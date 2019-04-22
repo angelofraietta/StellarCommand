@@ -14,7 +14,6 @@ import vizier.VizierQuery;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.SocketAddress;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,14 +29,8 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
     boolean queryVizier = true;
 
-    int maximumRows = 50;
+    int MAXIMUM_ROWS = 100;
 
-    /*
-    String stellariumHost = StellariumSlave.DEFAULT_STELLARIUM_HOST;
-    int stellariumPort = StellariumSlave.DEFAULT_STELLARIUM_PORT;
-    InetAddress oscClient = InetAddress.getByName("localhost");
-    String oscAddress = "\\Stellar";
-    */
 
     String oscNamespace; // this is what our OSC messages will start as
     InetAddress oscClient;
@@ -105,8 +98,9 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         if (!stellariumView.equals(lastFieldOfView)) {
             RaDec raDec = stellariumView.getRaDec();
             System.out.println("FOV: " + stellariumView.getFieldOfView() + " RA Dec " + raDec.rightAscension + " " + raDec.declination);
-           // oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
+            oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
             lastFieldOfView = stellariumView;
+
             if (queryVizier){
 
                 String centre =  raDec.rightAscension + " " + raDec.declination;
@@ -138,22 +132,44 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
      * @return true if we were able to send
      */
     boolean sendDataTable(StellarDataTable table){
+
+
         String [] columnNames =  table.getColumnNames();
 
-        OSCBundle oscBundle = new OSCBundle();
-
-        oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.STAR_NAMES, (Object[])columnNames));
+        OSCBundle oscBundle = null;
 
         List<StellarDataRow> dataRows = table.getDataTable();
 
+        // We want to make sure round up
+        int number_bundles = (dataRows.size() + MAXIMUM_ROWS - 1) / MAXIMUM_ROWS;
+
+        boolean ret = number_bundles > 0;
+
+        int bundle_num = 0; // The next bundle number we will send
+
         int table_size =  dataRows.size();
-        for (int i = 0; i < table_size && i < maximumRows; i++){
+        for (int i = 0; i < table_size && ret; i++){
+
+            if (i % MAXIMUM_ROWS == 0){
+                if (oscBundle != null){
+                    ret = oscSender.send(oscBundle, oscClient, targetPort);
+                }
+                bundle_num++;
+                oscBundle = new OSCBundle();
+                oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.STAR_NAMES, (Object[])columnNames));
+                oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.BUNDLE_COUNT, bundle_num, number_bundles));
+
+            }
             StellarDataRow row = dataRows.get(i);
             List<Float> row_data = row.vizierData;
             oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.STAR_VALUES, row_data.toArray()));
         }
 
-        return oscSender.send(oscBundle, oscClient, targetPort);
+        if (oscBundle != null){
+            ret = oscSender.send(oscBundle, oscClient, targetPort);
+        }
+
+        return ret;
     }
     /**
      * Set the name of where to request HTTP data from Stellarium

@@ -16,6 +16,7 @@ import java.util.List;
  * Sample query
  * Default catalogue used is I/311/hip2 - Hipparcos, the New Reduction (van Leeuwen, 2007)
  * Default outputs are as follows
+ *     <br>RArad (deg)   (F12.8) Right Ascension in ICRS, Ep=1991.25 [ucd=pos.eq.ra;meta.main]
  *     <br>DErad (deg)   (F12.8) Declination in ICRS, Ep=1991.25 [ucd=pos.eq.dec;meta.main]
  *     <br>pmRA (mas/yr) (F8.2)  Proper motion in Right Ascension [ucd=pos.pm;pos.eq.ra]
  *     <br>pmDE (mas/yr) (F8.2)  Proper motion in Declination [ucd=pos.pm;pos.eq.dec]
@@ -29,7 +30,7 @@ import java.util.List;
 public class VizierQuery {
 
     public static final String DEFAULT_CATALOGUE = "I/311/hip2";
-    public static final String DEFAULT_OUT = "-out=DErad&-out=pmRA&-out=pmDE&-out=Hpmag&-out=B-V";
+    public static final String DEFAULT_OUT = "-out=RArad&-out=DErad&-out=pmRA&-out=pmDE&-out=Hpmag&-out=B-V";
     public static final String ALL_OUT = "-out.all";
 
 
@@ -70,7 +71,7 @@ public class VizierQuery {
             ret = sb.toString();
         }
         catch (Exception ex){
-            ex.printStackTrace();
+            System.out.println("Unable to connect to VizieR");
         }
         return ret;
     }
