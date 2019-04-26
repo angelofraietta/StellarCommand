@@ -46,6 +46,24 @@ public final class StellarOSCVocabulary {
          *<br>RA Dec. pmRA pmDE Hpmag ad  B-V
          */
         public static final String STAR_VALUES = "/values";
+
+        /**
+         * The location that we are viewing for Stellarium
+         * OSC parameters will be latitude, longitude. If the planet is not Earth, a third parameter of planet is added
+         * <br>latitude -  Degrees as float
+         * <br>longitude - degrees as float
+         * <br>planet - optional as String
+         */
+        public static final String VIEW_LOCATION = "/location";
+
+
+        /**
+         * The time that Stellarium will be displaying
+         * The format of the time will be a string
+         */
+        public static final String SET_TIME = "/settime";
+
+
     }
 
     /**
@@ -79,6 +97,84 @@ public final class StellarOSCVocabulary {
          * Request that VizieR current table be saved to file
          */
         public static final String SAVE_TABLE = "savetable";
+
+        /**
+         * The location that we want to view in Stellarium
+         * OSC arguments will be latitude, longitude. If the planet is chamnging, a third parameter of planet
+         * <br>latitude -  Degrees as float
+         * <br>longitude - degrees as float
+         * <br>planet - optional as String
+         */
+        public static final String SET_VIEWER_LOCATION = "viewlocation";
+
+        /**
+         * Causes Stellarium to slew to the defined object
+         * <br><b>Object name</b>String - Object name we wanrt to display - eg Acrux or Saturn
+         */
+        public static final String VIEW_OBJECT = "viewobject";
+
+        /**
+         * Causes Stellarium to slew to the RA / DEC
+         * <br><b>RA</b> float - The Right ascension in decimal degrees
+         * <br><b>Dec</b> float - The Declination in decimal degrees
+         */
+        public static final String VIEW_RA_DEC = "viewRADec";
+
+        /**
+         * Causes Stellarium view to centre to the altitude and azimuth. OSC arguments are:
+         * <br><b>Altitude</b> float - altitude in degrees
+         * <br><b>Azimuth</b> float - azimuth in degrees
+         */
+        public static final String VIEW_ALTAZ = "viewaltaz";
+
+
+        /**
+         * Cause Stellarium to show or hide the ground. OSC arguments are:
+         * <br><b>Show</b> int -  not zero is true, zero is false
+         */
+        public static final String SHOW_GROUND = "showground";
+
+        /**
+         * Cause Stellarium to show or hide the atmosphere. OSC arguments are:
+         * <br><b>Show</b> int -  not zero is true, zero is false
+         */
+        public static final String SHOW_ATMOSPHERE = "showatmosphere";
+
+        /**
+         * Cause Stellarium to show or hide the constellation art. OSC arguments are:
+         * <br><b>Show</b> int -  not zero is true, zero is false
+         */
+        public static final String SHOW_CONSTELATION_ART = "showconstellationart";
+
+
+        /**
+         * Cause Stellarium to show or hide the star labels. OSC arguments are:
+         * <br><b>Show</b> int -  not zero is true, zero is false
+         */
+        public static final String SHOW_STAR_LABELS = "showstarlabels";
+
+
+        /**
+         * Cause Stellarium to move up or down. OSC arguments are:
+         * <br><b>Amount</b> float -  the amount to move. A positive value will slew up
+         */
+        public static final String MOVE_UP_DOWN = "moveUD";
+
+        /**
+         * Cause Stellarium to move left or right. OSC arguments are:
+         * <br><b>Amount</b> float -  the amount to move. A positive value will slew to the right
+         */
+        public static final String MOVE_LEFT_RIGHT = "moveLR";
+
+        /**
+         * Cause Stellarium to progress in time:
+         * <br><b>julian day per second</b> float -  The number of julian days per second. EG, if the value was set to one, the display would progress one day every second
+         */
+        public static final String SET_TIME_RATE = "timerate";
+
+
+
+
     }
 
     /**

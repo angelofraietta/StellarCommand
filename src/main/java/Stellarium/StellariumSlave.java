@@ -112,10 +112,10 @@ public class StellariumSlave  {
 
 
     /**
-     * Adds a listener that will receive notification of a fieldOfView Change
+     * Adds a listener that will receive notification of a latitude Change
      * @param listener the listener that will be notified of the change
      */
-    public void addFieldOfViewListener(StellariumViewListener listener){
+    public void addViewListener(StellariumViewListener listener){
         stellariumViewListeners.add(listener);
     }
 
@@ -290,15 +290,21 @@ public class StellariumSlave  {
         float fov = readFieldOfView();
         double [] coordinates = readView();
 
+
         if (coordinates != null) {
-            RaDec raDec = new RaDec(coordinates[0], coordinates[1], coordinates[2]);
+            StellariumLocation location = readLocation();
 
-            //System.out.println(raDec.rightAscension + " " + raDec.declination);
+            if (location != null) {
+                RaDec raDec = new RaDec(coordinates[0], coordinates[1], coordinates[2]);
 
-            StellariumView stellariumView = new StellariumView(fov, raDec);
-            for (StellariumViewListener listener :
-                    stellariumViewListeners) {
-                listener.viewChanged(stellariumView);
+                //System.out.println(raDec.rightAscension + " " + raDec.declination);
+
+                StellariumView stellariumView = new StellariumView(fov, raDec);
+                for (StellariumViewListener listener :
+                        stellariumViewListeners) {
+                    listener.viewRead(stellariumView);
+                    listener.locationRead(location);
+                }
             }
         }
     }
@@ -317,17 +323,15 @@ public class StellariumSlave  {
             String val = (String) message_val.get("j2000");
             // our string will look like this
             // [0.960286, 0.191647, -0.202787]
-            // Let us strip t into an array
+            // Let us strip it into an array
 
             val = val.replace("[", "");
             val = val.replace("]", "");
             String [] values = val.split(",");
 
-            // now that we have a string array, let us
+            // now that we have a string array, let us get the values
 
             try {
-
-
                 if (values.length == 3) {
                     ret = new double[values.length];
                     for (int i = 0; i < values.length; i++) {
@@ -344,6 +348,51 @@ public class StellariumSlave  {
         return ret;
     }
 
+
+    /**
+     * Read the viewer location of  Stellarium
+     * @return the view location
+     */
+    public StellariumLocation readLocation(){
+        StellariumLocation ret = null;
+
+        float latitude = 0, longitude = 0;
+        boolean valid = false;
+        try {
+            JSONObject message_val = sendGetMessage("main/status");
+
+            if (message_val != null) {
+                JSONObject location = message_val.getJSONObject("location");
+                if (location != null) {
+
+                    //if either of these fail we will get a false
+                    Object lat = location.get("latitude");
+                    if (lat != null) {
+                        String val_str = lat.toString();
+                        latitude = Float.parseFloat(val_str);
+                        valid = true;
+                    }
+                    Object lon = location.get("longitude");
+                    if (lon != null) {
+                        String val_str = lon.toString();
+                        longitude = Float.parseFloat(val_str);
+                    }
+                    else {
+                        valid = false;
+                    }
+                }
+
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        if (valid){
+            ret = new StellariumLocation(latitude, longitude);
+        }
+        return ret;
+    }
     /**
      * Read the field of view from Stellarium and notify any listeners of its value
      * @return the field of view in Stellarium. A return of zero indicates some sort of error
@@ -379,8 +428,8 @@ public class StellariumSlave  {
 
 
     /**
-     * Set the time rate that our sky is moving by.
-     * A value of one is means we are travelling at normal time.
+     * Set the time rate that our sky is moving by in Julian days per second.
+     * A value of one is means we are travelling at one julian day per second.
      * A value of zero is fixed time. A negative value is reverse.
      * We can speed up or slow down by setting this value
      * @param timeRate the time rate at which our sky is moving
@@ -392,16 +441,24 @@ public class StellariumSlave  {
         }
     }
 
-    public void setTargetName(String control_val){
-        targetName = control_val;
+    /**
+     * Cause Stellarium to view the target
+     * @param target_name the name of the object we are targeting. EG. Saturn
+     */
+    public void setTargetName(String target_name){
+        targetName = target_name;
 
         synchronized (targetSynchroniser){
             targetSynchroniser.notify();
         }
     }
 
-    public void setFieldOfView(double control_val){
-        fieldOfView = control_val;
+    /**
+     * Set the field of view we want Stellarium to display
+     * @param field_of_view the new field of view we want to display
+     */
+    public void setFieldOfView(double field_of_view){
+        fieldOfView = field_of_view;
 
         synchronized (fovSynchroniser){
             fovSynchroniser.notify();
@@ -746,10 +803,22 @@ public class StellariumSlave  {
 
         StellariumSlave slave = new StellariumSlave();
 
-        slave.addFieldOfViewListener(view -> {
-            RaDec raDec = view.raDec;
-            System.out.println("FOV: " + view.fieldOfView + " RA Dec " + raDec.rightAscension + " " + raDec.declination);
-        });
+        class listener implements StellariumViewListener{
+
+            @Override
+            public void viewRead(StellariumView stellariumView) {
+                System.out.println("FOV: " + stellariumView.fieldOfView + " RA Dec " + stellariumView.raDec.rightAscension + " " + stellariumView.raDec.declination);
+            }
+
+            @Override
+            public void locationRead(StellariumLocation stellariumView) {
+                System.out.println("Lat: " + stellariumView.latitude + " long: " + stellariumView.longitude);
+            }
+        }
+
+
+        slave.addViewListener(new listener());
+
         slave.setPollTime(4000);
 
         while (true){

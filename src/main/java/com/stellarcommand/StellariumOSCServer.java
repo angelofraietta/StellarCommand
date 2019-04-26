@@ -3,6 +3,7 @@ package com.stellarcommand;
 import StellarStructures.RaDec;
 import StellarStructures.StellarDataRow;
 import StellarStructures.StellarDataTable;
+import Stellarium.StellariumLocation;
 import Stellarium.StellariumSlave;
 import Stellarium.StellariumView;
 import Stellarium.StellariumViewListener;
@@ -89,12 +90,13 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         }
 
         oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.OSC_PORT, source_port), oscClient, targetPort);
-        stellariumSlave.addFieldOfViewListener(this::viewChanged);
+        //stellariumSlave.addViewListener(this::viewRead);
+        stellariumSlave.addViewListener(this);
         //vizierQuery.addFilter("Hpmag", "<", 5);
     }
 
     @Override
-    public void viewChanged(StellariumView stellariumView) {
+    public void viewRead(StellariumView stellariumView) {
         if (!stellariumView.equals(lastFieldOfView)) {
             RaDec raDec = stellariumView.getRaDec();
             System.out.println("FOV: " + stellariumView.getFieldOfView() + " RA Dec " + raDec.rightAscension + " " + raDec.declination);
@@ -124,6 +126,11 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
             }
         }
+    }
+
+    @Override
+    public void locationRead(StellariumLocation stellariumView) {
+
     }
 
     /**
@@ -223,6 +230,45 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                         System.out.println("Unable to save " + filename);
                     }
                 }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.VIEW_OBJECT)){
+                    String objectname = (String)msg.getArg(0);
+                    stellariumSlave.setTargetName(objectname);
+                }
+
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.MOVE_UP_DOWN)){
+                    float amount = (Float) msg.getArg(0);
+                    stellariumSlave.upDownMovement(amount);
+                }
+
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.MOVE_LEFT_RIGHT)){
+                    float amount = (Float) msg.getArg(0);
+                    stellariumSlave.leftRightMovement(amount);
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SET_TIME_RATE)){
+                    float amount = (Float) msg.getArg(0);
+                    stellariumSlave.setTimeRate(amount);
+                }
+
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_STAR_LABELS)){
+                    boolean show = ((int) msg.getArg(0) == 0) ?false:true;
+                    stellariumSlave.showAtmosphere(show);
+                }
+
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_CONSTELATION_ART)){
+                    boolean show = ((int) msg.getArg(0) == 0) ?false:true;
+                    stellariumSlave.showConstellationArt(show);
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_ATMOSPHERE)){
+                    boolean show = ((int) msg.getArg(0) == 0) ?false:true;
+                    stellariumSlave.showAtmosphere(show);
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_GROUND)){
+                    boolean show = ((int) msg.getArg(0) == 0) ?false:true;
+                    stellariumSlave.showGround(show);
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SET_VIEWER_LOCATION)){
+                    setLocation(msg);
+                }
 
 
 
@@ -234,6 +280,12 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
     }
 
+    boolean setLocation(OSCMessage msg){
+        boolean ret = false;
+
+        stellariumSlave.readLocation();
+        return ret;
+    }
     /**
      * Load a pre-saved VizieR table from file and send stars via OSC
      * @param filename the name of the file that has VizieR data
