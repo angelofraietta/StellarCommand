@@ -24,16 +24,21 @@ public class StellariumSlave  {
     double currentAz = 0;
     double currentAlt = 0; // zero is level. 1 is Up, -1 is down, 2 is behind
 
-    Object altAzSynchroniser = new Object();
+
     boolean exitThread = false;
 
 
-    Object fovSynchroniser = new Object();
-    Object timerateSynchroniser = new Object();
-    Object targetSynchroniser = new Object();
-    Object magnitudeSynchroniser = new Object();
-
-    Object pollSynchroniser = new Object();
+    /**
+     * Define our thread synchronisation objects. We will notifiy on exit
+     */
+    final private Object fovSynchroniser = new Object();
+    final private Object timerateSynchroniser = new Object();
+    final private Object targetSynchroniser = new Object();
+    final private Object magnitudeSynchroniser = new Object();
+    final private Object pollSynchroniser = new Object();
+    final private Object lrMoveSynchroniser = new Object();
+    final private Object upMoveSynchroniser = new Object();
+    final private Object altAzSynchroniser = new Object();
 
     private double fieldOfView  = 1;
 
@@ -41,6 +46,31 @@ public class StellariumSlave  {
 
     int stellariumPort = DEFAULT_STELLARIUM_PORT;
 
+    /**
+     * Cause a synchronised notify of an object
+     * @param object
+     */
+    void notifyObject (final Object object){
+        synchronized (object){
+            object.notify();
+        }
+    }
+
+    /**
+     * exit all our threads in the slave
+     */
+    public void exitSlave(){
+        exitThread = true;
+
+        notifyObject(fovSynchroniser);
+        notifyObject(timerateSynchroniser);
+        notifyObject(targetSynchroniser);
+        notifyObject(magnitudeSynchroniser);
+        notifyObject(pollSynchroniser);
+        notifyObject(lrMoveSynchroniser);
+        notifyObject(upMoveSynchroniser);
+        notifyObject(altAzSynchroniser);
+    }
     /**
      * The port to communicate on HTTP to get to stellarium
      * @return the HTTP port we are using
@@ -65,8 +95,6 @@ public class StellariumSlave  {
     // this is default magnitude
     private double magnitude = 13;
 
-    private Object lrMoveSynchroniser = new Object();
-    private Object upMoveSynchroniser = new Object();
 
     private double LRMovementAmount = 0;
     private double UDMovementAmount =  0;
@@ -119,11 +147,22 @@ public class StellariumSlave  {
         stellariumViewListeners.add(listener);
     }
 
+    /**
+     * Removes a listener
+     * @param listener the listener to remove
+     */
+    public void removeViewListener(StellariumViewListener listener){
+        stellariumViewListeners.remove(listener);
+    }
+
+    /**
+     * Erases all listeners
+     */
+    public void eraseViewListeners(){
+        stellariumViewListeners.clear();
+    }
+
     void createThreads(){
-        /***********************************************************
-         * Create a runnable thread object
-         * simply type synchronizedThread to generate this code
-         ***********************************************************/
         new Thread(() -> {
             while (!exitThread) {
                 synchronized (lrMoveSynchroniser) {
@@ -136,14 +175,13 @@ public class StellariumSlave  {
                 }
                 // we should just have
                 //Add the function you need to execute here
+                if (exitThread)
+                    break;
+
                 sendMoveLR(LRMovementAmount);
             }
         }).start();
 
-        /***********************************************************
-         * Create a runnable thread object
-         * simply type synchronizedThread to generate this code
-         ***********************************************************/
         new Thread(() -> {
             while (!exitThread) {
                 synchronized (upMoveSynchroniser) {
@@ -159,10 +197,7 @@ public class StellariumSlave  {
                 sendMoveUD(UDMovementAmount);
             }
         }).start();
-        /***********************************************************
-         * Create a runnable thread object
-         * simply type synchronizedThread to generate this code
-         ***********************************************************/
+
         new Thread(() -> {
             while (!exitThread) {
                 synchronized (fovSynchroniser) {
@@ -173,6 +208,9 @@ public class StellariumSlave  {
                         e.printStackTrace();
                     }
                 }
+                if (exitThread)
+                    break;
+
                 // we should just have
                 //Add the function you need to execute here
                 String api = "main/fov";
@@ -190,7 +228,6 @@ public class StellariumSlave  {
             }
         }).start();
 
-
         new Thread(() -> {
             while (!exitThread) {
                 synchronized (targetSynchroniser) {
@@ -201,6 +238,8 @@ public class StellariumSlave  {
                         e.printStackTrace();
                     }
                 }
+                if (exitThread)
+                    break;
                 // we should just have
                 //Add the function you need to execute here
                 String api = "main/focus";
@@ -222,6 +261,10 @@ public class StellariumSlave  {
                         e.printStackTrace();
                     }
                 }
+
+                if (exitThread)
+                    break;
+
                 // we should just have
                 //Add the function you need to execute here
                 String api = "main/time";
@@ -232,10 +275,7 @@ public class StellariumSlave  {
             }
         }).start();
 
-        /***********************************************************
-         * Create a runnable thread object
-         * simply type synchronizedThread to generate this code
-         ***********************************************************/
+
         new Thread(() -> {
             while (!exitThread) {
                 synchronized (altAzSynchroniser){
@@ -246,6 +286,10 @@ public class StellariumSlave  {
                         e.printStackTrace();
                     }
                 }
+
+                if (exitThread)
+                    break;
+
                 // we should just have
                 sendAltAz(currentAz, currentAlt);
             }
@@ -262,11 +306,14 @@ public class StellariumSlave  {
                         e.printStackTrace();
                     }
                 }
+
+                if (exitThread)
+                    break;
+
                 String property = "StelSkyDrawer.customStarMagLimit";
                 sendStelProperty(property, magnitude);
             }
         }).start();
-
 
         // we will have a wait object
         new Thread(() -> {
@@ -275,12 +322,16 @@ public class StellariumSlave  {
                     try {
                         pollSynchroniser.wait(pollTime);
 
-                        pollView();
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 //Add the function you need to execute here
+                if (exitThread)
+                    break;
+
+                pollView();
 
             }
         }).start(); /* end synchronizedThread */

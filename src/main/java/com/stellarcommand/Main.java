@@ -95,10 +95,8 @@ public class Main {
 
             slave.setPollTime(pollTime);
 
-            while (true) {
-
-
-            }
+            stellariumOSCServer.waitForExit();
+            System.exit(0);
         }
         catch (Exception ex){
             System.out.println("Unable to start with arguments");

@@ -69,5 +69,19 @@ jar {
 }
 
 
+task deployJarAndJavaDoc << {
+    copy {
+        from 'build/docs/javadoc'
+        into 'Examples/libs/docs/StellarCommand/javadoc'
+    }
+
+    copy {
+        from 'build/libs/StellarCommand.jar'
+        into 'Examples/Device/HappyBrackets/data/jars/'
+    }
+
+    println "copied jars"
+}
 
 
+deployJarAndJavaDoc.dependsOn shadowJar

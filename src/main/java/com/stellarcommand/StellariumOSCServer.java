@@ -37,9 +37,22 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     InetAddress oscClient;
     int targetPort;
 
+    StellariumView lastStellariumfView = null;
 
-    StellariumView lastFieldOfView = null;
+    final Object serverWaitObject = new Object(); // we will wait on this to exit
 
+    /**
+     * Wait on this object to exit.
+     */
+    public void waitForExit(){
+        synchronized (serverWaitObject){
+            try {
+                serverWaitObject.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * Set the frequency of polling Stellarium for changes in view
      * @param poll_time the time in milliseconds between re-polling Stellarium
@@ -97,11 +110,13 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
     @Override
     public void viewRead(StellariumView stellariumView) {
-        if (!stellariumView.equals(lastFieldOfView)) {
+        if (!stellariumView.equals(lastStellariumfView)) {
             RaDec raDec = stellariumView.getRaDec();
             System.out.println("FOV: " + stellariumView.getFieldOfView() + " RA Dec " + raDec.rightAscension + " " + raDec.declination);
-            oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
-            lastFieldOfView = stellariumView;
+
+            lastStellariumfView = stellariumView;
+
+            sendStellariumView(lastStellariumfView);
 
             if (queryVizier){
 
@@ -205,7 +220,19 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 String[] addresses = directive.split("/");
 
                 String command = addresses[0];
-                if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.FILTER)) {
+                if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION)) {
+                    sendStellariumView(lastStellariumfView);
+                }
+
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.POLL)) {
+                    // we only send to the port we are actually configured to. Not necessarily to who is calling us
+                    oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.OSC_PORT, oscReceiver.getPort()), oscClient, targetPort);
+                }
+
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.EXIT)) {
+                    exitServer();
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.FILTER)) {
                     addFilter(addresses, msg);
                 } else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.RESET_FILTERS)) {
                     vizierQuery.clearFilters();
@@ -277,6 +304,27 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         catch (Exception ex){
             ex.printStackTrace();
         }
+
+    }
+
+    private void exitServer() {
+
+        stellariumSlave.exitSlave();
+        stellariumSlave.eraseViewListeners();
+        oscReceiver.removeOSCListener(this);
+        synchronized (serverWaitObject){
+
+            serverWaitObject.notify();
+        }
+    }
+
+    /**
+     * Send the Stellarium RA/Dec and Field of view information
+     * @param stellariumView the view we are sending
+     */
+    private void sendStellariumView(StellariumView stellariumView) {
+        RaDec raDec = stellariumView.getRaDec();
+        oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + StellarOSCVocabulary.SendMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
 
     }
 

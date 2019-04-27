@@ -71,6 +71,21 @@ public final class StellarOSCVocabulary {
      * Direct where our message will be filtered
      */
     public final class ReceiveMessages{
+
+        /**
+         * See if Stellarium is active. we will send back our OSC port
+         */
+        public static final String POLL = "poll";
+        /**
+         * Get the current view location.
+         */
+        public static final String VIEW_LOCATION = "location";
+
+        /**
+         * Cause StellarCommand to exit
+         */
+        public static final String EXIT = "exit";
+
         /**
          * Defines a new filter parameter. All filters are ANDed together  <br>\
          * eg filter/Hpmagr/less 6 followed by filter/Hpmagr/greater 1 will filter Hpmagr between 6 and 1
