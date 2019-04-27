@@ -20,11 +20,11 @@ import java.net.UnknownHostException;
  * You should call this class from other classes. Eg
  *
  * LoadStellarCommand commandLoader = new LoadStellarCommand();
- * InetSocketAddress inetSocketAddress = commandLoader.loadStellarCommand();
+ * InetSocketAddress stellarCommandInetSocketAddress = commandLoader.loadStellarCommand();
  *
  * After this, Create a listener of the RECEIVE_PORT, listen for OSC from StellarCommand
  * and send OSC to StellarCommand via
- * oscSender.send(oscMessage, inetSocketAddress);
+ * oscSender.send(oscMessage, stellarCommandInetSocketAddress);
  */
 public class LoadStellarCommand implements HBAction, OSCListener {
 
@@ -35,7 +35,7 @@ public class LoadStellarCommand implements HBAction, OSCListener {
     public final String OSC_NAME = "/Stellar";
 
 
-    InetSocketAddress inetSocketAddress = null;
+    InetSocketAddress stellarCommandInetSocketAddress = null;
 
     /**
      * Get the String that we will use to Spawn Stellar Command
@@ -102,11 +102,11 @@ public class LoadStellarCommand implements HBAction, OSCListener {
      * Send an exit message to StellarCommand
      */
     void exitStellarCommand(){
-        if (inetSocketAddress != null){
+        if (stellarCommandInetSocketAddress != null){
 
             OSCMessage exitMessage = OSCMessageBuilder.createOscMessage(OSC_NAME + "/" + StellarOSCVocabulary.ReceiveMessages.EXIT);
             OSCUDPSender oscSender = new OSCUDPSender();
-            oscSender.send(exitMessage, inetSocketAddress);
+            oscSender.send(exitMessage, stellarCommandInetSocketAddress);
         }
 
     }
@@ -134,7 +134,7 @@ public class LoadStellarCommand implements HBAction, OSCListener {
                     try{
                         int targetPort = (int)oscMessage.getArg(0);
                         InetAddress stellarCommandClient = ((InetSocketAddress) socketAddress).getAddress();
-                        inetSocketAddress = new InetSocketAddress(stellarCommandClient, targetPort);
+                        stellarCommandInetSocketAddress = new InetSocketAddress(stellarCommandClient, targetPort);
                         System.out.println(oscMessage.getName() + " received on port " + targetPort);
                         synchronized (stellariumLoadWait){
                             stellariumLoadWait.notify();
@@ -170,7 +170,7 @@ public class LoadStellarCommand implements HBAction, OSCListener {
 
         // If we do not have a target port at this stage, StelarCommand is not running and wer will need to launch it
 
-        if (inetSocketAddress == null){
+        if (stellarCommandInetSocketAddress == null){
             String command = getStartStellarCommandline();
 
             ShellExecute executor = new ShellExecute().addProcessCompleteListener((shellExecute, exit_value) -> {
@@ -202,7 +202,7 @@ public class LoadStellarCommand implements HBAction, OSCListener {
         }
 
         // Target port will get set  a receiver
-        return inetSocketAddress;
+        return stellarCommandInetSocketAddress;
     }
 
     @Override
