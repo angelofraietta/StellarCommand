@@ -14,6 +14,8 @@
 '/Users/angelofraietta/StellarCommand/src/main/java/StellarStructures/MagnitudeSort.java'
 '/Users/angelofraietta/StellarCommand/src/main/java/Stellarium/StellariumViewListener.java'
 '/Users/angelofraietta/StellarCommand/src/main/java/Stellarium/StellariumView.java'
+'/Users/angelofraietta/StellarCommand/src/main/java/Stellarium/StellariumTime.java'
+'/Users/angelofraietta/StellarCommand/src/main/java/Stellarium/StellariumLocation.java'
 '/Users/angelofraietta/StellarCommand/src/main/java/Stellarium/StellariumSlave.java'
 '/Users/angelofraietta/StellarCommand/src/main/java/vizier/VizierQuery.java'
 '/Users/angelofraietta/StellarCommand/src/main/java/com/stellarcommand/OSCUDPListener.java'
