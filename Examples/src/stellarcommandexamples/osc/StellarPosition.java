@@ -83,7 +83,7 @@ public class StellarPosition implements HBAction {
                 @Override
                 public void triggerEvent() {// Write your DynamicControl code below this line
 
-                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.ReceiveMessages.FIELD_OF_VIEW), fieldOfView.getValue());
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.FIELD_OF_VIEW), fieldOfView.getValue());
 
                     oscudpSender.send(msg, stellarCommandInetSocketAddress);
                     display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
@@ -97,7 +97,7 @@ public class StellarPosition implements HBAction {
                 public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                     // type your code below this line
 
-                    if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.SendMessages.DISPLAY_VIEW))){
+                    if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.DISPLAY_VIEW))){
                         float fov = (float)oscMessage.getArg(0);
                         float Ra = (float)oscMessage.getArg(1);
                         float Dec = (float)oscMessage.getArg(2);
@@ -118,7 +118,7 @@ public class StellarPosition implements HBAction {
             } // end oscListener code
 
             // Let us get our position at the very start
-            oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION)), stellarCommandInetSocketAddress);
+            oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.VIEW_LOCATION)), stellarCommandInetSocketAddress);
         }
         // write your code above this line
     }

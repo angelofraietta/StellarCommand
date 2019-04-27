@@ -22,9 +22,9 @@ public final class StellarOSCVocabulary {
     }
 
     /**
-     * SendMessages are the messages sent from StellarCommand to the OSC client
+     * ClientMessages are the messages sent from StellarCommand to the OSC client
      */
-    public final class SendMessages{
+    public final class ClientMessages {
         /**
          * Notifies client of the UDP port that StellarCommand is listening to.
          *
@@ -84,10 +84,10 @@ public final class StellarOSCVocabulary {
     }
 
     /**
-     * ReceiveMessages are sent from OSC client to StellarCommand
+     * CommandMessages are sent from OSC client to StellarCommand
      * Direct where our message will be filtered by StellarCommand
      */
-    public final class ReceiveMessages{
+    public final class CommandMessages {
 
         /**
          * See if Stellarium is active. we will send back our OSC port

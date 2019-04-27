@@ -69,7 +69,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
         new TriggerControl(this, "Send Poll") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line
-                OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION));
+                OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ClientMessages.VIEW_LOCATION));
 
                 OSCUDPSender oscSender = new OSCUDPSender();
 
@@ -104,7 +104,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
     void exitStellarCommand(){
         if (stellarCommandInetSocketAddress != null){
 
-            OSCMessage exitMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ReceiveMessages.EXIT));
+            OSCMessage exitMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.CommandMessages.EXIT));
             OSCUDPSender oscSender = new OSCUDPSender();
             oscSender.send(exitMessage, stellarCommandInetSocketAddress);
         }
@@ -130,7 +130,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
         final Object stellariumLoadWait = new Object();
 
         // First see if Stellarium is open on any ports by sending a poll to each of them
-        OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ReceiveMessages.POLL));
+        OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.CommandMessages.POLL));
 
         // type osclistener to create this code 
         OSCUDPListener oscudpListener = new OSCUDPListener(RECEIVE_PORT) {
@@ -138,7 +138,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
             public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                 // type your code below this line 
 
-                if (oscMessage.getName().equalsIgnoreCase(buildOscName(StellarOSCVocabulary.SendMessages.OSC_PORT))){
+                if (oscMessage.getName().equalsIgnoreCase(buildOscName(StellarOSCVocabulary.ClientMessages.OSC_PORT))){
                     try{
                         int targetPort = (int)oscMessage.getArg(0);
                         InetAddress stellarCommandClient = ((InetSocketAddress) socketAddress).getAddress();

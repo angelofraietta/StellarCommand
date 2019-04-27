@@ -102,7 +102,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
             oscReceiver.addOSCListener(this::messageReceived);
         }
 
-        oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.SendMessages.OSC_PORT, source_port), oscClient, targetPort);
+        oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OSC_PORT, source_port), oscClient, targetPort);
         //stellariumSlave.addViewListener(this::viewRead);
         stellariumSlave.addViewListener(this);
         //vizierQuery.addFilter("Hpmag", "<", 5);
@@ -178,13 +178,13 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 }
                 bundle_num++;
                 oscBundle = new OSCBundle();
-                oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.SendMessages.STAR_NAMES, (Object[])columnNames));
-                oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + "/" +  StellarOSCVocabulary.SendMessages.BUNDLE_COUNT, bundle_num, number_bundles));
+                oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.STAR_NAMES, (Object[])columnNames));
+                oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + "/" +  StellarOSCVocabulary.ClientMessages.BUNDLE_COUNT, bundle_num, number_bundles));
 
             }
             StellarDataRow row = dataRows.get(i);
             List<Float> row_data = row.vizierData;
-            oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.SendMessages.STAR_VALUES, row_data.toArray()));
+            oscBundle.addPacket(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.STAR_VALUES, row_data.toArray()));
         }
 
         if (oscBundle != null){
@@ -220,27 +220,27 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 String[] addresses = directive.split("/");
 
                 String command = addresses[0];
-                if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION)) {
+                if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.VIEW_LOCATION)) {
                     sendStellariumView(lastStellariumfView);
                 }
 
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.POLL)) {
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.POLL)) {
                     // we only send to the port we are actually configured to. Not necessarily to who is calling us
-                    oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.SendMessages.OSC_PORT, oscReceiver.getPort()), oscClient, targetPort);
+                    oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OSC_PORT, oscReceiver.getPort()), oscClient, targetPort);
                 }
 
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.EXIT)) {
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.EXIT)) {
                     exitServer();
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.FIELD_OF_VIEW)) {
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.FIELD_OF_VIEW)) {
                     setFieldOfView(msg);
                 }
 
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.FILTER)) {
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.FILTER)) {
                     addFilter(addresses, msg);
-                } else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.RESET_FILTERS)) {
+                } else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.RESET_FILTERS)) {
                     vizierQuery.clearFilters();
-                } else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SEND_STARS)) {
+                } else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SEND_STARS)) {
 
                     if (msg.getArgCount() > 0 && msg.getArg(0) instanceof Integer){
                         queryVizier = ((int)msg.getArg(0)) != 0;
@@ -249,55 +249,55 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                         System.out.println("Invalid Command " + getOscMessageDisplay(msg));
                     }
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.LOAD_TABLE)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.LOAD_TABLE)){
                     String filename = (String)msg.getArg(0);
                     if (!loadVizierTableFromFile(filename)){
                         System.out.println("Unable to load and send " + filename);
                     }
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SAVE_TABLE)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SAVE_TABLE)){
                     String filename = (String)msg.getArg(0);
                     if (!saveVizierTableToFile(filename)){
                         System.out.println("Unable to save " + filename);
                     }
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.VIEW_OBJECT)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.VIEW_OBJECT)){
                     String objectname = (String)msg.getArg(0);
                     stellariumSlave.setTargetName(objectname);
                 }
 
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.MOVE_UP_DOWN)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.MOVE_UP_DOWN)){
                     float amount = (Float) msg.getArg(0);
                     stellariumSlave.upDownMovement(amount);
                 }
 
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.MOVE_LEFT_RIGHT)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.MOVE_LEFT_RIGHT)){
                     float amount = (Float) msg.getArg(0);
                     stellariumSlave.leftRightMovement(amount);
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SET_TIME_RATE)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SET_TIME_RATE)){
                     float amount = (Float) msg.getArg(0);
                     stellariumSlave.setTimeRate(amount);
                 }
 
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_STAR_LABELS)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_STAR_LABELS)){
                     boolean show = ((int) msg.getArg(0) == 0) ?false:true;
                     stellariumSlave.showAtmosphere(show);
                 }
 
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_CONSTELATION_ART)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_CONSTELATION_ART)){
                     boolean show = ((int) msg.getArg(0) == 0) ?false:true;
                     stellariumSlave.showConstellationArt(show);
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_ATMOSPHERE)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_ATMOSPHERE)){
                     boolean show = ((int) msg.getArg(0) == 0) ?false:true;
                     stellariumSlave.showAtmosphere(show);
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SHOW_GROUND)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_GROUND)){
                     boolean show = ((int) msg.getArg(0) == 0) ?false:true;
                     stellariumSlave.showGround(show);
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.ReceiveMessages.SET_VIEWER_LOCATION)){
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SET_VIEWER_LOCATION)){
                     setLocation(msg);
                 }
 
@@ -337,7 +337,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
      */
     private void sendStellariumView(StellariumView stellariumView) {
         RaDec raDec = stellariumView.getRaDec();
-        oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.SendMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
+        oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
 
     }
 
