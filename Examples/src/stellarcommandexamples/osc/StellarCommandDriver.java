@@ -19,20 +19,20 @@ import java.net.UnknownHostException;
  * the ports to communicate with it
  * You should call this class from other classes. Eg
  *
- * LoadStellarCommand commandLoader = new LoadStellarCommand();
+ * StellarCommandDriver commandLoader = new StellarCommandDriver();
  * InetSocketAddress stellarCommandInetSocketAddress = commandLoader.loadStellarCommand();
  *
  * After this, Create a listener of the RECEIVE_PORT, listen for OSC from StellarCommand
  * and send OSC to StellarCommand via
  * oscSender.send(oscMessage, stellarCommandInetSocketAddress);
  */
-public class LoadStellarCommand implements HBAction, OSCListener {
+public class StellarCommandDriver implements HBAction, OSCListener {
 
 
     // port=1234 osc=/Stellar tryport=3333,4444,5555
     public final int RECEIVE_PORT = 1234; // define the port we will listen on
     public final int [] TRY_PORTS = new int []{3333,4444,5555};
-    public final String OSC_NAME = "/Stellar";
+    private final String OSC_NAME = "/Stellar";
 
 
     InetSocketAddress stellarCommandInetSocketAddress = null;
@@ -69,7 +69,7 @@ public class LoadStellarCommand implements HBAction, OSCListener {
         new TriggerControl(this, "Send Poll") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line
-                OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(OSC_NAME + "/" + StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION);
+                OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION));
 
                 OSCUDPSender oscSender = new OSCUDPSender();
 
@@ -104,13 +104,21 @@ public class LoadStellarCommand implements HBAction, OSCListener {
     void exitStellarCommand(){
         if (stellarCommandInetSocketAddress != null){
 
-            OSCMessage exitMessage = OSCMessageBuilder.createOscMessage(OSC_NAME + "/" + StellarOSCVocabulary.ReceiveMessages.EXIT);
+            OSCMessage exitMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ReceiveMessages.EXIT));
             OSCUDPSender oscSender = new OSCUDPSender();
             oscSender.send(exitMessage, stellarCommandInetSocketAddress);
         }
 
     }
 
+    /**
+     * Create the OSC message name based on the OSC address space we are using
+     * @param address
+     * @return
+     */
+    public String buildOscName(String address){
+        return OSC_NAME + "/" + address;
+    }
     /**
      * Get the Socket Address we need to communicate with StellarCommand
      * If StellarCommand is already open with these ports, we will just return the SocketAddress to communicate
@@ -122,7 +130,7 @@ public class LoadStellarCommand implements HBAction, OSCListener {
         final Object stellariumLoadWait = new Object();
 
         // First see if Stellarium is open on any ports by sending a poll to each of them
-        OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(OSC_NAME + "/" + StellarOSCVocabulary.ReceiveMessages.POLL);
+        OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ReceiveMessages.POLL));
 
         // type osclistener to create this code 
         OSCUDPListener oscudpListener = new OSCUDPListener(RECEIVE_PORT) {
@@ -130,7 +138,7 @@ public class LoadStellarCommand implements HBAction, OSCListener {
             public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                 // type your code below this line 
 
-                if (oscMessage.getName().equalsIgnoreCase(OSC_NAME + StellarOSCVocabulary.SendMessages.OSC_PORT)){
+                if (oscMessage.getName().equalsIgnoreCase(buildOscName(StellarOSCVocabulary.SendMessages.OSC_PORT))){
                     try{
                         int targetPort = (int)oscMessage.getArg(0);
                         InetAddress stellarCommandClient = ((InetSocketAddress) socketAddress).getAddress();

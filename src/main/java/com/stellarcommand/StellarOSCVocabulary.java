@@ -1,9 +1,26 @@
 package com.stellarcommand;
 
+import de.sciss.net.OSCMessage;
+
 /**
  * Define vocabulary that we use for OSC message transmission
  */
 public final class StellarOSCVocabulary {
+
+    /**
+     * Get a String version of OSC message so we can display it
+     * @param msg the OSC message
+     * @return teh OSC name and arguments as a string
+     */
+    public static String getOscAsText(OSCMessage msg){
+        String ret =  msg.getName();
+        for (int i = 0; i < msg.getArgCount(); i++){
+            ret += " " + msg.getArg(i);
+        }
+
+        return ret;
+    }
+
     /**
      * SendMessages are the messages sent from StellarCommand to the OSC client
      */
@@ -13,7 +30,7 @@ public final class StellarOSCVocabulary {
          *
          * The message contains a single int argumenr
          */
-        public static final String OSC_PORT = "/osc";
+        public static final String OSC_PORT = "osc";
 
         /**
          * Notifies Client of the display being viewed in Stellarium as three floats <br>
@@ -22,7 +39,7 @@ public final class StellarOSCVocabulary {
          * <br>The Right Ascension (Ra) of the centre of the display
          * <br> The Declination (Dec.) of the centre of the display
          */
-        public static final String DISPLAY_VIEW = "/view";
+        public static final String DISPLAY_VIEW = "view";
 
         /**
          * The message is used to indicate the number of bundles that are being used to send all the Stellar Data for a single query.
@@ -31,21 +48,21 @@ public final class StellarOSCVocabulary {
          * <br><br>The Bundle number for this section of the data. One based index count - eg, first bundle will have a value of 1
          * <br>The total number of bundles for current query
          */
-        public static final String BUNDLE_COUNT = "/bundlecount";
+        public static final String BUNDLE_COUNT = "bundlecount";
 
         /**
          * The list of the the column names for the data that will be in the values message
          * <br>OSC arguments will be a series of strings. EG
          * <br><br>RArad (deg) <br>DErad (deg) <br>pmRA(mas/yr) <br>pmDE(mas/yr) <br>Hpmag (mag) <br>B-V(mag)
          */
-        public static final String STAR_NAMES = "/names";
+        public static final String STAR_NAMES = "names";
 
         /**
          * The data for a row of stars as floats. The column values correlate to the values in star names.
          * <br> For example, the following OSC argument 133.50998 -34.824913 -10.56 8.17 9.0556 0.042 would correlate to
          *<br>RA Dec. pmRA pmDE Hpmag ad  B-V
          */
-        public static final String STAR_VALUES = "/values";
+        public static final String STAR_VALUES = "values";
 
         /**
          * The location that we are viewing for Stellarium
@@ -54,21 +71,21 @@ public final class StellarOSCVocabulary {
          * <br>longitude - degrees as float
          * <br>planet - optional as String
          */
-        public static final String VIEW_LOCATION = "/location";
+        public static final String VIEW_LOCATION = "location";
 
 
         /**
          * The time that Stellarium will be displaying
          * The format of the time will be a string
          */
-        public static final String SET_TIME = "/settime";
+        public static final String SET_TIME = "settime";
 
 
     }
 
     /**
      * ReceiveMessages are sent from OSC client to StellarCommand
-     * Direct where our message will be filtered
+     * Direct where our message will be filtered by StellarCommand
      */
     public final class ReceiveMessages{
 
@@ -77,9 +94,14 @@ public final class StellarOSCVocabulary {
          */
         public static final String POLL = "poll";
         /**
-         * Get the current view location.
+         * Set the current view location.
          */
         public static final String VIEW_LOCATION = "location";
+
+        /**
+         * Set the Field of view in Stellarium
+         */
+        public static final String FIELD_OF_VIEW = "fieldOfView";
 
         /**
          * Cause StellarCommand to exit
@@ -120,13 +142,13 @@ public final class StellarOSCVocabulary {
          * <br>longitude - degrees as float
          * <br>planet - optional as String
          */
-        public static final String SET_VIEWER_LOCATION = "viewlocation";
+        public static final String SET_VIEWER_LOCATION = "viewLocation";
 
         /**
          * Causes Stellarium to slew to the defined object
          * <br><b>Object name</b>String - Object name we wanrt to display - eg Acrux or Saturn
          */
-        public static final String VIEW_OBJECT = "viewobject";
+        public static final String VIEW_OBJECT = "viewObject";
 
         /**
          * Causes Stellarium to slew to the RA / DEC
@@ -140,33 +162,33 @@ public final class StellarOSCVocabulary {
          * <br><b>Altitude</b> float - altitude in degrees
          * <br><b>Azimuth</b> float - azimuth in degrees
          */
-        public static final String VIEW_ALTAZ = "viewaltaz";
+        public static final String VIEW_ALTAZ = "viewAltAz";
 
 
         /**
          * Cause Stellarium to show or hide the ground. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          */
-        public static final String SHOW_GROUND = "showground";
+        public static final String SHOW_GROUND = "showGround";
 
         /**
          * Cause Stellarium to show or hide the atmosphere. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          */
-        public static final String SHOW_ATMOSPHERE = "showatmosphere";
+        public static final String SHOW_ATMOSPHERE = "showAtmosphere";
 
         /**
          * Cause Stellarium to show or hide the constellation art. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          */
-        public static final String SHOW_CONSTELATION_ART = "showconstellationart";
+        public static final String SHOW_CONSTELATION_ART = "showConstellationart";
 
 
         /**
          * Cause Stellarium to show or hide the star labels. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          */
-        public static final String SHOW_STAR_LABELS = "showstarlabels";
+        public static final String SHOW_STAR_LABELS = "showStarLabels";
 
 
         /**

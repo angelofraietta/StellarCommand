@@ -656,7 +656,7 @@ public class StellariumSlave  {
      * @param api te api we are sending
      * @return a JSON object with the data
      */
-    JSONObject sendGetMessage(String api){
+    synchronized JSONObject sendGetMessage(String api){
         JSONObject ret = null;
 
         try {

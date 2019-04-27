@@ -6,10 +6,7 @@ import com.stellarcommand.StellarOSCVocabulary;
 import de.sciss.net.OSCMessage;
 import net.happybrackets.core.HBAction;
 import net.happybrackets.core.OSCUDPListener;
-import net.happybrackets.core.control.FloatTextControl;
-import net.happybrackets.core.control.TextControl;
-import net.happybrackets.core.control.TextControlSender;
-import net.happybrackets.core.control.TriggerControl;
+import net.happybrackets.core.control.*;
 import net.happybrackets.device.HB;
 
 import java.lang.invoke.MethodHandles;
@@ -22,7 +19,7 @@ import java.net.SocketAddress;
 public class StellarPosition implements HBAction {
     InetSocketAddress stellarCommandInetSocketAddress = null;
 
-    LoadStellarCommand commandLoader = null;
+    StellarCommandDriver commandLoader = null;
 
     OSCUDPSender oscudpSender = new OSCUDPSender();
 
@@ -35,7 +32,7 @@ public class StellarPosition implements HBAction {
         TextControl display_text = new TextControlSender(this, "Diagnostics", "");
 
 
-        commandLoader = new LoadStellarCommand();
+        commandLoader = new StellarCommandDriver();
         stellarCommandInetSocketAddress = commandLoader.loadStellarCommand();
 
         if (stellarCommandInetSocketAddress == null){
@@ -43,6 +40,17 @@ public class StellarPosition implements HBAction {
         }
 
         else {
+
+
+            // If we check this we will disable updating so we can send values
+            BooleanControl disableUpdate = new BooleanControl(this, "Disable Update", false) {
+                @Override
+                public void valueChanged(Boolean control_val) {// Write your DynamicControl code below this line 
+
+                    // Write your DynamicControl code above this line 
+                }
+            };// End DynamicControl disableUpdate code
+
 
             FloatTextControl fieldOfView = new FloatTextControl(this, "Field of View", 0) {
                 @Override
@@ -75,9 +83,10 @@ public class StellarPosition implements HBAction {
                 @Override
                 public void triggerEvent() {// Write your DynamicControl code below this line
 
-                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.OSC_NAME + "/" + StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION, fieldOfView.getValue(), raValue.getValue(), decValue.getValue());
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.ReceiveMessages.FIELD_OF_VIEW), fieldOfView.getValue());
 
                     oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
                     // Write your DynamicControl code above this line 
                 }
             };// End DynamicControl sendPosition code 
@@ -88,14 +97,17 @@ public class StellarPosition implements HBAction {
                 public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                     // type your code below this line
 
-                    if (oscMessage.getName().equalsIgnoreCase(commandLoader.OSC_NAME + StellarOSCVocabulary.SendMessages.DISPLAY_VIEW)){
+                    if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.SendMessages.DISPLAY_VIEW))){
                         float fov = (float)oscMessage.getArg(0);
                         float Ra = (float)oscMessage.getArg(1);
                         float Dec = (float)oscMessage.getArg(2);
 
-                        fieldOfView.setValue(fov);
-                        raValue.setValue(Ra);
-                        decValue.setValue(Dec);
+                        // if we have our checkbox checked, we will disable the update
+                        if (!disableUpdate.getValue()) {
+                            fieldOfView.setValue(fov);
+                            raValue.setValue(Ra);
+                            decValue.setValue(Dec);
+                        }
                     }
                     // type your code above this line
                 }
@@ -106,7 +118,7 @@ public class StellarPosition implements HBAction {
             } // end oscListener code
 
             // Let us get our position at the very start
-            oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.OSC_NAME + "/" + StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION), stellarCommandInetSocketAddress);
+            oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.ReceiveMessages.VIEW_LOCATION)), stellarCommandInetSocketAddress);
         }
         // write your code above this line
     }
