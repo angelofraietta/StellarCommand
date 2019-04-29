@@ -118,7 +118,7 @@ public class ViewerLocation implements HBAction {
                     // Write your DynamicControl code above this line 
                 }
             };// End DynamicControl triggerControl code 
-            
+
 
             // Let us get our position at the very start
             oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.OBSERVATION_POINT)), stellarCommandInetSocketAddress);

@@ -498,7 +498,7 @@ public class StellariumSlave  {
     }
 
     /**
-     * Read teh Status From the Stellarium RemoteApi
+     * Read the Status From the Stellarium RemoteApi
      * @return
      * @see  <a href="http://stellarium.org/doc/head/remoteControlApi.html"http://stellarium.org/doc/head/remoteControlApi.html</a>
      */
