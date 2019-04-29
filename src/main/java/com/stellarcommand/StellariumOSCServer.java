@@ -298,7 +298,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_STAR_LABELS)){
                     boolean show = ((int) msg.getArg(0) == 0) ?false:true;
-                    stellariumSlave.showAtmosphere(show);
+                    stellariumSlave.showStarLabels(show);
                 }
 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_CONSTELATION_ART)){
