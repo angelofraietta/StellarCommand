@@ -104,10 +104,40 @@ public class StellarPosition implements HBAction {
             };// End DynamicControl sendAcrux code
 
 
-            TriggerControl triggerControl = new TriggerControl(this, "Send Ra / Dec") {
+            new TriggerControl(this, "Send Canopus by Ra / Dec") {
                 @Override
-                public void triggerEvent() {// Write your DynamicControl code below this line 
-                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_RA_DEC), raValue.getValue(), decValue.getValue());
+                public void triggerEvent() {// Write your DynamicControl code below this line
+
+                    // First we need to make sure we do not have an item focused
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_OBJECT), "");
+
+                    oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+
+                    // These are the RA and Dec for Canopus
+                    float ra = 95.987958f, dec = -52.695661f;
+
+                    msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_RA_DEC),
+                            ra, dec);
+
+                    oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                    // Write your DynamicControl code above this line
+                }
+            };// End DynamicControl triggerControl code
+
+
+            new TriggerControl(this, "Send Ra / Dec") {
+                @Override
+                public void triggerEvent() {// Write your DynamicControl code below this line
+
+                    // First we need to make sure we do not have an item focused
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_OBJECT), "");
+
+                    oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+
+                    msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_RA_DEC), raValue.getValue(), decValue.getValue());
 
                     oscudpSender.send(msg, stellarCommandInetSocketAddress);
                     display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));

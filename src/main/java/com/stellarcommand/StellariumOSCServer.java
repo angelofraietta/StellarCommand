@@ -1,12 +1,10 @@
 package com.stellarcommand;
 
+import StellarStructures.AltAz;
 import StellarStructures.RaDec;
 import StellarStructures.StellarDataRow;
 import StellarStructures.StellarDataTable;
-import Stellarium.StellariumLocation;
-import Stellarium.StellariumSlave;
-import Stellarium.StellariumView;
-import Stellarium.StellariumViewListener;
+import Stellarium.*;
 import de.sciss.net.OSCBundle;
 import de.sciss.net.OSCListener;
 import de.sciss.net.OSCMessage;
@@ -15,6 +13,7 @@ import vizier.VizierQuery;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.SocketAddress;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -38,8 +37,11 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     int targetPort;
 
     StellariumView lastStellariumfView = null;
+    StellariumLocation lastStellariumLocation = null;
+    private StellariumTime lastStellariumTime = null;
 
     final Object serverWaitObject = new Object(); // we will wait on this to exit
+
 
     /**
      * Wait on this object to exit.
@@ -145,8 +147,22 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
     @Override
     public void locationRead(StellariumLocation stellariumView) {
-
+        if (!stellariumView.equals(lastStellariumLocation)){
+            lastStellariumLocation = stellariumView;
+            sendObservationPoint(lastStellariumLocation);
+        }
     }
+
+    @Override
+    public void timeRead(StellariumTime stellariumTime) {
+
+        if (!stellariumTime.equals(lastStellariumTime)){
+            System.out.println("Read");
+            lastStellariumTime = stellariumTime;
+            sendStellariumTime(lastStellariumTime);
+        }
+    }
+
 
     /**
      * Send the StellarDataTable via OSC
@@ -300,6 +316,12 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.OBSERVATION_POINT)){
                     processObservationPoint(msg);
                 }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.VIEW_RA_DEC)){
+                    processRaDec(msg);
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.VIEW_ALTAZ)){
+                    processAltAz(msg);
+                }
 
 
 
@@ -309,6 +331,27 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
             ex.printStackTrace();
         }
 
+    }
+
+    /**
+     * Set the ALT az as OSC Message
+     * @param msg OSC Message
+     */
+    private void processAltAz(OSCMessage msg) {
+        float altitude = (float)msg.getArg(0);
+        float azimuth = (float)msg.getArg(1);
+        stellariumSlave.setAltAz(new AltAz(altitude, azimuth));
+    }
+
+
+    /**
+     * Process Right Ascension / Declination as OSC Message
+     * @param msg OSC Message
+     */
+    private void processRaDec(OSCMessage msg) {
+        float ra = (float)msg.getArg(0);
+        float dec = (float)msg.getArg(1);
+        stellariumSlave.setRaDec(new RaDec(ra, dec));
     }
 
     private void setFieldOfView(OSCMessage msg) {
@@ -334,12 +377,26 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     /**
      * Send the Stellarium RA/Dec and Field of view information
      * @param stellariumView the view we are sending
+     * @return true if able to send
      */
-    private void sendStellariumView(StellariumView stellariumView) {
+    private boolean sendStellariumView(StellariumView stellariumView) {
         RaDec raDec = stellariumView.getRaDec();
-        oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
+        return oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.DISPLAY_VIEW, stellariumView.getFieldOfView(), raDec.rightAscension, raDec.declination), oscClient, targetPort);
 
     }
+
+    /**
+     * Send the Stellarium time information
+     * @param stellariumTime the current Stellarium we are sending
+     * @return true if able to send
+     */
+    private boolean sendStellariumTime(StellariumTime stellariumTime) {
+
+        return oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.STELLAR_TIME,
+                stellariumTime.utcString(), stellariumTime.localTimeString(), stellariumTime.getGMTShift()), oscClient, targetPort);
+
+    }
+
 
 
     /**
@@ -354,9 +411,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         if (msg.getArgCount() == 0){
             StellariumLocation location = stellariumSlave.readObservationPoint();
             if (location != null){
-                ret = oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OBSERVATION_POINT,
-                        location.getLatitude(), location.getLongitude(),
-                        location.getAltitude(), location.getPlanet()), oscClient, targetPort);
+                ret = sendObservationPoint(location);
             }
         }
         else{ // we have args so we are actually setting the value
@@ -409,6 +464,18 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
         return ret;
     }
+
+    /**
+     * Send our Observation Point
+     * @param location our observation point
+     * @return true if able to send
+     */
+    private boolean sendObservationPoint(StellariumLocation location) {
+        return oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OBSERVATION_POINT,
+                location.getLatitude(), location.getLongitude(),
+                location.getAltitude(), location.getPlanet()), oscClient, targetPort);
+    }
+
     /**
      * Load a pre-saved VizieR table from file and send stars via OSC
      * @param filename the name of the file that has VizieR data
@@ -454,7 +521,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         return ret;
     }
     /**
-     * Get a String display of OSC message
+     * Get a String display of OSC message. We use this basically for debugging
      * @param msg the OSC message we want to display
      * @return the String representation
      */

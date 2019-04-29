@@ -79,7 +79,7 @@ public final class StellarOSCVocabulary {
          * The time that Stellarium will be displaying
          * The format of the time will be a string
          */
-        public static final String SET_TIME = "settime";
+        public static final String STELLAR_TIME = "time";
 
 
     }

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Displays what we are seeing on view as far as field of view ands RaDec
  */
-public class StellariumLocation {
+public class StellariumLocation  extends StellariumJSONClass{
 
     /* From API
         location : {
@@ -22,7 +22,6 @@ public class StellariumLocation {
     }
      */
 
-    private JSONObject apiObject = null;
     float latitude, longitude;
 
     /**
@@ -50,15 +49,7 @@ public class StellariumLocation {
      * @return LandscapeKey observation point name
      */
     public String getLandcapeKey(){
-        String ret = "";
-
-        if (apiObject != null){
-            Object o = apiObject.get("landscapeKey");
-            if (o != null) {
-                ret = o.toString();
-            }
-        }
-        return ret;
+        return getStringVal("landscapeKey");
     }
 
 
@@ -67,15 +58,7 @@ public class StellariumLocation {
      * @return state observation point name
      */
     public String getState(){
-        String ret = "";
-
-        if (apiObject != null){
-            Object o = apiObject.get("state");
-            if (o != null) {
-                ret = o.toString();
-            }
-        }
-        return ret;
+        return getStringVal("state");
     }
 
     /**
@@ -83,15 +66,7 @@ public class StellariumLocation {
      * @return country observation point name
      */
     public String getCountry(){
-        String ret = "";
-
-        if (apiObject != null){
-            Object o = apiObject.get("planet");
-            if (o != null) {
-                ret = o.toString();
-            }
-        }
-        return ret;
+        return getStringVal("country");
     }
 
     /**
@@ -99,15 +74,7 @@ public class StellariumLocation {
      * @return Stellarium planet
      */
     public String getPlanet(){
-        String ret = "";
-
-        if (apiObject != null){
-            Object o = apiObject.get("planet");
-            if (o != null) {
-                ret = o.toString();
-            }
-        }
-        return ret;
+        return getStringVal("planet");
     }
 
 
@@ -116,15 +83,7 @@ public class StellariumLocation {
      * @return Stellarium role name
      */
     public String getRole(){
-        String ret = "";
-
-        if (apiObject != null){
-            Object o = apiObject.get("role");
-            if (o != null) {
-                ret = o.toString();
-            }
-        }
-        return ret;
+        return getStringVal("role");
     }
 
     /**
@@ -132,15 +91,8 @@ public class StellariumLocation {
      * @return Stellarium observation point name
      */
     public String getName(){
-        String ret = "";
 
-        if (apiObject != null){
-            Object o = apiObject.get("name");
-            if (o != null) {
-                ret = o.toString();
-            }
-        }
-        return ret;
+        return getStringVal("name");
     }
 
     /**
@@ -148,15 +100,7 @@ public class StellariumLocation {
      * @return altitude
      */
     public float getAltitude(){
-        float ret = 0;
-
-        if (apiObject != null){
-            Object o = apiObject.get("altitude");
-            if (o != null) {
-                ret = Float.parseFloat(o.toString());
-            }
-        }
-        return ret;
+        return getFloatVal("altitude");
     }
 
     /**
@@ -164,30 +108,13 @@ public class StellariumLocation {
      * @param jsonObject the JSONObject returned from StellariumAPI
      */
     public StellariumLocation(JSONObject jsonObject){
-        apiObject = jsonObject;
+        super(jsonObject);
+        latitude = getFloatVal("latitude");
 
-        Object lat = jsonObject.get("latitude");
-        if (lat != null) {
-            String val_str = lat.toString();
-            latitude = Float.parseFloat(val_str);
-        }
-
-        Object lon = jsonObject.get("longitude");
-        if (lon != null) {
-            String val_str = lon.toString();
-            longitude = Float.parseFloat(val_str);
-        }
+        longitude = getFloatVal("longitude");
 
     }
-    /**
-     * Constructor
-     * @param latitude the latitude of viewer in stellarium in degrees
-     * @param longitude the latitude of viewer in stellarium in degrees
-     */
-    public StellariumLocation(float latitude, float longitude){
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+
 
     @Override
     public boolean equals(Object obj) {

@@ -86,12 +86,12 @@ public class ObservationalPoint {
      * Constructor
      * @param latitude geographic latitude
      * @param longitude geographic longitude
-     * @param observation_date the observation date we are using
+     * @param utc_observation_date the observation date we are using in UTC
      */
-    public ObservationalPoint (double latitude, double longitude, LocalDateTime observation_date){
+    public ObservationalPoint (double latitude, double longitude, LocalDateTime utc_observation_date){
         geographicLatitude = latitude;
         geographicLongitude = longitude;
-        observationDate = observation_date;
+        observationDate = utc_observation_date;
         final double dayOffset = ChronoUnit.DAYS.between(J200_REFERENCE_DATE, observationDate);
         localSiderealTime = (100.46 + 0.985647 * dayOffset + longitude + 15 * (observationDate.getHour() + observationDate.getMinute() / 60d + observationDate.getSecond() / 3600) + 360) % 360;
 

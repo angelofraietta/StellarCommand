@@ -8,4 +8,5 @@ import StellarStructures.RaDec;
 public interface StellariumViewListener {
     void viewRead(StellariumView stellariumView);
     void locationRead(StellariumLocation stellariumView);
+    void timeRead(StellariumTime stellariumTime);
 }

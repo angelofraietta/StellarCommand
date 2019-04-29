@@ -69,7 +69,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
         new TriggerControl(this, "Send Poll") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line
-                OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.ClientMessages.VIEW_LOCATION));
+                OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.CommandMessages.POLL));
 
                 OSCUDPSender oscSender = new OSCUDPSender();
 

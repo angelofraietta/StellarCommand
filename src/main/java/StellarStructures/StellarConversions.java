@@ -59,9 +59,11 @@ public class StellarConversions {
      */
     public static AltAz convertRaDecToAltAz(RaDec raDec, ObservationalPoint observationalPoint){
         // Hour Angle
+        final double DEG_CONVERT =  Math.PI / 180;
+
         double HA = (observationalPoint.localSiderealTime - raDec.rightAscension + 360) % 360;
 
-        final double DEG_CONVERT =  Math.PI / 180;
+        double sinHa = Math.sin(HA * DEG_CONVERT);
 
         //sin(ALT) = sin(DEC)*sin(LAT)+cos(DEC)*cos(LAT)*cos(HA)
         double a_alt = Math.sin(raDec.declination * DEG_CONVERT) * Math.sin(observationalPoint.geographicLatitude * DEG_CONVERT) + Math.cos(DEG_CONVERT * raDec.declination) * Math.cos(observationalPoint.geographicLatitude * DEG_CONVERT) * Math.cos(HA * DEG_CONVERT);
@@ -80,6 +82,9 @@ public class StellarConversions {
                 (Math.cos(alt * DEG_CONVERT) * Math.cos(observationalPoint.geographicLatitude * DEG_CONVERT));
 
         double az =  Math.acos(a_az)  / DEG_CONVERT;
+        if (sinHa > 0){
+            az = 360 - az;
+        }
 
         return new AltAz(alt, az);
     }

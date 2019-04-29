@@ -1,7 +1,10 @@
 package Stellarium;
 
 
+import StellarStructures.AltAz;
+import StellarStructures.ObservationalPoint;
 import StellarStructures.RaDec;
+import StellarStructures.StellarConversions;
 import org.json.JSONObject;
 
 
@@ -51,6 +54,7 @@ public class StellariumSlave  {
     JSONObject mainView = null;
 
     StellariumLocation lastStellariumLocation = null;
+    StellariumTime lastStellariumTime = null;
 
     String stellariumDevice = DEFAULT_STELLARIUM_HOST;
 
@@ -405,6 +409,8 @@ public class StellariumSlave  {
 
             if (coordinates != null) {
                 StellariumLocation stellariumLocation = readObservationPoint();
+                StellariumTime time = readStellariumTime();
+
 
                 if (stellariumLocation != null) {
                     lastStellariumLocation = stellariumLocation;
@@ -418,6 +424,7 @@ public class StellariumSlave  {
                             stellariumViewListeners) {
                         listener.viewRead(stellariumView);
                         listener.locationRead(stellariumLocation);
+                        listener.timeRead(time);
                     }
                 }
             }
@@ -473,6 +480,30 @@ public class StellariumSlave  {
     }
 
 
+    /**
+     * Get the Stellarium time from last poll
+     * @return the stellarium time
+     */
+    public StellariumTime readStellariumTime(){
+        StellariumTime ret = null;
+
+        try {
+
+            if (mainStatus != null) {
+                JSONObject time = mainStatus.getJSONObject("time");
+                if (time != null) {
+                    ret = new StellariumTime(time);
+                    lastStellariumTime = ret;
+                }
+
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return ret;
+    }
     /**
      * Read the viewer location of  Stellarium
      * @return the view location
@@ -632,21 +663,53 @@ public class StellariumSlave  {
         sendStelProperty("actionShow_Atmosphere", show);
     }
 
-    public void setAltitude(double control_val){
+    /**
+     * Set the altitude in degrees. +90 is zenith, -90 is nadir
+     * @param degrees
+     */
+    public void setAltitude(double degrees){
         synchronized (altAzSynchroniser){
-            currentAlt = control_val  / 2 * Math.PI;
+            currentAlt = degrees  * Math.PI / 180;
             altAzSynchroniser.notify();
         }
 
     }
 
-    public void setAzimuth(double control_val){
+    /**
+     * Set the Azimuth in degrees
+     * @param degrees the degrees of azimuth. North is zero, east is 90
+     */
+    public void setAzimuth(double degrees){
         synchronized (altAzSynchroniser){
-            currentAz = control_val  * Math.PI;
+            currentAz = (degrees + 180)  * Math.PI / 180 * -1;
             altAzSynchroniser.notify();
         }
     }
 
+    /**
+     * Set the Azimuth and Altitude based on RA and Dec
+     * @param raDec RA/Dec structure
+     */
+    public void setRaDec(RaDec raDec){
+        ObservationalPoint observationalPoint = new ObservationalPoint(lastStellariumLocation.latitude, lastStellariumLocation.longitude, lastStellariumTime.utcTime());
+
+        AltAz calc = StellarConversions.convertRaDecToAltAz(raDec, observationalPoint);
+        setAltAz(calc);
+    }
+
+    /**
+     * Set Altitude and Azimuth
+     * @param altAz Altitude and azimuth in degrees
+     */
+    public void setAltAz(AltAz altAz){
+        synchronized (altAzSynchroniser){
+            // We need to switch this around so 0 points north, 90 - east, 180 south, 270 west
+            currentAz = (altAz.getAzimuth() + 180)  * Math.PI / 180 * -1;
+            currentAlt =  altAz.getAltitude() * Math.PI / 180;
+            altAzSynchroniser.notify();
+        }
+
+    }
     /**
      * Set the new longitude and latitude of our observation point
      * @param latitude new latitude
@@ -949,6 +1012,11 @@ public class StellariumSlave  {
             @Override
             public void locationRead(StellariumLocation stellariumView) {
                 System.out.println("Lat: " + stellariumView.latitude + " long: " + stellariumView.longitude);
+            }
+
+            @Override
+            public void timeRead(StellariumTime stellariumTime) {
+
             }
         }
 
