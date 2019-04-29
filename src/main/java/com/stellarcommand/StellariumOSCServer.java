@@ -220,7 +220,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 String[] addresses = directive.split("/");
 
                 String command = addresses[0];
-                if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.VIEW_LOCATION)) {
+                if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.DISPLAY_VIEW)) {
                     sendStellariumView(lastStellariumfView);
                 }
 
@@ -297,8 +297,8 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                     boolean show = ((int) msg.getArg(0) == 0) ?false:true;
                     stellariumSlave.showGround(show);
                 }
-                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SET_VIEWER_LOCATION)){
-                    setLocation(msg);
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.OBSERVATION_POINT)){
+                    processObservationPoint(msg);
                 }
 
 
@@ -341,10 +341,72 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
     }
 
-    boolean setLocation(OSCMessage msg){
+
+    /**
+     * Process the ObservationPoint message from Client. If we have arguments in the oscMessage, it means we are actually setting the value.
+     * Otherwise, we will just send our current location
+     * @param msg OSCMessage with arguments
+     * @return true if able to process the value
+     */
+    boolean processObservationPoint(OSCMessage msg){
         boolean ret = false;
 
-        stellariumSlave.readLocation();
+        if (msg.getArgCount() == 0){
+            StellariumLocation location = stellariumSlave.readObservationPoint();
+            if (location != null){
+                ret = oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OBSERVATION_POINT,
+                        location.getLatitude(), location.getLongitude(),
+                        location.getAltitude(), location.getPlanet()), oscClient, targetPort);
+            }
+        }
+        else{ // we have args so we are actually setting the value
+
+            try{
+                float latitude = (float)msg.getArg(0);
+                float longitude = (float)msg.getArg(1);
+                float altitude =  0;
+                String planet = "";
+
+                if (msg.getArgCount() > 2){
+                    Object arg =  msg.getArg(2);
+                    if (arg instanceof Float)
+                    {
+                        altitude = (float)arg;
+                    }
+                    else if (arg instanceof Integer)
+                    {
+                        altitude = (int)arg;
+                    }
+                    else if (arg instanceof String){
+                        planet = (String)arg;
+                    }
+
+                }
+                if (msg.getArgCount() > 3){
+                    Object arg =  msg.getArg(3);
+                    if (arg instanceof Float)
+                    {
+                        altitude = (float)arg;
+                    }
+                    else if (arg instanceof Integer)
+                    {
+                        altitude = (int)arg;
+                    }
+                    else if (arg instanceof String){
+                        planet = (String)arg;
+                    }
+
+                }
+
+
+                stellariumSlave.setLongitudeAndLatitude(latitude, longitude, altitude, planet);
+                ret = true;
+            }
+            catch (Exception ex){
+
+            }
+        }
+
         return ret;
     }
     /**

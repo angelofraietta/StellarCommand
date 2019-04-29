@@ -23,6 +23,8 @@ public class StellariumSlave  {
 
     double currentAz = 0;
     double currentAlt = 0; // zero is level. 1 is Up, -1 is down, 2 is behind
+    double newLatitude = 0, newLongitude = 0, newAltitude = 0;
+    String newPlanet = "";
 
 
     boolean exitThread = false;
@@ -39,8 +41,16 @@ public class StellariumSlave  {
     final private Object lrMoveSynchroniser = new Object();
     final private Object upMoveSynchroniser = new Object();
     final private Object altAzSynchroniser = new Object();
+    final private Object locationSynchroniser = new Object();
+
 
     private double fieldOfView  = 1;
+
+    // Define our cahced JSON objects
+    JSONObject mainStatus = null;
+    JSONObject mainView = null;
+
+    StellariumLocation lastStellariumLocation = null;
 
     String stellariumDevice = DEFAULT_STELLARIUM_HOST;
 
@@ -70,6 +80,8 @@ public class StellariumSlave  {
         notifyObject(lrMoveSynchroniser);
         notifyObject(upMoveSynchroniser);
         notifyObject(altAzSynchroniser);
+        notifyObject(locationSynchroniser);
+
     }
     /**
      * The port to communicate on HTTP to get to stellarium
@@ -298,6 +310,28 @@ public class StellariumSlave  {
 
         new Thread(() -> {
             while (!exitThread) {
+                synchronized (locationSynchroniser){
+                    try {
+                        locationSynchroniser.wait();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (exitThread)
+                    break;
+
+                // we should just have
+                sendLocation(newLatitude, newLongitude, newAltitude, newPlanet);
+            }
+        }).start();
+
+
+
+
+        new Thread(() -> {
+            while (!exitThread) {
                 synchronized (magnitudeSynchroniser){
                     try {
                         magnitudeSynchroniser.wait();
@@ -337,28 +371,68 @@ public class StellariumSlave  {
         }).start(); /* end synchronizedThread */
     }
 
-    void pollView(){
-        float fov = readFieldOfView();
-        double [] coordinates = readView();
+    /**
+     * Send the new Location
+     * @param latitude
+     * @param longitude
+     * @param altitude the altitude we are viewing from
+     * @param planet the planet we are viewing from
+     * @return true if able to send
+     */
+    private boolean sendLocation(double latitude, double longitude, double altitude, String planet) {
+        String api = "location/setlocationfields";
+        Map<String,Object> params = new LinkedHashMap<>();
+        params.put("latitude", latitude);
+        params.put("longitude", longitude);
+        params.put("altitude", altitude);
+        params.put("country", "");
+        params.put("name", "");
+        params.put("planet", planet);
+
+        return sendPostMessage(api, params);
+    }
 
 
-        if (coordinates != null) {
-            StellariumLocation location = readLocation();
+    /**
+     * Force Module to do a poll of Stellarium and send status changes
+     * We will do this via the Synchronised thread
+     */
+    private void pollView(){
+        if (readMainStatus() && readMainView()) {
+            float fov = readFieldOfView();
+            double[] coordinates = readView();
 
-            if (location != null) {
-                RaDec raDec = new RaDec(coordinates[0], coordinates[1], coordinates[2]);
 
-                //System.out.println(raDec.rightAscension + " " + raDec.declination);
+            if (coordinates != null) {
+                StellariumLocation stellariumLocation = readObservationPoint();
 
-                StellariumView stellariumView = new StellariumView(fov, raDec);
-                for (StellariumViewListener listener :
-                        stellariumViewListeners) {
-                    listener.viewRead(stellariumView);
-                    listener.locationRead(location);
+                if (stellariumLocation != null) {
+                    lastStellariumLocation = stellariumLocation;
+
+                    RaDec raDec = new RaDec(coordinates[0], coordinates[1], coordinates[2]);
+
+                    //System.out.println(raDec.rightAscension + " " + raDec.declination);
+
+                    StellariumView stellariumView = new StellariumView(fov, raDec);
+                    for (StellariumViewListener listener :
+                            stellariumViewListeners) {
+                        listener.viewRead(stellariumView);
+                        listener.locationRead(stellariumLocation);
+                    }
                 }
             }
         }
     }
+
+    /**
+     * Get the JSON Object for Main View and store in mainView
+     * @return true if able to read from
+     */
+    private boolean readMainView() {
+        mainView = sendGetMessage("main/view");
+        return  mainView != null;
+    }
+
     /**
      * Read current view position of Stellarium in three dimensional spherical points
      * Using J2000 as a double array of x, y, z
@@ -367,11 +441,10 @@ public class StellariumSlave  {
     private double [] readView(){
         //curl -G http://localhost:8090/api/main/view
         double [] ret = null;
-        JSONObject message_val = sendGetMessage("main/view");
 
-        if (message_val != null) {
+        if (mainView != null) {
             //System.out.println(message_val);
-            String val = (String) message_val.get("j2000");
+            String val = (String) mainView.get("j2000");
             // our string will look like this
             // [0.960286, 0.191647, -0.202787]
             // Let us strip it into an array
@@ -404,33 +477,15 @@ public class StellariumSlave  {
      * Read the viewer location of  Stellarium
      * @return the view location
      */
-    public StellariumLocation readLocation(){
+    public StellariumLocation readObservationPoint(){
         StellariumLocation ret = null;
 
-        float latitude = 0, longitude = 0;
-        boolean valid = false;
         try {
-            JSONObject message_val = sendGetMessage("main/status");
 
-            if (message_val != null) {
-                JSONObject location = message_val.getJSONObject("location");
+            if (mainStatus != null) {
+                JSONObject location = mainStatus.getJSONObject("location");
                 if (location != null) {
-
-                    //if either of these fail we will get a false
-                    Object lat = location.get("latitude");
-                    if (lat != null) {
-                        String val_str = lat.toString();
-                        latitude = Float.parseFloat(val_str);
-                        valid = true;
-                    }
-                    Object lon = location.get("longitude");
-                    if (lon != null) {
-                        String val_str = lon.toString();
-                        longitude = Float.parseFloat(val_str);
-                    }
-                    else {
-                        valid = false;
-                    }
+                    ret = new StellariumLocation(location);
                 }
 
             }
@@ -439,11 +494,30 @@ public class StellariumSlave  {
             ex.printStackTrace();
         }
 
-        if (valid){
-            ret = new StellariumLocation(latitude, longitude);
-        }
         return ret;
     }
+
+    /**
+     * Read teh Status From the Stellarium RemoteApi
+     * @return
+     * @see  <a href="http://stellarium.org/doc/head/remoteControlApi.html"http://stellarium.org/doc/head/remoteControlApi.html</a>
+     */
+    boolean readMainStatus(){
+        boolean ret = false;
+
+
+        try {
+            mainStatus = sendGetMessage("main/status");
+
+            ret = (mainStatus != null);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return ret;
+    }
+
     /**
      * Read the field of view from Stellarium and notify any listeners of its value
      * @return the field of view in Stellarium. A return of zero indicates some sort of error
@@ -452,10 +526,8 @@ public class StellariumSlave  {
         float ret = 0;
 
         try {
-            JSONObject message_val = sendGetMessage("main/status");
-
-            if (message_val != null) {
-                JSONObject view = message_val.getJSONObject("view");
+            if (mainStatus != null) {
+                JSONObject view = mainStatus.getJSONObject("view");
                 if (view != null) {
                     Object fov = view.get("fov");
                     if (fov != null) {
@@ -572,6 +644,23 @@ public class StellariumSlave  {
         synchronized (altAzSynchroniser){
             currentAz = control_val  * Math.PI;
             altAzSynchroniser.notify();
+        }
+    }
+
+    /**
+     * Set the new longitude and latitude of our observation point
+     * @param latitude new latitude
+     * @param longitude new longitude
+     * @param altitude the new altitude
+     * @param planet the new planet
+     */
+    public void setLongitudeAndLatitude(double latitude, double longitude, double altitude, String planet){
+        synchronized (locationSynchroniser) {
+            newLatitude = latitude;
+            newLongitude = longitude;
+            newAltitude = altitude;
+            newPlanet = planet;
+            locationSynchroniser.notify();
         }
     }
     /**
@@ -827,14 +916,10 @@ public class StellariumSlave  {
      */
     String requestCoordinated(){
         String ret = "";
-
-        String api = "main/view";
-
         try {
-            JSONObject message_val = sendGetMessage(api);
-            if (message_val != null) {
+            if (mainView != null) {
 
-                Object altAz = message_val.get("altAz");
+                Object altAz = mainView.get("altAz");
                 if (altAz != null){
                     ret = altAz.toString();
                 }

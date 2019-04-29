@@ -79,7 +79,7 @@ public class StellarPosition implements HBAction {
             };// End DynamicControl code decValue
 
 
-            TriggerControl sendPosition = new TriggerControl(this, "Send Position") {
+            new TriggerControl(this, "Send Field of view") {
                 @Override
                 public void triggerEvent() {// Write your DynamicControl code below this line
 
@@ -90,6 +90,31 @@ public class StellarPosition implements HBAction {
                     // Write your DynamicControl code above this line 
                 }
             };// End DynamicControl sendPosition code 
+
+
+            new TriggerControl(this, "Send Acrux") {
+                @Override
+                public void triggerEvent() {// Write your DynamicControl code below this line 
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_OBJECT), "Acrux");
+
+                    oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                    // Write your DynamicControl code above this line 
+                }
+            };// End DynamicControl sendAcrux code
+
+
+            TriggerControl triggerControl = new TriggerControl(this, "Send Ra / Dec") {
+                @Override
+                public void triggerEvent() {// Write your DynamicControl code below this line 
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_RA_DEC), raValue.getValue(), decValue.getValue());
+
+                    oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                    // Write your DynamicControl code above this line 
+                }
+            };// End DynamicControl triggerControl code 
+
 
             // type osclistener to create this code
             OSCUDPListener oscudpListener = new OSCUDPListener(commandLoader.RECEIVE_PORT) {
@@ -118,7 +143,7 @@ public class StellarPosition implements HBAction {
             } // end oscListener code
 
             // Let us get our position at the very start
-            oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.VIEW_LOCATION)), stellarCommandInetSocketAddress);
+            oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.DISPLAY_VIEW)), stellarCommandInetSocketAddress);
         }
         // write your code above this line
     }

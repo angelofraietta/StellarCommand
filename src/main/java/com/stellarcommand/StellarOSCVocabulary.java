@@ -66,12 +66,13 @@ public final class StellarOSCVocabulary {
 
         /**
          * The location that we are viewing for Stellarium
-         * OSC parameters will be latitude, longitude. If the planet is not Earth, a third parameter of planet is added
+         * OSC arguments will be latitude, longitude.
          * <br>latitude -  Degrees as float
          * <br>longitude - degrees as float
-         * <br>planet - optional as String
+         * <br>altitude - meters as float
+         * <br>planet - planet as string
          */
-        public static final String VIEW_LOCATION = "location";
+        public static final String OBSERVATION_POINT = "viewerObservationPoint";
 
 
         /**
@@ -93,10 +94,11 @@ public final class StellarOSCVocabulary {
          * See if Stellarium is active. we will send back our OSC port
          */
         public static final String POLL = "poll";
+
         /**
-         * Set the current view location.
+         * Request the current view location.
          */
-        public static final String VIEW_LOCATION = "location";
+        public static final String DISPLAY_VIEW = "getView";
 
         /**
          * Set the Field of view in Stellarium
@@ -136,17 +138,19 @@ public final class StellarOSCVocabulary {
         public static final String SAVE_TABLE = "savetable";
 
         /**
-         * The location that we want to view in Stellarium
-         * OSC arguments will be latitude, longitude. If the planet is chamnging, a third parameter of planet
+         * The location that we want to view from in Stellarium
+         * If there are no OSC arguments, the current location will be sent to Client, otherwise
+         * OSC arguments will be latitude, longitude, altitude and planet
          * <br>latitude -  Degrees as float
          * <br>longitude - degrees as float
-         * <br>planet - optional as String
+         * <br>altitude - (optional)meters as float
+         * <br>planet - (optional)planet as string
          */
-        public static final String SET_VIEWER_LOCATION = "viewLocation";
+        public static final String OBSERVATION_POINT = "viewerObservationPoint";
 
         /**
          * Causes Stellarium to slew to the defined object
-         * <br><b>Object name</b>String - Object name we wanrt to display - eg Acrux or Saturn
+         * <br><b>Object name</b>String - Object name we want to display - eg Acrux or Saturn
          */
         public static final String VIEW_OBJECT = "viewObject";
 
