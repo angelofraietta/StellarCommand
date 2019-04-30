@@ -31,7 +31,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
 
     // port=1234 osc=/Stellar tryport=3333,4444,5555
     public final int RECEIVE_PORT = 1234; // define the port we will listen on
-    public final int [] TRY_PORTS = new int []{3333,4444,5555};
+    public final int [] TRY_PORTS = new int []{4567, 3333,4444,5555};
     private final String OSC_NAME = "/Stellar";
 
 
@@ -144,6 +144,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
                         InetAddress stellarCommandClient = ((InetSocketAddress) socketAddress).getAddress();
                         stellarCommandInetSocketAddress = new InetSocketAddress(stellarCommandClient, targetPort);
                         System.out.println(oscMessage.getName() + " received on port " + targetPort);
+                        System.out.println(StellarOSCVocabulary.getOscAsText(oscMessage));
                         synchronized (stellariumLoadWait){
                             stellariumLoadWait.notify();
                         }
