@@ -125,7 +125,7 @@ public class StellarCommandDriver implements HBAction, OSCListener {
      * If StelarCommand is not open, it will try and spawn it
      * @return the SocketAddress to communicate with Stellarium. If unable to, will return null
      */
-    InetSocketAddress loadStellarCommand(){
+    public InetSocketAddress loadStellarCommand(){
 
         final Object stellariumLoadWait = new Object();
 

@@ -103,6 +103,7 @@ public class VizierQuery {
             url_query = url_query + "&" + filter;
         }
 
+        System.out.println(url_query);
         lastVizierDataRead = readVizier(url_query);
         return lastVizierDataRead;
     }
@@ -123,7 +124,16 @@ public class VizierQuery {
      * @param filter_param the value we are adding to filter
      */
     public void addFilter(String filterName, String operand, float filter_param) {
-        addFilter(filterName + "=" + operand + filterName);
+        // first remove a filter if it has this name and operand
+        String filter_prefix = filterName + "=" + operand;
+
+        for (int i = filters.size() -1; i >= 0; i--){
+            String filter =  filters.get(i);
+            if (filter.startsWith(filter_prefix)){
+                filters.remove(i);
+            }
+        }
+        addFilter(filter_prefix + filter_param);
     }
 
     /**

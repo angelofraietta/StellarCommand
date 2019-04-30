@@ -40,6 +40,11 @@ public class AltAz implements HBAction {
             @Override
             public void valueChanged(double control_val) {// Write your DynamicControl code below this line 
 
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.AZIMUTH),
+                        control_val);
+
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
                 // Write your DynamicControl code above this line 
             }
         };// End DynamicControl azimuthControl code 
@@ -48,7 +53,11 @@ public class AltAz implements HBAction {
         FloatControl altitudeControl = new FloatBuddyControl(this, "Altitude", 0, -90, 90) {
             @Override
             public void valueChanged(double control_val) {// Write your DynamicControl code below this line 
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.ALTITUDE),
+                        control_val);
 
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
                 // Write your DynamicControl code above this line 
             }
         };// End DynamicControl altitudeSender code 
@@ -72,7 +81,7 @@ public class AltAz implements HBAction {
         } // end oscListener code
 
 
-        TriggerControl triggerControl = new TriggerControl(this, "Send Position") {
+        TriggerControl triggerControl = new TriggerControl(this, "Send Alt Az") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line
                 OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_ALTAZ),

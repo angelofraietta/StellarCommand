@@ -45,7 +45,7 @@ public final class StellarOSCVocabulary {
          * The message is used to indicate the number of bundles that are being used to send all the Stellar Data for a single query.
          * The reason is that there could be thousands of stars being returned which would be too large to fit a single bundle.
          * <br>The OSC arguments are two integers:
-         * <br><br>The Bundle number for this section of the data. One based index count - eg, first bundle will have a value of 1
+         * <br><br>The Bundle number for this section of the data. Zero based index count - eg, first bundle will have a value of zero
          * <br>The total number of bundles for current query
          */
         public static final String BUNDLE_COUNT = "bundlecount";
@@ -156,7 +156,7 @@ public final class StellarOSCVocabulary {
 
         /**
          * Causes Stellarium to slew to the RA / DEC
-         * <br><b>RA</b> float - The Right ascension in decimal degrees
+         * <br><b>RA</b> float - The Right Ascension in decimal degrees
          * <br><b>Dec</b> float - The Declination in decimal degrees
          */
         public static final String VIEW_RA_DEC = "viewRADec";
@@ -166,24 +166,40 @@ public final class StellarOSCVocabulary {
          * <br><b>Altitude</b> float - altitude in degrees
          * <br><b>Azimuth</b> float - azimuth in degrees
          */
-        public static final String VIEW_ALTAZ = "viewAltAz";
+         public static final String VIEW_ALTAZ = "viewAltAz";
 
+
+        /**
+         * Causes Stellarium view to centre to the altitude. OSC arguments are:
+         * <br><b>Altitude</b> float - altitude in degrees
+         */
+        public static final String ALTITUDE = "altitude";
+
+
+        /**
+         * Causes Stellarium view to centre to the  azimuth. OSC arguments are:
+         * <br><b>Azimuth</b> float - altitude in degrees
+         */
+        public static final String AZIMUTH = "azimuth";
 
         /**
          * Cause Stellarium to show or hide the ground. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
+         * <br> If no OSC arguments present, the current value will be returned
          */
         public static final String SHOW_GROUND = "showGround";
 
         /**
          * Cause Stellarium to show or hide the atmosphere. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
+         * <br> If no OSC arguments present, the current value will be returned
          */
         public static final String SHOW_ATMOSPHERE = "showAtmosphere";
 
         /**
          * Cause Stellarium to show or hide the constellation art. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
+         * <br> If no OSC arguments present, the current value will be returned
          */
         public static final String SHOW_CONSTELATION_ART = "showConstellationart";
 
@@ -191,6 +207,7 @@ public final class StellarOSCVocabulary {
         /**
          * Cause Stellarium to show or hide the star labels. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
+         * <br> If no OSC arguments present, the current value will be returned
          */
         public static final String SHOW_STAR_LABELS = "showStarLabels";
 

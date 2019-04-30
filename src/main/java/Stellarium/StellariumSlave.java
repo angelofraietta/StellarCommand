@@ -51,10 +51,21 @@ public class StellariumSlave  {
 
     // Define our cahced JSON objects
     JSONObject mainStatus = null;
+    JSONObject propertiesValue = null;
     JSONObject mainView = null;
 
     StellariumLocation lastStellariumLocation = null;
     StellariumTime lastStellariumTime = null;
+
+    /**
+     * Get the Stellarium Properties. Note that this could be null
+     * @return the last polled Stellarium Properties
+     */
+    public StellariumProperty getStellariumProperties() {
+        return lastStellariumProperty;
+    }
+
+    StellariumProperty lastStellariumProperty = null;
 
     String stellariumDevice = DEFAULT_STELLARIUM_HOST;
 
@@ -406,6 +417,10 @@ public class StellariumSlave  {
             float fov = readFieldOfView();
             double[] coordinates = readView();
 
+            if (readPropertiesStatus())
+            {
+                lastStellariumProperty = new StellariumProperty(propertiesValue);
+            }
 
             if (coordinates != null) {
                 StellariumLocation stellariumLocation = readObservationPoint();
@@ -528,9 +543,10 @@ public class StellariumSlave  {
         return ret;
     }
 
+
     /**
      * Read the Status From the Stellarium RemoteApi
-     * @return
+     * @return true if able to read
      * @see  <a href="http://stellarium.org/doc/head/remoteControlApi.html"http://stellarium.org/doc/head/remoteControlApi.html</a>
      */
     boolean readMainStatus(){
@@ -541,6 +557,27 @@ public class StellariumSlave  {
             mainStatus = sendGetMessage("main/status");
 
             ret = (mainStatus != null);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    /**
+     * Read the Properties From the Stellarium RemoteApi
+     * @return true if able to read
+     * @see  <a href="http://stellarium.org/doc/head/remoteControlApi.html"http://stellarium.org/doc/head/remoteControlApi.html</a>
+     */
+    boolean readPropertiesStatus(){
+        boolean ret = false;
+
+
+        try {
+            propertiesValue = sendGetMessage("stelproperty/list");
+
+            ret = (propertiesValue != null);
         }
         catch (Exception ex){
             ex.printStackTrace();
