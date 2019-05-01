@@ -275,7 +275,7 @@ Manual last changed \svnyear/\svnmonth/\svnday
 \clearpage
 \listoftables
 \clearpage
-\listofegresults
+%\listofegresults
 
 %#% extend
 
@@ -294,7 +294,7 @@ Manual last changed \svnyear/\svnmonth/\svnday
     \textit{Stellar Command} is a software system that integrates \textit{Stellarium} planetarium software with online astronomical data acquisition through \textit{VizieR} database of astronomical catalogues \cite{ochsenbein2000vizier}. Stellar Command can be used as an interface mechanism for correlating music and sound generation, allowing Stellarium to be used as both a direct input interface for performance or composition, and as a remotely controlled derivative multimedia display output.   
 
 	I hope you will have as much fun creating musical works with it as much as I have.
-{\raggedleft{\scshape ngelo Fraietta} \\ Newcastle, AU \\ June 2019\par}
+{\raggedleft{\scshape Angelo Fraietta} \\ Newcastle, AU \\ June 2019\par}
 
 
 %#% extend
@@ -315,10 +315,8 @@ The advancement of computing power has made the availability of planetarium soft
 Many composers have used the cosmos as inspiration or stimulus to their works, with many using scientific observations or data as input \cite{fraknoi2008music, fraietta2014musical}. The \textit{Quadrivium} linked astronomy, mathematics, geometry and music as a standard part of classical education up until the renaissance \cite{lundy2010quadrivium}. Composers have been mapping mathematics and geometry to music since antiquity \cite{james1995music, assayag2002mathematics}. Kepler stated ``The heavenly motions are nothing but a continuous song for several voices, to be perceived by the intellect, not by the ear; a music which, through discordant tensions, through syncopations and cadenzas as it were, progresses toward certain pre designed six-voiced cadences, and thereby sets landmarks in the immeasurable flow of time." \cite[cited in  ~286]{RojersRuffKepler}. This notion inspired Rogers and Ruff to compose \textit{The Harmony of the World} (1979), describing their work as ``A Realization for the Ear" \cite [p. 286]{RojersRuffKepler} of Johannes Kepler's Astronomical Data from Harmonices Mundi 1619.
 More recently, composers have used measurements from online databases as inputs to automata or as stimulus to performers. 
 
-Nick Ryan developed a musical instrument called \textit{Machine 9} that uses the location of 27,000 pieces of space junk as input to an automaton \cite{spaceDebrisNewScientist}. 
-The instrument is a large cylindrical phonograph that maps space debris to sound as it directly passes overhead. Each groove on the cylinder is associated with a catalogued piece of space debris \cite{spaceDebrisYoutube}. The system accesses publicly available databases that provides the telemetry data of space debris, which is then modelled in real-time. When the telemetry data indicates that one of catalogued items is overhead, the machine locates one of the grooves on the cylinder and plays a mapped sound mechanically through a record-player type stylus. 
 
-Another system based on astronomical catalogues was the author's own musical composition and performance interface using naked eye and binocular astronomy \cite{fraietta2014musical}. A specific star was determined by calculating its azimuth and height above the horizon--known as its \textit {altitude}--using  accelerometer and magnetometer sensors, and calculating the exact location of the star on the celestial sphere using the sensor data, time and geographical location of the observer. This calculation returns the star's \textit{right ascension (RA)}, which is based on its azimuth at Greenwich Meantime at the vernal equinox,  and its \textit{declination (Dec.)}, which is the stars north-south position at the same time \cite{duffett2011practical, fraietta2014musical}. The resultant RA and Dec. are added as input to the VizieR database of online catalogues, returning data about stars--such as brightness and colour--within the defined radius. Various works were created using this interface. In one performance, which was  conducted in conjunction with the Newcastle Astronomical Society on one of their field viewing nights, members of the  public were enticed into viewing the night sky through high powered binoculars, while the sound generated, which was  based on data from the stars they were viewing, was played through loudspeakers on the field \cite{fraietta_segue}. 
+A system based on astronomical catalogues was the author's own musical composition and performance interface using naked eye and binocular astronomy \cite{fraietta2014musical}. A specific star was determined by calculating its azimuth and height above the horizon--known as its \textit {altitude}--using  accelerometer and magnetometer sensors, and calculating the exact location of the star on the celestial sphere using the sensor data, time and geographical location of the observer. This calculation returns the star's \textit{right ascension (RA)}, which is based on its azimuth at Greenwich Meantime at the vernal equinox,  and its \textit{declination (Dec.)}, which is the stars north-south position at the same time \cite{duffett2011practical, fraietta2014musical}. The resultant RA and Dec. are added as input to the VizieR database of online catalogues, returning data about stars--such as brightness and colour--within the defined radius. Various works were created using this interface. In one performance, which was  conducted in conjunction with the Newcastle Astronomical Society on one of their field viewing nights, members of the  public were enticed into viewing the night sky through high powered binoculars, while the sound generated, which was  based on data from the stars they were viewing, was played through loudspeakers on the field \cite{fraietta_segue}. 
 Another set of performances was conducted with an improvising ensemble that featured various astronomical photos displayed as a slide show where the astronomical data was mapped as MIDI and functioned as inspirational impetus for the performers \cite{BriightSyzygy}. 
 
 Although both systems are innovative and impressive, they have identifiable boundaries. First, Machine 9 exists as an installation piece using unique piece of specialised hardware \cite{spaceDebrisYoutube}.  Furthermore, a publicly available API to convert the space debris to a musical transmission protocol like MIDI or OSC \cite{wright1997open} is not yet available for the wider computer music community. Secondly, although the binocular display has an awesome display--the actual night sky--``few people ventured outside to the astronomical equipment"\cite[p. ~50]{fraietta2014musical} because they were required to leave the room to look through binoculars while the ensemble played in a room. Furthermore, the work is severely bound by weather conditions and a clear view of the sky. In one of the performances, ``the sky was completely covered with cloud and it rained, so there was nothing to see through the binoculars. The audience, however, enjoyed the ensemble performance with the NASA image slide show with samples fed from stored star tables."\cite[p. ~50]{fraietta2014musical}.  This weather constraint inspired the author to use planetarium software as the input and display mechanism as an alternative to binoculars.  
@@ -363,18 +361,7 @@ The interface required to control both Stellarium and VizieR was HTTP based, so 
 
 Developing the system as a Java Archive (JAR) fulfilled all these requirements. Using a JAR file allowed instantiation from the command line, running as separate processes and using OSC to communicate with other programs. Additionally, many other programming languages can connect directly to a JAR through the Java Native Interface (JNI) \cite{liang1999java}. 
 
-
-\chapter{Terminology}
-
-\subsection{Right Ascension}
-
-\subsection{Declination}
-
-\subsection{Magnitude}
-
-\subsection{Mission}
-	
-\subsection{Open Sound Control}
+\input{terminology.tex}
 
 %#% extend
 
@@ -401,36 +388,36 @@ There are primarily two ways to use Stellar Command. The first is as a separate 
 The Stellar Command module is instantiated by executing Java  with the name of the JAR file and the required program arguments that define communication, such as the network port to send OSC messages to, and the OSC address space.  For example, to start the StellarCommand module so it sends OSC messages on UDP port 1234  using an OSC address space of \texttt{/Stellar},\footnote{In this instance, the OSC client and Stellarium are on the same computer.} one would execute the following command:\\
 
 \begin{syntax}
-	\medskip
+
 	java -jar StellarCommand.jar port=1234 osc=/Stellar  \\
-	\medskip
+
 \end{syntax}
 \bigskip
    When the server starts, it will open the first available UDP port, and notify the client of this port. For example, if the command module opened port 4567, it will send an OSC message \texttt{/Stellar/osc 4567} to the client on the localhost. 
    
 \begin{syntax}
-	\medskip
+
 	/Stellar/osc 4567  \\
-	\medskip
+
 \end{syntax}
 \bigskip
 
 Allowing the command module to find its own port number removes the probability of port clashes as each client furnishes the other with a valid port number for communicating without requiring configuration in the command module. It is, however, possible to request the Stellar Command module try certain ports by adding the argument \textit{tryport} \index{osc!tryport|(} with a comma separated list of ports. For example, the argument \texttt{tryport=3333,4444,5555} will cause Stellarium to sequentially try opening the ports listed, and if these all fail, will then open the first available port.\\
    
    \begin{syntax}
-   	\medskip
+
    	java -jar StellarCommand.jar port=1234 osc=/Stellar  tryport=3333,4444,5555\\
-   	\medskip
+
    \end{syntax}
    \bigskip
    
    The OSC client would receive the following OSC message:
    \begin{syntax}
-   	\medskip
-   	/Stellar/osc 3333  \\
-   	\medskip
-   \end{syntax}
 
+   	/Stellar/osc 3333  \\
+   \end{syntax}
+   \bigskip
+   
 The OSC client and the Stellarium server do not have to be on the same physical computer as the Stellar Command module. For example Figure~\ref{fig:RemoteStellarium}, shows three OSC clients and a Stellarium server on a LAN, and a remote Stellarium server accessible from the internet through \textit{myserver.com}. 
 
 \begin{figure}[htbp]
@@ -454,9 +441,12 @@ This will cause the Stellar Command module to send OSC messages to ``192.168.0.5
 \clearpage
 \pagestyle{ruled}
 
-%#% extstart include laying-out-page.tex
+\section{Sending Commands to the Stellar Command Module}
+You can provide instructions to Stellar Command in order to control Stellarium or to change the amount and type of data you want to receive. For example, you may want the Stellarium display to zoom in closer to a particular area of sky. You would do this by decreasing the field of view.\footnote{Section~\ref{subsec:fieldofview} --
+	\emph{\titleref{subsec:fieldofview}} shows how to do this.} Likewise, you may want to reduce the amount of astronomical data you are receiving by adding a filter threshold so VizieR will only receive stars within a certain magnitude range. 
 
 
+\subsection{Field Of View}\label{subsec:fieldofview}
 \chapter{Using Stellar Command as a Java Library} \label{chap:libraryosc}
 This chapter details how to use Stellar Command as a library that you call directly from within your programming environment.
 If you intend to use Stellar Command as a standalone server application and communicate to it with Open Sound Control Messages through your preferred music package---such as Max MSP, SuperCollider or PD---you can skip back to chapter~\ref{chap:launchosc} --
