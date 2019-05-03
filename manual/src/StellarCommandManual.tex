@@ -124,6 +124,7 @@
   layout=marginnote,
 }
 \usepackage{tikz,ragged2e}
+\usepackage{makeidx} 
 \makeatletter
 % extra feature, vadj=length kan flytte på fxnotes hvis de overlapper
 \@fxdefinekey{layout}{vadj}{\def\marginnotevadjust{#1}}
@@ -382,9 +383,9 @@ There are primarily two ways to use Stellar Command. The first is as a separate 
 
 
 \section{Launching Stellar Command}
-\index{standalone!process|(}
-\index{osc!clientport|(}
-\index{osc!port|(}
+makeidx{standalone}
+\index{osc!clientport}
+\index{osc!port|}
 The Stellar Command module is instantiated by executing Java  with the name of the JAR file and the required program arguments that define communication, such as the network port to send OSC messages to, and the OSC address space.  For example, to start the StellarCommand module so it sends OSC messages on UDP port 1234  using an OSC address space of \texttt{/Stellar},\footnote{In this instance, the OSC client and Stellarium are on the same computer.} one would execute the following command:\\
 
 \begin{syntax}
@@ -579,7 +580,7 @@ the indexed topic.\vskip\onelineskip}
 \makeatother
 
 
-\printindex[lines]
+\printindex
 
 \cleardoublepage
 \pagestyle{empty}

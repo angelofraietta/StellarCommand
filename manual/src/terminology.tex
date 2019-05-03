@@ -14,34 +14,57 @@ The \textit{field of view} is the amount of sky that you are able to see and it 
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\columnwidth]{fov60}
-	\caption{Stellarium displaying a 6060$^{\circ}$ field of view.}
+	\includegraphics[width=1\columnwidth]{fov60}
+	\caption{Stellarium displaying a 60$^{\circ}$ field of view.}
 	\label{fig:fov60}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\columnwidth]{fov13}
-	\caption{Stellarium displaying a 1360$^{\circ}$ field of view.}
+	\includegraphics[width=1\columnwidth]{fov13}
+	\caption{Stellarium displaying a 13$^{\circ}$ field of view.}
 	\label{fig:fov13}
 \end{figure}
 
 \subsubsection{Observation Location}
+The observer location is the geographical position from where the celestial observation is being made. These are defined using latitude and longitude. For example, if you were viewing the sky from Newcastle Australia, your geographical location would be  32.9283$^{\circ}$ South, 151.7817$^{\circ}$ East. Rather than using the terms south and east, northern latitudes are positive and southern are negative. Likewise, east is positive and west is negative. Therefore, the geographical location for Newcastle would be -32.9283, +151.7817.  A western longitude can also be positive, however, the value is 360$^{\circ}$ - the western longitude. Eg, a longitude of -90$^{\circ}$ is also +270$^{\circ}$.
+
+It is also possible to set the planet or celestial body you are viewing from. 
+For example, Figure ~\ref{fig_JupiterFromIO} displays us looking at Jupiter with our observation location as its moon Io.
+
+\begin{figure}[ht]
+	\centerline{\includegraphics[width=1\columnwidth]{JupiterFromIO.png}}
+	\caption{\label{fig_JupiterFromIO}{A simulation of Jupiter being viewed with Io as the observation location.}}
+\end{figure}
+
+\subsubsection{Time Zone}
+The time zone is the time difference between local time and Coordinated Universal Time (UTC) and does not change with daylight saving. The exact time is specified by the year, month, day followed by time in hours (24 hour code), minutes, seconds and the time zone.  The time zone for UTC is "Z", witch each hour time zone increasing by a letter of the alphabet, with "Z" being zero. For example,   midday on January 1, 2000 at UTC would be defined as "2000-01-01T12:00:00Z". Likewise, "2019-06-01T14:13:00K" would be 1 June 2019 at 2:15pm, 10 hours later than UTC time (this is Sydney time). When daylight saving occurs, the local time changes, which results in a different letter for the time zone.
+
 
 \subsubsection{Celestial Coordinates}
-In the same way we can define an exact location on the Earth using latitude and longitude. For example, 32.9283$^{\circ}$ S, 151.7817$^{\circ}$  E
-, we do the same with celestial objects using the celestial coordinate system
+In the same way we can define an exact location on the Earth using latitude and longitude, we define the location of celestial objects using the celestial coordinate system. Instead of longitude and latitude, we use the terms \textit{Right ascension} and \textit{Declination}. 
+
 \subsubsection{Right Ascension}
-The \textit{Right Ascension}, knows as the \textit{RA}, is the angular distance 
+Right Ascension, abbreviated to \textit{RA}, is the angular distance from the east of the First Point of Aries (hereafter FPOA), and is measured in hours, minutes and seconds, and is similar to the longitude on earth, except on the celestial sphere. This is basically how long it takes from the time FPOA is on the meridian (directly north or south) for the RA in question to be overhead. For example, if an object had a Right ascension of 3 Hours, it would mean that it would appear on the meridian three hours after FPOA was.  This is similar to the concept of time zones. In order to make calculations easier, we convert the RA to a digital angle by multiplying the number of hours by 15 (24 hours x 15 = 360$^{\circ}$) . Furthermore, we use decimals instead of minutes and seconds. eg, 90$^{\circ}$ 30' would be written 90.5$^{\circ}$. 
 
 \subsubsection{Declination}
+The declination is equivalent to the concept of latitude and is the angular distance a star is north or south of the celestial equator when it is on the meridian (in line with north / south).  
 
+\subsection{Magnitude}
+The magnitude is how bright a star is. Higher magnitudes mean a lower brightness.
 
-\subsubsection{Magnitude}
+\subsection{Atmosphere}
+Atmosphere is the gas that surrounds us and makes the sky appear like daylight. If there was no atmosphere, the sky would appear dark, as it does on the moon, and you would be easily able to see stars during the day. Stellarium gives us the option to hide the atmosphere, enabling us to see stars at any time. For example, Figure ~\ref{fig_with-atmosphere} shows the midday with normal atmosphere, whereas ~\ref{fig_no-atmosphere} shows the same sky without the atmosphere.
 
-\subsubsection{Atmosphere}
+\begin{figure}[ht]
+	\centerline{\includegraphics[width=1\columnwidth]{with-atmosphere.png}}
+	\caption{\label{fig_with-atmosphere}{Midday showing the sky with atmosphere.}}
+\end{figure}
 
-\subsubsection{Mission}
+\begin{figure}[ht]
+	\centerline{\includegraphics[width=1\columnwidth]{no-atmosphere.png}}
+	\caption{\label{fig_no-atmosphere}{Midday showing the sky with atmosphere.}}
+\end{figure}
 
 
 \subsection{Ethnoastronomy}
@@ -59,7 +82,12 @@ contain meaning and significance for terrestrial affairs....Astrology appears to
 be a universal feature of human culture and may be understood as a form of cultural
 astronomy; an important contribution to the understanding of astronomy’s cultural
 uses, applications, uses, and functions; and an indication of society’s attitudes to the
-stars."\cite[p.~104]{Campion2015}.
+stars."\cite[p.~104]{Campion2015}. Stellarium has a feature whereby you can display constellation art, as shown in ~\ref{fig_constellation-art}, which facilitates representing astrology in your works. 
+
+\begin{figure}[ht]
+	\centerline{\includegraphics[width=1\columnwidth]{constellation-art}}
+	\caption{\label{fig_constellation-art}{Constellation art.}}
+\end{figure}
 
 
 	
