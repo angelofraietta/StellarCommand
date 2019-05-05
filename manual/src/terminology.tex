@@ -32,6 +32,8 @@ The observer location is the geographical position from where the celestial obse
 It is also possible to set the planet or celestial body you are viewing from. 
 For example, Figure ~\ref{fig_JupiterFromIO} displays us looking at Jupiter with our observation location as its moon Io.
 
+Another parameter is the altitude from where the observation is being made. 
+
 \begin{figure}[ht]
 	\centerline{\includegraphics[width=1\columnwidth]{JupiterFromIO.png}}
 	\caption{\label{fig_JupiterFromIO}{A simulation of Jupiter being viewed with Io as the observation location.}}
@@ -40,6 +42,11 @@ For example, Figure ~\ref{fig_JupiterFromIO} displays us looking at Jupiter with
 \subsubsection{Time Zone}
 The time zone is the time difference between local time and Coordinated Universal Time (UTC) and does not change with daylight saving. The exact time is specified by the year, month, day followed by time in hours (24 hour code), minutes, seconds and the time zone.  The time zone for UTC is "Z", witch each hour time zone increasing by a letter of the alphabet, with "Z" being zero. For example,   midday on January 1, 2000 at UTC would be defined as "2000-01-01T12:00:00Z". Likewise, "2019-06-01T14:13:00K" would be 1 June 2019 at 2:15pm, 10 hours later than UTC time (this is Sydney time). When daylight saving occurs, the local time changes, which results in a different letter for the time zone.
 
+\subsubsection{Azimuth}
+\textit{Azimuth} is the direction with respect to celestial north and is measured in degrees. If, for example, you were looking due south, the azimuth would be 180. East is 90 and west is -90 or +270. 
+
+\subsubsection{Altitude}
+The altitude is the angle you are looking up or down at and is measured in degrees. If you were looking directly up, the altitude would be 90 degrees. Similarly, horizontal is zero and down is -90.
 
 \subsubsection{Celestial Coordinates}
 In the same way we can define an exact location on the Earth using latitude and longitude, we define the location of celestial objects using the celestial coordinate system. Instead of longitude and latitude, we use the terms \textit{Right ascension} and \textit{Declination}. 

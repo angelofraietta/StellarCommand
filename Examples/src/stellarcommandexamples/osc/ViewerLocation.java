@@ -6,10 +6,7 @@ import com.stellarcommand.StellarOSCVocabulary;
 import de.sciss.net.OSCMessage;
 import net.happybrackets.core.HBAction;
 import net.happybrackets.core.OSCUDPListener;
-import net.happybrackets.core.control.FloatTextControl;
-import net.happybrackets.core.control.TextControl;
-import net.happybrackets.core.control.TextControlSender;
-import net.happybrackets.core.control.TriggerControl;
+import net.happybrackets.core.control.*;
 import net.happybrackets.device.HB;
 
 import java.lang.invoke.MethodHandles;
@@ -28,7 +25,7 @@ public class ViewerLocation implements HBAction {
         hb.reset(); //Clears any running code on the device
         //Write your sketch below
 
-        TextControl display_text = new TextControlSender(this, "Diagnostics", "");
+        TextControl display_text = new TextControlSender(this, "Diagnostics", "").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
 
         commandLoader = new StellarCommandDriver();
@@ -103,9 +100,13 @@ public class ViewerLocation implements HBAction {
             new TriggerControl(this, "Change Location") {
                 @Override
                 public void triggerEvent() {// Write your DynamicControl code below this line 
-                    oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.OBSERVATION_POINT),
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.OBSERVATION_POINT),
                             latttudeControl.getValue(), longitudeControl.getValue(),
-                            altitudeControl.getValue(), planetControl.getValue()), stellarCommandInetSocketAddress);
+                            altitudeControl.getValue(), planetControl.getValue());
+
+                    oscudpSender.send(msg, stellarCommandInetSocketAddress);
+
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
                     // Write your DynamicControl code above this line 
                 }
             };// End DynamicControl locationChangeTrigger code 
@@ -113,8 +114,11 @@ public class ViewerLocation implements HBAction {
 
             new TriggerControl(this, "Request Location") {
                 @Override
-                public void triggerEvent() {// Write your DynamicControl code below this line 
-                    oscudpSender.send(OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.OBSERVATION_POINT)), stellarCommandInetSocketAddress);
+                public void triggerEvent() {// Write your DynamicControl code below this line
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.OBSERVATION_POINT));
+
+                    oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
                     // Write your DynamicControl code above this line 
                 }
             };// End DynamicControl triggerControl code 

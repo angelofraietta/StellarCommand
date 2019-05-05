@@ -29,7 +29,7 @@ public class StellarPosition implements HBAction {
         //Write your sketch below
 
 
-        TextControl display_text = new TextControlSender(this, "Diagnostics", "");
+        TextControl display_text = new TextControlSender(this, "Diagnostics", "").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
 
         commandLoader = new StellarCommandDriver();
@@ -83,16 +83,16 @@ public class StellarPosition implements HBAction {
 
 
 
-                new TriggerControl(this, "Send Acrux") {
+                new TriggerControl(this, "Send Saturn") {
                     @Override
                     public void triggerEvent() {// Write your DynamicControl code below this line
-                        OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_OBJECT), "Acrux");
+                        OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_OBJECT), "Saturn");
 
                         oscudpSender.send(msg, stellarCommandInetSocketAddress);
                         display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
                         // Write your DynamicControl code above this line
                     }
-                };// End DynamicControl sendAcrux code
+                };// End DynamicControl sendSaturn code
 
 
                 new TriggerControl(this, "Send Canopus by Ra / Dec") {

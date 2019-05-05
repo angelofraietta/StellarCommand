@@ -64,6 +64,24 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
 
     /**
+     * Convert our OSC message to a float. This is in casd someone sends an int instead of as float
+     * @param arg the OSC argument
+     * @return a float version
+     */
+    static float convertOSCArgToFloat(Object arg){
+        float ret = 0;
+
+        if (arg instanceof Float)
+        {
+            ret = (float)arg;
+        }
+        else if (arg instanceof Integer)
+        {
+            ret = (int)arg;
+        }
+        return ret;
+    }
+    /**
      * Clear our stored values and have new values se-sent
      */
     void forceRePollStellarium(){
@@ -395,8 +413,8 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
      * @param msg OSC Message
      */
     private void processAltAz(OSCMessage msg) {
-        float altitude = (float)msg.getArg(0);
-        float azimuth = (float)msg.getArg(1);
+        float altitude = convertOSCArgToFloat(msg.getArg(0));
+        float azimuth = convertOSCArgToFloat(msg.getArg(1));
         stellariumSlave.setAltAz(new AltAz(altitude, azimuth));
     }
 
@@ -414,7 +432,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
      * @param msg OSC Message
      */
     private void processAzimuth(OSCMessage msg) {
-        float altitude = (float)msg.getArg(0);
+        float altitude = convertOSCArgToFloat(msg.getArg(0));
         stellariumSlave.setAzimuth(altitude);
     }
 
@@ -431,7 +449,9 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     private void setFieldOfView(OSCMessage msg) {
         try
         {
-            float field_of_view = (float)msg.getArg(0);
+            Object msg_val = msg.getArg(0);
+
+            float field_of_view = convertOSCArgToFloat(msg_val);
             stellariumSlave.setFieldOfView(field_of_view);
         }
         catch(Exception ex){}

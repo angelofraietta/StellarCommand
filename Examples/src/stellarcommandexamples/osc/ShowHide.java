@@ -6,10 +6,7 @@ import com.stellarcommand.StellarOSCVocabulary;
 import de.sciss.net.OSCMessage;
 import net.happybrackets.core.HBAction;
 import net.happybrackets.core.OSCUDPListener;
-import net.happybrackets.core.control.BooleanControl;
-import net.happybrackets.core.control.TextControl;
-import net.happybrackets.core.control.TextControlSender;
-import net.happybrackets.core.control.TriggerControl;
+import net.happybrackets.core.control.*;
 import net.happybrackets.device.HB;
 
 import java.lang.invoke.MethodHandles;
@@ -28,7 +25,7 @@ public class ShowHide implements HBAction {
         hb.reset(); //Clears any running code on the device
         //Write your sketch below
 
-        TextControl display_text = new TextControlSender(this, "Diagnostics", "");
+        TextControl display_text = new TextControlSender(this, "Diagnostics", "").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
 
         commandLoader = new StellarCommandDriver();

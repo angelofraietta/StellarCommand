@@ -119,23 +119,23 @@ public final class StellarOSCVocabulary {
         /**
          * Reset all filters on the query
          */
-        public static final String RESET_FILTERS = "resetfilters";
+        public static final String RESET_FILTERS = "resetFilters";
 
         /**
          * Flag to indicate we want stars sent when a view changes. <br>
          * Add an OSC arg of zero to stop sending stars or non zero to send
          */
-        public static final String SEND_STARS = "sendstars";
+        public static final String SEND_STARS = "sendStars";
 
         /**
          * Request that a pre-stored VizieR table be loaded from file and sent
          */
-        public static final String LOAD_TABLE = "loadtable";
+        public static final String LOAD_TABLE = "loadTable";
 
         /**
          * Request that VizieR current table be saved to file
          */
-        public static final String SAVE_TABLE = "savetable";
+        public static final String SAVE_TABLE = "saveTable";
 
         /**
          * The location that we want to view from in Stellarium
@@ -228,7 +228,7 @@ public final class StellarOSCVocabulary {
          * Cause Stellarium to progress in time:
          * <br><b>julian day per second</b> float -  The number of julian days per second. EG, if the value was set to one, the display would progress one day every second
          */
-        public static final String SET_TIME_RATE = "timerate";
+        public static final String SET_TIME_RATE = "timeRate";
 
 
 

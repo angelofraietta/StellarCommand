@@ -25,7 +25,7 @@ public class AltAz implements HBAction {
         hb.reset(); //Clears any running code on the device
         //Write your sketch below
 
-        TextControl display_text = new TextControlSender(this, "Diagnostics", "");
+        TextControl display_text = new TextControlSender(this, "Diagnostics", "").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
 
         commandLoader = new StellarCommandDriver();

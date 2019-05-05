@@ -35,7 +35,6 @@ Allowing the command module to find its own port number removes the probability 
    
    The OSC client would receive the following OSC message:
    \begin{syntax}
-
    	/Stellar/osc 3333  \\
    \end{syntax}
    \bigskip
@@ -53,7 +52,7 @@ The OSC client and the Stellarium server do not have to be on the same physical 
 Creating a connection between \textit{OSC Client 1} and \texttt{Remote Stellarium Server} is effected by adding adding the arguments \\\texttt{client=192.168.0.5} and \texttt{stellarium=http://myserver.com} to the command line.
 This will cause the Stellar Command module to send OSC messages to ``192.168.0.5" and Stellarium commands to \textit{http://myserver.com} on HTP port 8090\footnote{The default Stellarium Remote Control port is 8090, however, this can be changed inside Stellarium. It is assumed that port forwarding when not using a local area network has been configured to send packages to the correct computer hosting Stellarium}, effectively acting as a proxy between the two.
 
-   \begin{syntax}
+ \begin{syntax}
 	\medskip
 	java -jar StellarCommand.jar port=1234 osc=/Stellar  {\char'134}\\client=192.168.0.5 stellarium=http://myserver.com\\
 	\medskip
@@ -64,5 +63,160 @@ This will cause the Stellar Command module to send OSC messages to ``192.168.0.5
 You can provide instructions to Stellar Command in order to control Stellarium or to change the amount and type of data you want to receive. For example, you may want the Stellarium display to zoom in closer to a particular area of sky. You would do this by decreasing the field of view.\footnote{Section~\ref{subsec:fieldofview} --
 	\emph{\titleref{subsec:fieldofview}} shows how to do this.} Likewise, you may want to reduce the amount of astronomical data you are receiving by adding a filter threshold so VizieR will only receive stars within a certain magnitude range. 
 
-\subsection{Field Of View}\label{subsec:fieldofview}
+\subsection{poll}
+Sometimes Stellar Command may already be started and configured to send and listen to the ports. You can easily find this out by sending the \textit{poll} command with no arguments, which will cause Stellarium to reply on the ports it is configured when started up.
 
+ \begin{syntax}
+	\medskip
+	Stellar/poll
+	\medskip
+\end{syntax}
+
+If you were sending OSC on the required port and your cleint was at the correct address, you would receive the following OSC message:
+\begin{syntax}
+	/Stellar/osc 3333  \\
+\end{syntax}
+\bigskip
+
+
+\subsection{fieldOfView}\label{subsec:fieldofview}
+
+In order to send a change in the field of view, send a message using the \textit{fieldOfView} in the namespace, followed by the field of view as a float argument. For example, to set the field of view to 60$^{\circ}$, you would send a message as follows:
+ \begin{syntax}	
+ 	\medskip
+	/Stellar/fieldOfView 60.0
+	\medskip
+ \end{syntax}
+\bigskip
+
+\subsection{moveLR}
+You can make the Stellarium display move left or right by sending the command \textit{moveLR} followed by a floating point number indicating how far to move. A positive value will make it appear that the viewer is turning their head to the right, while a negative number will simulate moving to the left. To move to the right, send the following command:
+  \begin{syntax}	
+ 	\medskip
+ 	/Stellar/moveLR 1.0
+ 	\medskip
+ \end{syntax}
+ \bigskip
+
+\subsection{moveUD}
+You can make the Stellarium display move up or rdown by sending the command \textit{moveUD} followed by a floating point number indicating how far to move. A positive value will make it appear that the viewer is turning their head up, while a negative number will look lower. To look towards the sky, send the following command:
+\begin{syntax}	
+	\medskip
+	/Stellar/moveUD 1.0
+	\medskip
+\end{syntax}
+\bigskip
+
+\subsection{azimuth}
+If you want to change the azimuth that you are looking at, use \textit{azimuth} in the namespace and add the azimuth as a float argument. For example, if you wanted to turn to the east, you would send a message as follows:
+ \begin{syntax}	
+	\medskip
+	/Stellar/azimuth 90.0
+	\medskip
+\end{syntax}
+
+\subsection{altitude}
+If you want to change the altitude that you are looking at, use \textit{altitude} in the namespace and add the altitude as a float argument. For example, if you wanted to look 45$^{\circ}$ up, you would send a message as follows:
+\begin{syntax}	
+	\medskip
+	/Stellar/altitude 45.0
+	\medskip
+\end{syntax}
+
+\subsection{viewAltAz}
+Setting the altitude and the azimuth at the same time is so commonplace that it has been made available as a single OSC message.
+If you want to change the altitude that you are looking at, use \textit{viewAltAz} in the namespace and add the altitude and then the azimuth as float arguments. The two previous calls could have been done with the single command
+\begin{syntax}	
+	\medskip
+	/Stellar/viewAltAz 45.0 90.0
+	\medskip
+\end{syntax}
+
+\subsection{viewRADec}
+You can move to the RA and Dec to the centre of the sky by using  \textit{viewRADec} in the namespace and send the RA and Dec as decimal degrees. If for example, you wanted to centralise  an RA of 95.98796$^{\circ}$  and Dec. of -52.69566$^{\circ}$  (this is the star Canopus), you would send the following OSC:
+ \begin{syntax}	
+ 	\medskip
+ 	/Stellar/viewRADec 95.98796 -52.69566
+ 	\medskip
+ \end{syntax}
+ 
+ \subsection{View Object}
+ You may want to select a particular named object in the sky, such as a star, planet or moon. You can do this by using the command \textit{viewObject} followed by the object name. For example, if you wanted to centre the planet Saturn, you would send the following OSC:
+ 
+\begin{syntax}	
+ 	\medskip
+ 	 /Stellar/viewObject Saturn
+ 	\medskip
+ \end{syntax}
+ 
+ \subsection{viewerObservationPoint}
+ You can change the latitude, longitude, altitude and planet you are setting as your observation point by using the \textit{viewerObservationPoint} command followed by the latitude, longitude, and altitude as float arguments, and the planet as a string.  For example, to set a latitude of 32$^{\circ}$, longitude of 151$^{\circ}$, and altitude of 21m from Saturn, you would send the following command:
+ 
+ \begin{syntax}	
+ 	\medskip
+ 	/Stellar/viewerObservationPoint 32.0 151.0 21.0 Saturn
+ 	\medskip
+ \end{syntax}
+ 
+ 
+ \subsection{showGround }
+ It is possible to hide the ground, enabling you to see stars and planets through the earth by sending the \textit{showGround } command, and an integer value of zero to hide the ground or non-zero to show it. To hide the ground, you would send the following OSC message:
+ 
+  \begin{syntax}	
+ 	\medskip
+ 	/Stellar/showGround 0
+ 	\medskip
+ \end{syntax}
+
+ \subsection{showAtmosphere }
+It is possible to hide the atmosphere, enabling you to see stars and planets during daylight hours by sending the \textit{showAtmosphere} command, and an integer value of zero to hide the atmosphere or non-zero to show it. To hide the atmosphere, you would send the following OSC message:
+
+\begin{syntax}	
+	\medskip
+	/Stellar/showAtmosphere 0
+	\medskip
+\end{syntax}
+
+ \subsection{showStarLabels }
+It is possible to hide the star labels  by sending the \textit{showStarLabels} command, and an integer value of zero to hide the labels or non-zero to show it. To hide the labels, you would send the following OSC message:
+
+\begin{syntax}	
+	\medskip
+	/Stellar/showStarLabels 0
+	\medskip
+\end{syntax}
+
+ \subsection{showConstellationart }
+It is possible to show or hide the constellation art by sending the \textit{showConstellationart} command, and an integer value of zero to hide the art or non-zero to show it. To show the constellation art, you would send the following OSC message:
+
+\begin{syntax}	
+	\medskip
+	/Stellar/showConstellationart 1
+	\medskip
+\end{syntax}
+
+\subsection{timeRate}
+It is possible to change the simulated time rate on Stellarium by sending the \textit{timeRate} command followed by the new time rate in days per second as a float. If, for example, you set the time rate to zero, time would be still and the stars would not move through the sky. If, however, you set the time rate to 0.5, the display would simulate time running at one day every two seconds. You can also make time go in reverse by setting the time rate to a negative number. To set the display to simulate a day every two seconds, you would send the following:
+
+\begin{syntax}	
+	\medskip
+	/Stellar/timeRate 0.5
+	\medskip
+\end{syntax}
+
+\subsection{saveTable and loadTable}
+Retrieving astronomical data from VizieR can sometimes take time, depending on your internet speed and the number of stars in the field of view requested. It is possible to save the current loaded VizieR table of stars to a file so you can use it even when there is no internet. To save the table, send the command \textit{saveTable} followed by the name of the file you want it saved to. You can then use the \textit{loadTable} command later to load the data and have Stellar Command send it to you.
+To save the current table to the file "Acrux.txt", send the following command:
+ 
+ \begin{syntax}	
+ 	\medskip
+ 	/Stellar/saveTable Acrux.txt
+ 	\medskip
+ \end{syntax}
+
+To load this table from file and have it send the data to you, send te following command:
+ \begin{syntax}	
+	\medskip
+	/Stellar/loadTable Acrux.txt
+	\medskip
+\end{syntax}
