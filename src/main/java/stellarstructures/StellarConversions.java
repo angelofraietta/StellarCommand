@@ -62,7 +62,7 @@ public class StellarConversions {
         // Hour Angle
         final double DEG_CONVERT =  Math.PI / 180;
 
-        double HA = (observationalPoint.localSiderealTime - raDec.rightAscension + 360) % 360;
+        double HA = (observationalPoint.localSiderealAngle - raDec.rightAscension + 360) % 360;
 
         double sinHa = Math.sin(HA * DEG_CONVERT);
 

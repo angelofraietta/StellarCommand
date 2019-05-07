@@ -3,30 +3,76 @@ This chapter details how to use Stellar Command as a library that you call direc
 If you intend to use Stellar Command as a standalone server application and communicate to it with Open Sound Control Messages through your preferred music package---such as Max MSP, SuperCollider or PD---you can skip back to chapter~\ref{chap:launchosc} --
 \emph{\titleref{chap:launchosc}}.
 
-The Stellar Command Library is a Java Archive that provides a far more efficient method of controlling stellarium and accessing the data because the structures can be accessed directly without having to convert them to OSC. In some cases, converting values to OSC  can result in  data loss when the parameter is a double. Similarly, if a VizieR query contains many thousands of rows of data, these do not need to be encoded into OSC, parsed, and then decoded again. Furthermore, you can easily do efficient functions such as sorting and obtaining altitude and azimuth based on observer location and date and time directly.
+The Stellar Command Library is a Java Archive that provides a far more efficient method of controlling Stellarium and accessing the data because the structures can be accessed directly without having to convert them to OSC. In some cases, converting values to OSC  can result in  data loss when the parameter is a double. Similarly, if a VizieR query contains many thousands of rows of data, these do not need to be encoded into OSC, parsed, and then decoded again. Furthermore, you can easily do efficient functions such as sorting and obtaining altitude and azimuth based on observer location and date and time directly.
 
-The three main packages include in the Jar are stellarium Control (packed as\textit{stellarium}), VizieR query (packaged \textit{vizier}), and complex data conversion (packaged \textit{stellarstructures}).
+The three main packages include in the Jar are Stellarium Control (packed as\textit{stellarium}), VizieR query (packaged \textit{vizier}), and complex data conversion (packaged \textit{stellarstructures}).
 
 \section{stellarium}
-The simplest way to access stellarium is through the \textit{stellarium} package. The package contains various classes to simplify communication with stellarium. Rather than detailing every function, which you can easily access through the online documentation, the class names and their basic functions will be outlined.
+The simplest way to access Stellarium is through the \textit{stellarium} package. The package contains various classes to simplify communication with Stellarium. Rather than detailing every function, which you can easily access through the online documentation, the class names and their basic functions will be outlined.
 \subsection{StellariumSlave}
 
-\textit{StellariumSlave} is the class that does the REST communication to stellarium and provides a common access point. The class contains a synchronised threaded model that enables API calls to stellarium to complete asynchronously. If, for example, you wanted to set the azimuth of the stellarium display, you would call \textit{setAzimuth} with the number of degrees and your function would return immediately. The StellariumSlave class would then send the API request to stellarium in a separate thread. This prevents the calling application form having to wait for stellarium to process the request, which can often take over 100ms.
-StellariumSlave provides the facility to poll stellarium for changes and provides \textit{StellariumViewListener} interfaces for classes \textit{StellariumView, StellariumLocation} and \textit{StellariumTime}.
+\textit{StellariumSlave} is the class that does the REST communication to Stellarium and provides a common access point. The class contains a synchronised threaded model that enables API calls to Stellarium to complete asynchronously. If, for example, you wanted to set the azimuth of the Stellarium display, you would call \textit{setAzimuth} with the number of degrees and your function would return immediately. The StellariumSlave class would then send the API request to Stellarium in a separate thread. This prevents the calling application form having to wait for Stellarium to process the request, which can often take over 100ms. 
+StellariumSlave provides the facility to poll Stellarium for changes and provides \textit{StellariumViewListener} interfaces for classes \textit{StellariumView, StellariumLocation} and \textit{StellariumTime}.
 
 \subsection{StellariumView}
-StellariumView contains properties about the display of stellarium. These include the field of view, and the RaDec. RaDec are collated into a single class, as detailed in section ~\ref{sec:RaDec} --
+StellariumView contains properties about the display of Stellarium. These include the field of view, and the RaDec. RaDec are collated into a single class, as detailed in section ~\ref{sec:RaDec} --
 \emph{\titleref{sec:RaDec}}. 
 
 \subsection{StellariumLocation}
-StellariumLocation contains information about the simulated location of the viewer in stellarium. You can access parameters including latitude, longitude, altitude, planet and landscape.
+StellariumLocation contains information about the simulated location of the viewer in Stellarium. You can access parameters including latitude, longitude, altitude, planet and landscape.
 
 \subsection{StellariumTime}
-StellariumTime provides access to the time parameters of the stellarium.  These include UTC time, local date time and GMT time shift based on the viewer location, the Julian day, and the time rate that stellarium is simulating.
+StellariumTime provides access to the time parameters of the Stellarium.  These include UTC time, local date time and GMT time shift based on the viewer location, the Julian day, and the time rate that Stellarium is simulating.
 
 \subsection{StellariumProperty}
 The \textit{StellariumProperty} has properties including the ability to show atmosphere, ground, star labels and constellation art. This is very much in progress and more properties will; be made accessible in time as the need arises.
 
+\section{vizier}
+The vizier packages provides the interface to  VizieR database of astronomical catalogues. 
+\subsection{VizierQuery}
+The \textit{VizierQuery} class is where you are able to define the catalogue you want to use, outputs that you require, and any filters that you want to apply. You cn then perform a read which will provide the astronomical data matching the query as text. This data can be reinterpreted using functions from the \textit{stellarstructures} package, detailed in   section ~\ref{sec:stellarstructures} --
+\emph{\titleref{sec:stellarstructures}}. 
 
+The default catalogue used is catalogue used is I/311/hip2 - Hipparcos, the New Reduction (van Leeuwen, 2007). The default outputs provided are:
+
+\begin{itemize}
+	\item RArad (deg) -  Right Ascension in ICRS, Ep=1991.25 
+	\item DErad (deg) -  Declination in ICRS, Ep=1991.25
+	\item pmRA (mas/yr) -  Proper motion in Right Ascension
+	\item pmDE (mas/yr) - Proper motion in Declination 
+	\item Hpmag (mag) - Hipparcos magnitude
+	\item B-V (mag) -  Colour index
+\end{itemize}
+
+ \subsection{StellarDataTable}
+\textit{StellarDataTable} performs analysis and conversion of VizieR data   and stores the data into a table structure. The StellarDataTable contains the names of the columns as well as a list of \textit{StellarDataRow} items that contain the astronomical data values.
+
+\subsection{StellarDataRow}
+A StellarDataRow contains astronomical data values for one star. The list of values match the column names in the StellarDataTable.
+
+\subsection{StellarFilteredTable}
+\textit{StellarFilteredTable} is a class for sorting a StellarDataTable.
+
+ \subsection{FilteredData}
+The \texit{FilteredData} class is a utility for sorting StellarDataRow items based on AltAz
+
+\subsection{MagnitudeSort}
+the \textit{MagnitudeSort} class is a utility for sorting StellarDataRow items based on magnitude
+
+
+\section{stellarstructures} \label{sec:stellarstructures}
+The following classes provide basic encapsulation and some functions on data.
+
+\subsection{AltAz}
+Contains a combination of altitude and azimuth as a single structure;
 
 \subsection{RaDec}\label{sec:RaDec}
+Contains the Right Ascension (RA) and the Declination (Dec.) as a single structure. RA is stored as decimal degrees rather than as hours, minutes and seconds.
+
+\subsection{ObservationalPoint}
+The \textit{ObservationalPoint} contains information about the UTC date / time, latitude and longitude of a particular point. This information is often required for performing other functions such as converting the RADec of a star to AltAz.
+
+\subsection{StellarConversions]}
+ The \textit{StellarConversions} is a utility class used for performing functions including converting RaDec to AltAz and converting Stellarium's three dimensional spherical points to RaDec.
+ 
+

@@ -41,6 +41,21 @@ public class VizierQuery {
     List<String> filters = new ArrayList<>();
 
     /**
+     * Get the catalog we are using for our query
+     * @return the name of the catalogue
+     */
+    public String getCatalogue() {
+        return catalogue;
+    }
+
+    /**
+     * Set the catalogue to use for queries
+     * @param catalogue name if catalogue
+     */
+    public void setCatalogue(String catalogue){
+        this.catalogue = catalogue;
+    }
+    /**
      * Return the VizieR string from the last read
      * @return VizieR text from last read
      */

@@ -12,8 +12,8 @@ public class AltAz {
         return azimuth;
     }
 
-    double altitude;
-    double azimuth;
+    final public double altitude;
+    final public double azimuth;
 
     /**
      * Constructor using alt and dec

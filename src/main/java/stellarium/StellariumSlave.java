@@ -746,7 +746,7 @@ public class StellariumSlave  {
 
     /**
      * Set the altitude in degrees. +90 is zenith, -90 is nadir
-     * @param degrees
+     * @param degrees the altitude in degrees
      */
     public void setAltitude(double degrees){
         synchronized (altAzSynchroniser){

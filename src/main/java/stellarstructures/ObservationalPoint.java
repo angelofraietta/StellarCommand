@@ -11,14 +11,22 @@ import java.time.temporal.ChronoUnit;
 public class ObservationalPoint {
 
 
-    double geographicLongitude;
-    double geographicLatitude;
-    double localSiderealTime;
+    final double geographicLongitude;
+    final double geographicLatitude;
+    final double localSiderealAngle;
     ZonedDateTime observationDate;
 
     public static final ZonedDateTime J200_REFERENCE_DATE = ZonedDateTime.parse("2000-01-01T12:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     public static final double J200_REFERENCE_JDAY = 2451545;
 
+
+    /**
+     * Gets the local sidereal time as an angle.
+     * @return the local sidereal time as an angle
+     */
+    public double getLocalSiderealAngle() {
+        return localSiderealAngle;
+    }
 
     /**
      * Calculate our Julian Day based on dat time provided
@@ -114,7 +122,7 @@ public class ObservationalPoint {
         geographicLongitude = longitude;
         observationDate = utc_observation_date;
         final double dayOffset = ChronoUnit.DAYS.between(J200_REFERENCE_DATE, observationDate);
-        localSiderealTime = (100.46 + 0.985647 * dayOffset + longitude + 15 * (observationDate.getHour() + observationDate.getMinute() / 60d + observationDate.getSecond() / 3600) + 360) % 360;
+        localSiderealAngle = (100.46 + 0.985647 * dayOffset + longitude + 15 * (observationDate.getHour() + observationDate.getMinute() / 60d + observationDate.getSecond() / 3600) + 360) % 360;
 
 
     }

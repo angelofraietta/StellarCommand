@@ -5,6 +5,8 @@ import stellarium.*;
 import de.sciss.net.OSCBundle;
 import de.sciss.net.OSCListener;
 import de.sciss.net.OSCMessage;
+import vizier.StellarDataRow;
+import vizier.StellarDataTable;
 import vizier.VizierQuery;
 
 import java.io.*;
@@ -444,9 +446,10 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     /**
      * Set the stellarium time based on OSC message
      * @param msg the OSC message with the parameters
+     * @return true if able to do conversions
      */
     public boolean setTime(OSCMessage msg) {
-        boolean ret = false;
+        boolean ret = true;
 
         try {
             Object arg_1 = msg.getArg(0);
@@ -493,7 +496,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
             }
         }
         catch (Exception ex){
-
+            ret = false;
         }
         return ret;
     }
