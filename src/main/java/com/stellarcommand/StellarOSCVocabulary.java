@@ -130,7 +130,7 @@ public final class StellarOSCVocabulary {
          * Flag to indicate we want stars sent when a view changes. <br>
          * Add an OSC arg of zero to stop sending stars or non zero to send
          */
-        public static final String SEND_STARS = "sendStars";
+            public static final String SEND_STARS = "sendStars";
 
         /**
          * Request that a pre-stored VizieR table be loaded from file and sent

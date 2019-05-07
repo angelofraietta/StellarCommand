@@ -100,10 +100,18 @@ You can set the simulation time by sending a full ISO time stamp as a string mes
 	\medskip
 \end{syntax}
 
-If using specified time, the first three arguments will be  Year, Month and  Day as integers. The next  argument will be the hour as an integer as a 24 hour number. EG, the number 13 will signify 1pm. The next argument will be the minutes as an integer. The next argument will be seconds as a float, which enables sub second accuracy. The final optional argument will be the time zone as an alphabetical times zone, or if blank, the local time at the location will be used.  the same time could be set by sending the following message.
+If using specified time, the first three arguments will be  Year, Month and  Day as integers. The next  argument will be the hour as an integer as a 24 hour number. EG, the number 13 will signify 1pm. The next two arguments will be the minutes and seconds as integers.  The final optional argument will be the time zone as an alphabetical times zone, or if blank, the local time at the location will be used.  the same time could be set by sending the following message.
 \begin{syntax}	
 	\medskip
-	/Stellar/time 2019 04 18 17 51 17.0 Z
+	/Stellar/time 2019 4 18 17 51 17 Z
+	\medskip
+\end{syntax}
+
+Sending the following would set to midday on 18 April 2019 at the Observer location in Stellarium.
+
+\begin{syntax}	
+	\medskip
+	/Stellar/time 2019 4 18 12 0 0 
 	\medskip
 \end{syntax}
 
@@ -239,3 +247,55 @@ To load this table from file and have it send the data to you, send te following
 	/Stellar/loadTable Acrux.txt
 	\medskip
 \end{syntax}
+
+\subsection{sendStars}
+It is possible to pause Stellar Command sending stars data back to the client. This may be particularly useful if you are receiving data from thousands of stars and the resources to parse decode all that data in OSC may be unnecessary. Sending the \textit{sendStars} command with a zero will cause Stellar Command to stop querying VizieR, and thus stop sending you updated astronomical data. You will still, however, receive position and field of view change messages. Sending a non-zero argument with the command will resume sending starts. To stop the data being sent, send OSC as follows:
+
+ \begin{syntax}	
+	\medskip
+	/Stellar/sendStars 0
+	\medskip
+\end{syntax}  
+
+\subsection{Filter}
+Considering how many stars could be within a particular view, it can be beneficial to apply a filter.  For example, you may only be interested in stars with a magnitude brighter that 6. Setting a filter actually modifies the query sent to VizieR, thus reducing the amount of time to process the astronomical data.
+Filtering the data is accomplished by adding the command \textit{filter}, followed by the astronomical data filed you want to filter, followed by less or greater and then using the OSC argument as the filter value.  for example, to filter the \textit{Hpmag} field so magnitudes brighter (less than) 6.5 are returned, you would send the following OSC command
+   
+    \begin{syntax}	
+   	\medskip
+   	/Stellar/filter/Hpmag/less 6.5
+   	\medskip
+   \end{syntax}  
+
+You can AND filters together by sending a second command. for example, to filter stars that are between magnitudes 3 and 6, you would send the following OSC.
+    \begin{syntax}	
+	\medskip
+	/Stellar/filter/Hpmag/less 6\\
+	/Stellar/filter/Hpmag/greater 3
+	\medskip
+\end{syntax}  
+
+You can filter by star colour (i.e. temperature) by filtering \textit{B-V}. For example, to filter stars with  B-V values between -1 and 1, you apply the following OSC commands:
+     \begin{syntax}	
+ 	\medskip
+ 	/Stellar/filter/B-V/less 1\\
+ 	/Stellar/filter/B-V/greater -1
+ 	\medskip
+
+You can reset the specific filter by sending a \textit{reset} command with the filter. Eg, to cleat the Hpmag filters, send the following OSC:
+    \begin{syntax}	
+	\medskip
+	/Stellar/filter/Hpmag/reset
+	\medskip
+\end{syntax}  
+
+
+You can reset all filters by sending the \textit{resetFilters} command:
+    \begin{syntax}	
+	\medskip
+	/Stellar/resetFilters
+	\medskip
+\end{syntax}  
+
+    
+    

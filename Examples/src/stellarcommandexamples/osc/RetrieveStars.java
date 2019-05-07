@@ -114,6 +114,21 @@ public class RetrieveStars implements HBAction {
         };// End DynamicControl minMagnitude code 
 
 
+
+        // We can disable sending stars and just receive FOV and position changes
+        BooleanControl sendStars = new BooleanControl(this, "Send Stars", true) {
+            @Override
+            public void valueChanged(Boolean control_val) {// Write your DynamicControl code below this line 
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.SEND_STARS),
+                        control_val);
+
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                // Write your DynamicControl code above this line 
+            }
+        };// End DynamicControl disableStars code 
+
+
         TriggerControl resetTrigger = new TriggerControl(this, "Reset Filter") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line 
