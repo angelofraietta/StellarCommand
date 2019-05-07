@@ -48,7 +48,7 @@ public final class StellarOSCVocabulary {
          * <br><br>The Bundle number for this section of the data. Zero based index count - eg, first bundle will have a value of zero
          * <br>The total number of bundles for current query
          */
-        public static final String BUNDLE_COUNT = "bundlecount";
+        public static final String BUNDLE_COUNT = "bundleCount";
 
         /**
          * The list of the the column names for the data that will be in the values message
@@ -80,7 +80,7 @@ public final class StellarOSCVocabulary {
          * The format of the time will be a string
          * <br>UTC as String
          * <br> Local Time as String
-         * <br> GMT Times shift as float
+         * <br> GMT Times shift as float in julian days - eg, a value of 0.5 indicates half a day ahead of GMT
          * <br>Time rate as float - Julian days per second
          */
         public static final String STELLAR_TIME = "time";

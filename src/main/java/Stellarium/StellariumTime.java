@@ -50,7 +50,7 @@ timerate //the current time rate (in julian days per second secs)
      * Gets the current time rate in Julian days per second
      * @return Jukian days per second
      */
-    public float getTimeRate(){return getFloatVal("timerate");}
+    public double getTimeRate(){return getDoubleVal("timerate");}
     /**
      * Get the the timezone shift to GMT
      * @return the timezone shift to GMT

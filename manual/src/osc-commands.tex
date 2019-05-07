@@ -3,33 +3,33 @@ There are primarily two ways to use Stellar Command. The first is as a separate 
 \emph{\titleref{chap:libraryosc}}.
 
 
-\section{Launching Stellar Command}
+\section{Launching Stellar Command} \label{sec:launchcommand}
 makeidx{standalone}
 \index{osc!clientport}
 \index{osc!port|}
 The Stellar Command module is instantiated by executing Java  with the name of the JAR file and the required program arguments that define communication, such as the network port to send OSC messages to, and the OSC address space.  For example, to start the StellarCommand module so it sends OSC messages on UDP port 1234  using an OSC address space of \texttt{/Stellar},\footnote{In this instance, the OSC client and Stellarium are on the same computer.} one would execute the following command:\\
 
 \begin{syntax}
-
+\medskip
 	java -jar StellarCommand.jar port=1234 osc=/Stellar  \\
-
+\medskip
 \end{syntax}
 \bigskip
    When the server starts, it will open the first available UDP port, and notify the client of this port. For example, if the command module opened port 4567, it will send an OSC message \texttt{/Stellar/osc 4567} to the client on the localhost. 
    
 \begin{syntax}
-
+\medskip
 	/Stellar/osc 4567  \\
-
+\medskip
 \end{syntax}
 \bigskip
 
 Allowing the command module to find its own port number removes the probability of port clashes as each client furnishes the other with a valid port number for communicating without requiring configuration in the command module. It is, however, possible to request the Stellar Command module try certain ports by adding the argument \textit{tryport} \index{osc!tryport|(} with a comma separated list of ports. For example, the argument \texttt{tryport=3333,4444,5555} will cause Stellarium to sequentially try opening the ports listed, and if these all fail, will then open the first available port.\\
    
    \begin{syntax}
-
+\medskip
    	java -jar StellarCommand.jar port=1234 osc=/Stellar  tryport=3333,4444,5555\\
-
+\medskip
    \end{syntax}
    \bigskip
    
@@ -241,7 +241,7 @@ To save the current table to the file "Acrux.txt", send the following command:
  	\medskip
  \end{syntax}
 
-To load this table from file and have it send the data to you, send te following command:
+To load this table from file and have it send the data to you, send the following command:
  \begin{syntax}	
 	\medskip
 	/Stellar/loadTable Acrux.txt
@@ -261,7 +261,7 @@ It is possible to pause Stellar Command sending stars data back to the client. T
 Considering how many stars could be within a particular view, it can be beneficial to apply a filter.  For example, you may only be interested in stars with a magnitude brighter that 6. Setting a filter actually modifies the query sent to VizieR, thus reducing the amount of time to process the astronomical data.
 Filtering the data is accomplished by adding the command \textit{filter}, followed by the astronomical data filed you want to filter, followed by less or greater and then using the OSC argument as the filter value.  for example, to filter the \textit{Hpmag} field so magnitudes brighter (less than) 6.5 are returned, you would send the following OSC command
    
-    \begin{syntax}	
+    \begin{syntax}	  
    	\medskip
    	/Stellar/filter/Hpmag/less 6.5
    	\medskip
@@ -281,6 +281,7 @@ You can filter by star colour (i.e. temperature) by filtering \textit{B-V}. For 
  	/Stellar/filter/B-V/less 1\\
  	/Stellar/filter/B-V/greater -1
  	\medskip
+\end{syntax}  
 
 You can reset the specific filter by sending a \textit{reset} command with the filter. Eg, to cleat the Hpmag filters, send the following OSC:
     \begin{syntax}	
@@ -291,11 +292,8 @@ You can reset the specific filter by sending a \textit{reset} command with the f
 
 
 You can reset all filters by sending the \textit{resetFilters} command:
-    \begin{syntax}	
+\begin{syntax}	
 	\medskip
 	/Stellar/resetFilters
 	\medskip
 \end{syntax}  
-
-    
-    

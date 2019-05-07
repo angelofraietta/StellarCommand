@@ -171,7 +171,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     public void viewRead(StellariumView stellariumView) {
         if (!stellariumView.equals(lastStellariumView)) {
             RaDec raDec = stellariumView.getRaDec();
-            System.out.println("FOV: " + stellariumView.getFieldOfView() + " RA Dec " + raDec.rightAscension + " " + raDec.declination);
+            //System.out.println("FOV: " + stellariumView.getFieldOfView() + " RA Dec " + raDec.rightAscension + " " + raDec.declination);
 
             lastStellariumView = stellariumView;
 
@@ -681,9 +681,12 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
      * @return true if able to send
      */
     private boolean sendObservationPoint(StellariumLocation location) {
-        return oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OBSERVATION_POINT,
+        OSCMessage msg = OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OBSERVATION_POINT,
                 location.getLatitude(), location.getLongitude(),
-                location.getAltitude(), location.getPlanet()), oscClient, targetPort);
+                location.getAltitude(), location.getPlanet());
+        System.out.println(getOscMessageDisplay(msg));
+
+        return oscSender.send(msg, oscClient, targetPort);
     }
 
     /**

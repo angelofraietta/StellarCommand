@@ -42,9 +42,9 @@ public class TimeFunctions implements HBAction {
         TextControl localTimeControl = new TextControlSender(this, "Local Time", "").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);;
 
 
-        FloatControl gmtShiftControl = new FloatControlSender(this, "GMT Time Shift", 0);
+        FloatControl gmtShiftControl = new FloatControlSender(this, "GMT Time Shift", 0).setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
-        FloatControl timerateControl = new FloatControlSender(this, "Time rate", 0);
+        FloatControl timerateControl = new FloatControlSender(this, "Time rate", 0).setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
 
         TextControl stringTimeSender = new TextControl(this, "Send Time", "") {
@@ -98,7 +98,7 @@ public class TimeFunctions implements HBAction {
         };// End DynamicControl timeRate code
 
 
-        TriggerControl sendCurrenttime = new TriggerControl(this, "Set Midday 6 April 2019 Syd") {
+        TriggerControl sendCurrenttime = new TriggerControl(this, "Set Midday 6 April 2019") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line
 
