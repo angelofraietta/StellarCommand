@@ -1,6 +1,4 @@
-package StellarStructures;
-
-import java.util.List;
+package stellarstructures;
 
 /**
  * A row of data that is sorted

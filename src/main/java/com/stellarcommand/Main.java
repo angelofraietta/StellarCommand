@@ -1,9 +1,6 @@
 package com.stellarcommand;
 
-import StellarStructures.RaDec;
-import Stellarium.StellariumSlave;
-import de.sciss.net.OSCBundle;
-import de.sciss.net.OSCMessage;
+import stellarium.StellariumSlave;
 
 import java.net.InetAddress;
 
@@ -83,8 +80,8 @@ public class Main {
             System.out.println("Send OSC to " + oscClient.toString());
             System.out.println("Send OSC on port " + clientPort);
             System.out.println("Send OSC name " + oscAddress);
-            System.out.println("Stellarium host is " + stellariumHost);
-            System.out.println("Stellarium port is " + stellariumPort);
+            System.out.println("stellarium host is " + stellariumHost);
+            System.out.println("stellarium port is " + stellariumPort);
 
             StellariumOSCServer stellariumOSCServer = new StellariumOSCServer(oscAddress, oscClient, clientPort, inputPorts);
             stellariumOSCServer.setPollTime(pollTime);

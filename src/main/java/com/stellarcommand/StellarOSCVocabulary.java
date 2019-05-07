@@ -33,7 +33,7 @@ public final class StellarOSCVocabulary {
         public static final String OSC_PORT = "osc";
 
         /**
-         * Notifies Client of the display being viewed in Stellarium as three floats <br>
+         * Notifies Client of the display being viewed in stellarium as three floats <br>
          * The OSC arguments are three floats measured in decimal degrees:
          * <br>The field of view being viewed
          * <br>The Right Ascension (Ra) of the centre of the display
@@ -65,7 +65,7 @@ public final class StellarOSCVocabulary {
         public static final String STAR_VALUES = "values";
 
         /**
-         * The location that we are viewing for Stellarium
+         * The location that we are viewing for stellarium
          * OSC arguments will be latitude, longitude.
          * <br>latitude -  Degrees as float
          * <br>longitude - degrees as float
@@ -76,7 +76,7 @@ public final class StellarOSCVocabulary {
 
 
         /**
-         * The time that Stellarium will be displaying
+         * The time that stellarium will be displaying
          * The format of the time will be a string
          * <br>UTC as String
          * <br> Local Time as String
@@ -95,7 +95,7 @@ public final class StellarOSCVocabulary {
     public final class CommandMessages {
 
         /**
-         * See if Stellarium is active. we will send back our OSC port
+         * See if stellarium is active. we will send back our OSC port
          * Will cause current status to be sent
          */
         public static final String POLL = "poll";
@@ -106,7 +106,7 @@ public final class StellarOSCVocabulary {
         public static final String DISPLAY_VIEW = "getView";
 
         /**
-         * Set the Field of view in Stellarium
+         * Set the Field of view in stellarium
          */
         public static final String FIELD_OF_VIEW = "fieldOfView";
 
@@ -143,7 +143,7 @@ public final class StellarOSCVocabulary {
         public static final String SAVE_TABLE = "saveTable";
 
         /**
-         * The location that we want to view from in Stellarium
+         * The location that we want to view from in stellarium
          * If there are no OSC arguments, the current location will be sent to Client, otherwise
          * OSC arguments will be latitude, longitude, altitude and planet
          * <br>latitude -  Degrees as float
@@ -154,20 +154,20 @@ public final class StellarOSCVocabulary {
         public static final String OBSERVATION_POINT = "viewerObservationPoint";
 
         /**
-         * Causes Stellarium to slew to the defined object
+         * Causes stellarium to slew to the defined object
          * <br><b>Object name</b>String - Object name we want to display - eg Acrux or Saturn
          */
         public static final String VIEW_OBJECT = "viewObject";
 
         /**
-         * Causes Stellarium to slew to the RA / DEC
+         * Causes stellarium to slew to the RA / DEC
          * <br><b>RA</b> float - The Right Ascension in decimal degrees
          * <br><b>Dec</b> float - The Declination in decimal degrees
          */
         public static final String VIEW_RA_DEC = "viewRADec";
 
         /**
-         * Causes Stellarium view to centre to the altitude and azimuth. OSC arguments are:
+         * Causes stellarium view to centre to the altitude and azimuth. OSC arguments are:
          * <br><b>Altitude</b> float - altitude in degrees
          * <br><b>Azimuth</b> float - azimuth in degrees
          */
@@ -175,34 +175,34 @@ public final class StellarOSCVocabulary {
 
 
         /**
-         * Causes Stellarium view to centre to the altitude. OSC arguments are:
+         * Causes stellarium view to centre to the altitude. OSC arguments are:
          * <br><b>Altitude</b> float - altitude in degrees
          */
         public static final String ALTITUDE = "altitude";
 
 
         /**
-         * Causes Stellarium view to centre to the  azimuth. OSC arguments are:
+         * Causes stellarium view to centre to the  azimuth. OSC arguments are:
          * <br><b>Azimuth</b> float - altitude in degrees
          */
         public static final String AZIMUTH = "azimuth";
 
         /**
-         * Cause Stellarium to show or hide the ground. OSC arguments are:
+         * Cause stellarium to show or hide the ground. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          * <br> If no OSC arguments present, the current value will be returned
          */
         public static final String SHOW_GROUND = "showGround";
 
         /**
-         * Cause Stellarium to show or hide the atmosphere. OSC arguments are:
+         * Cause stellarium to show or hide the atmosphere. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          * <br> If no OSC arguments present, the current value will be returned
          */
         public static final String SHOW_ATMOSPHERE = "showAtmosphere";
 
         /**
-         * Cause Stellarium to show or hide the constellation art. OSC arguments are:
+         * Cause stellarium to show or hide the constellation art. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          * <br> If no OSC arguments present, the current value will be returned
          */
@@ -210,7 +210,7 @@ public final class StellarOSCVocabulary {
 
 
         /**
-         * Cause Stellarium to show or hide the star labels. OSC arguments are:
+         * Cause stellarium to show or hide the star labels. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          * <br> If no OSC arguments present, the current value will be returned
          */
@@ -218,26 +218,26 @@ public final class StellarOSCVocabulary {
 
 
         /**
-         * Cause Stellarium to move up or down. OSC arguments are:
+         * Cause stellarium to move up or down. OSC arguments are:
          * <br><b>Amount</b> float -  the amount to move. A positive value will slew up
          */
         public static final String MOVE_UP_DOWN = "moveUD";
 
         /**
-         * Cause Stellarium to move left or right. OSC arguments are:
+         * Cause stellarium to move left or right. OSC arguments are:
          * <br><b>Amount</b> float -  the amount to move. A positive value will slew to the right
          */
         public static final String MOVE_LEFT_RIGHT = "moveLR";
 
         /**
-         * Cause Stellarium to progress in time:
+         * Cause stellarium to progress in time:
          * <br><b>julian day per second</b> float -  The number of julian days per second. EG, if the value was set to one, the display would progress one day every second
          */
         public static final String SET_TIME_RATE = "timeRate";
 
 
         /**
-         * Set the time on Stellarium. This can be set with either a single string with full ISO time or as OSC arguments for the date and time
+         * Set the time on stellarium. This can be set with either a single string with full ISO time or as OSC arguments for the date and time
          * <br> If the first OSC agrgument is a string, the code will attempt to decode as ISO string
          * <br>ISO time as String OR Year as Integer
          * <br>Month as Integer

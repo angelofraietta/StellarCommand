@@ -1,9 +1,9 @@
-package Stellarium;
+package stellarium;
 
 import org.json.JSONObject;
 
 /**
- * The graphic properties displayed in Stellarium. Only the very minimum are
+ * The graphic properties displayed in stellarium. Only the very minimum are
  * defined. Add more as project progresses
  */
 public class StellariumProperty extends StellariumJSONClass {

@@ -1,4 +1,4 @@
-package StellarStructures;
+package stellarstructures;
 
 /**
  * Utility class for performing Conversions
@@ -6,7 +6,7 @@ package StellarStructures;
 public class StellarConversions {
 
     /**
-     * Get the RA and dec of a position given x, y and z from Stellarium 3D Vector
+     * Get the RA and dec of a position given x, y and z from stellarium 3D Vector
      * eg j2000":"[-0.449409, -0.0523899, -0.891789]
      * @param x x axis
      * @param y y axix

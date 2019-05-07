@@ -121,7 +121,7 @@ V  [libjvm.dylib+0x540195]
 V  [libjvm.dylib+0x1e36da]
 V  [libjvm.dylib+0x45383e]
 V  [libjvm.dylib+0x2eabe9]
-j  Stellarium.StellariumSlave.setRaDec(LStellarStructures/RaDec;)V+0
+j  stellarium.StellariumSlave.setRaDec(LStellarStructures/RaDec;)V+0
 j  com.stellarcommand.StellariumOSCServer.processRaDec(Lde/sciss/net/OSCMessage;)V+39
 j  com.stellarcommand.StellariumOSCServer.messageReceived(Lde/sciss/net/OSCMessage;Ljava/net/SocketAddress;J)V+1046
 j  com.stellarcommand.StellariumOSCServer$$Lambda$12.messageReceived(Lde/sciss/net/OSCMessage;Ljava/net/SocketAddress;J)V+7
@@ -161,7 +161,7 @@ j  java.lang.ClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class;+70
 j  sun.misc.Launcher$AppClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class;+81
 j  java.lang.ClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class;+3
 v  ~StubRoutines::call_stub
-j  Stellarium.StellariumSlave.setRaDec(LStellarStructures/RaDec;)V+0
+j  stellarium.StellariumSlave.setRaDec(LStellarStructures/RaDec;)V+0
 j  com.stellarcommand.StellariumOSCServer.processRaDec(Lde/sciss/net/OSCMessage;)V+39
 j  com.stellarcommand.StellariumOSCServer.messageReceived(Lde/sciss/net/OSCMessage;Ljava/net/SocketAddress;J)V+1046
 j  com.stellarcommand.StellariumOSCServer$$Lambda$12.messageReceived(Lde/sciss/net/OSCMessage;Ljava/net/SocketAddress;J)V+7
@@ -394,8 +394,8 @@ Event: 740.253 Executing VM operation: RevokeBias
 Event: 740.253 Executing VM operation: RevokeBias done
 Event: 740.253 Executing VM operation: RevokeBias
 Event: 740.253 Executing VM operation: RevokeBias done
-Event: 745.285 loading class StellarStructures/ObservationalPoint
-Event: 745.285 loading class StellarStructures/ObservationalPoint done
+Event: 745.285 loading class stellarstructures/ObservationalPoint
+Event: 745.285 loading class stellarstructures/ObservationalPoint done
 
 
 Dynamic libraries:

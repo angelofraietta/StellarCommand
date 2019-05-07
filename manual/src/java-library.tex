@@ -2,3 +2,31 @@
 This chapter details how to use Stellar Command as a library that you call directly from within your programming environment.
 If you intend to use Stellar Command as a standalone server application and communicate to it with Open Sound Control Messages through your preferred music package---such as Max MSP, SuperCollider or PD---you can skip back to chapter~\ref{chap:launchosc} --
 \emph{\titleref{chap:launchosc}}.
+
+The Stellar Command Library is a Java Archive that provides a far more efficient method of controlling stellarium and accessing the data because the structures can be accessed directly without having to convert them to OSC. In some cases, converting values to OSC  can result in  data loss when the parameter is a double. Similarly, if a VizieR query contains many thousands of rows of data, these do not need to be encoded into OSC, parsed, and then decoded again. Furthermore, you can easily do efficient functions such as sorting and obtaining altitude and azimuth based on observer location and date and time directly.
+
+The three main packages include in the Jar are stellarium Control (packed as\textit{stellarium}), VizieR query (packaged \textit{vizier}), and complex data conversion (packaged \textit{stellarstructures}).
+
+\section{stellarium}
+The simplest way to access stellarium is through the \textit{stellarium} package. The package contains various classes to simplify communication with stellarium. Rather than detailing every function, which you can easily access through the online documentation, the class names and their basic functions will be outlined.
+\subsection{StellariumSlave}
+
+\textit{StellariumSlave} is the class that does the REST communication to stellarium and provides a common access point. The class contains a synchronised threaded model that enables API calls to stellarium to complete asynchronously. If, for example, you wanted to set the azimuth of the stellarium display, you would call \textit{setAzimuth} with the number of degrees and your function would return immediately. The StellariumSlave class would then send the API request to stellarium in a separate thread. This prevents the calling application form having to wait for stellarium to process the request, which can often take over 100ms.
+StellariumSlave provides the facility to poll stellarium for changes and provides \textit{StellariumViewListener} interfaces for classes \textit{StellariumView, StellariumLocation} and \textit{StellariumTime}.
+
+\subsection{StellariumView}
+StellariumView contains properties about the display of stellarium. These include the field of view, and the RaDec. RaDec are collated into a single class, as detailed in section ~\ref{sec:RaDec} --
+\emph{\titleref{sec:RaDec}}. 
+
+\subsection{StellariumLocation}
+StellariumLocation contains information about the simulated location of the viewer in stellarium. You can access parameters including latitude, longitude, altitude, planet and landscape.
+
+\subsection{StellariumTime}
+StellariumTime provides access to the time parameters of the stellarium.  These include UTC time, local date time and GMT time shift based on the viewer location, the Julian day, and the time rate that stellarium is simulating.
+
+\subsection{StellariumProperty}
+The \textit{StellariumProperty} has properties including the ability to show atmosphere, ground, star labels and constellation art. This is very much in progress and more properties will; be made accessible in time as the need arises.
+
+
+
+\subsection{RaDec}\label{sec:RaDec}

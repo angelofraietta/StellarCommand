@@ -1,6 +1,6 @@
-package Stellarium;
+package stellarium;
 
-import StellarStructures.ObservationalPoint;
+import stellarstructures.ObservationalPoint;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
@@ -17,13 +17,13 @@ gmtShift, //the timezone shift to GMT
 timeZone, //the timezone name
 utc, //the time in UTC time zone as ISO8601 time string
 local, //the time in local time zone as ISO8601 time string
-isTimeNow, //if true, the Stellarium time equals the current real-world time
+isTimeNow, //if true, the stellarium time equals the current real-world time
 timerate //the current time rate (in julian days per second secs)
      */
 
     /**
      * Class containing Time objext from RemoteApi
-     * @param jsonObject the JSON object from Stellarium API call
+     * @param jsonObject the JSON object from stellarium API call
      */
     public StellariumTime(JSONObject jsonObject){
         super(jsonObject);
@@ -51,8 +51,9 @@ timerate //the current time rate (in julian days per second secs)
      * @return Jukian days per second
      */
     public double getTimeRate(){return getDoubleVal("timerate");}
+
     /**
-     * Get the the timezone shift to GMT
+     * Get the the timezone shift to GMT in Julian days
      * @return the timezone shift to GMT
      */
     public float getGMTShift(){

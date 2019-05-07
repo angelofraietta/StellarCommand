@@ -1,6 +1,6 @@
-package Stellarium;
+package stellarium;
 
-import StellarStructures.RaDec;
+import stellarstructures.RaDec;
 
 /**
  * Displays what we are seeing on view as far as field of view ands RaDec
@@ -16,7 +16,7 @@ public class StellariumView {
 
     /**
      * set field of view in degrees
-     * @param fieldOfView the field of view we want to set Stellarium to use
+     * @param fieldOfView the field of view we want to set stellarium to use
      */
     public void setFieldOfView(float fieldOfView) {
         this.fieldOfView = fieldOfView;
@@ -32,7 +32,7 @@ public class StellariumView {
 
     /**
      * Set Right ascension and declination
-     * @param raDec the RaDec we are seting Stellarium to
+     * @param raDec the RaDec we are seting stellarium to
      */
     public void setRaDec(RaDec raDec) {
         this.raDec = raDec;

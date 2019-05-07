@@ -1,4 +1,4 @@
-package StellarStructures;
+package stellarstructures;
 
 import java.util.*;
 

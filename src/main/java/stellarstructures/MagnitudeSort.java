@@ -1,4 +1,4 @@
-package StellarStructures;
+package stellarstructures;
 
 public class MagnitudeSort implements Comparable {
 

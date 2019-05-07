@@ -1,9 +1,7 @@
-package Stellarium;
-
-import StellarStructures.RaDec;
+package stellarium;
 
 /**
- * Create a listener for field of view changes from Stellarium
+ * Create a listener for field of view changes from stellarium
  */
 public interface StellariumViewListener {
     void viewRead(StellariumView stellariumView);

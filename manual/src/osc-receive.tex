@@ -80,7 +80,7 @@ The names of the astronomical data columns is returned in the message names, wit
 \end{itemize}
 
 \subsection{values}
-Each bundle will return zero or more OSC messages that contain the data values that correlate to the column names in the \textit{names} message. Table~\ref{tab:vizierData} shows how the column names correlate to the astronomical data. Note that \textit{\Stellar} was removed from table example for brevity.
+Each bundle will return zero or more OSC messages that contain the data values that correlate to the column names in the \textit{names} message. Table~\ref{tab:vizierData} shows how the column names correlate to the astronomical data. Note that \textit{/Stellar} was removed from table example for brevity.
 
 \begin{table}
 	\centering
@@ -100,7 +100,7 @@ Each bundle will return zero or more OSC messages that contain the data values t
 \end{table} 
 
 \section{viewerObservationPoint}
-The \textit{viewerObservationPoint} message will contain information regarding the viewers location within the Stellarium simulation. The OSC arguments returned are:
+The \textit{viewerObservationPoint} message will contain information regarding the viewers location within the stellarium simulation. The OSC arguments returned are:
 \begin{enumerate}
 	\item float - latitude in degrees. 
 	\item float -longitude in degrees
@@ -115,7 +115,7 @@ For example, the following OSC message would indicate we are viewing from a lati
 \end{syntax}
 
 \section{time}
-The \textit{time} message indicates the simulated time being displayed on Stellarium. The arguments in the OSC message if we were viewing at midday of 8 June 2019 in Sydney simulating a normal procession of time, would be are as follows:
+The \textit{time} message indicates the simulated time being displayed on stellarium. The arguments in the OSC message if we were viewing at midday of 8 June 2019 in Sydney simulating a normal procession of time, would be are as follows:
 \begin{enumerate}
 	\item string - UTC as ISO formatted String. Eg, .2019-06-08T02:00:00.000Z
 	\item string - Local time as a string eg. 2019-06-08T12:00:00.000

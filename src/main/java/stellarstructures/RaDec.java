@@ -1,4 +1,4 @@
-package StellarStructures;
+package stellarstructures;
 
 /**
  * Structure to contain Right Ascension and Declination
@@ -18,11 +18,11 @@ public class RaDec {
     }
 
     /**
-     * Create RA and Dec based on Stellarium's three dimensional spherical points using J2000
+     * Create RA and Dec based on stellarium's three dimensional spherical points using J2000
      * ""j2000":"[-0.449409, -0.0523899, -0.891789]
-     * @param x x coordinate from Stellarium
-     * @param y y coordinate from Stellarium
-     * @param z z coordinate from Stellarium
+     * @param x x coordinate from stellarium
+     * @param y y coordinate from stellarium
+     * @param z z coordinate from stellarium
      */
     public RaDec(double x, double y, double z){
         declination =  Math.asin(z) / Math.PI * 180;
@@ -54,12 +54,12 @@ public class RaDec {
     }
 
     /**
-     * Test that RA and Dec calculate correctly for Acrux focused in Stellarium
+     * Test that RA and Dec calculate correctly for Acrux focused in stellarium
      * @param args NA
      */
     public static void main(String[] args) {
         // We will test for acrux
-        // Stellarium should give us
+        // stellarium should give us
         //""j2000":"[-0.449409, -0.0523899, -0.891789]
         double x = -0.449409, y = -0.0523899, z = -0.891789;
         RaDec celestial_acrux = new RaDec(x, y, z);

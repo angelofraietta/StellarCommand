@@ -1,4 +1,4 @@
-package StellarStructures;
+package stellarstructures;
 
 /**
  * Structure to contain Alt and Azimuth

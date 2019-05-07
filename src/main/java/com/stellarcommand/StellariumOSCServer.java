@@ -1,7 +1,7 @@
 package com.stellarcommand;
 
-import StellarStructures.*;
-import Stellarium.*;
+import stellarstructures.*;
+import stellarium.*;
 import de.sciss.net.OSCBundle;
 import de.sciss.net.OSCListener;
 import de.sciss.net.OSCMessage;
@@ -11,13 +11,12 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * Sends Stellarium OSC Data back to client
+ * Sends stellarium OSC Data back to client
  */
 public class StellariumOSCServer implements StellariumViewListener, OSCListener {
 
@@ -56,8 +55,8 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         }
     }
     /**
-     * Set the frequency of polling Stellarium for changes in view
-     * @param poll_time the time in milliseconds between re-polling Stellarium
+     * Set the frequency of polling stellarium for changes in view
+     * @param poll_time the time in milliseconds between re-polling stellarium
      */
     void setPollTime(int poll_time){
         stellariumSlave.setPollTime(poll_time);
@@ -275,7 +274,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         return ret;
     }
     /**
-     * Set the name of where to request HTTP data from Stellarium
+     * Set the name of where to request HTTP data from stellarium
      * @param stellariumHost HTTP host name
      */
     public void setStellariumDevice(String stellariumHost) {
@@ -283,8 +282,8 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     }
 
     /**
-     * Set the port to send to Stellarium to get Stellarium data
-     * @param stellariumPort the port we will use to send to Stellarium if we are not using default
+     * Set the port to send to stellarium to get stellarium data
+     * @param stellariumPort the port we will use to send to stellarium if we are not using default
      */
     public void setStellariumPort(int stellariumPort) {
         stellariumSlave.setStellariumPort(stellariumPort);
@@ -443,7 +442,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     }
 
     /**
-     * Set the Stellarium time based on OSC message
+     * Set the stellarium time based on OSC message
      * @param msg the OSC message with the parameters
      */
     public boolean setTime(OSCMessage msg) {
@@ -585,7 +584,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     }
 
     /**
-     * Send the Stellarium RA/Dec and Field of view information
+     * Send the stellarium RA/Dec and Field of view information
      * @param stellariumView the view we are sending
      * @return true if able to send
      */
@@ -596,8 +595,8 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     }
 
     /**
-     * Send the Stellarium time information
-     * @param stellariumTime the current Stellarium we are sending
+     * Send the stellarium time information
+     * @param stellariumTime the current stellarium we are sending
      * @return true if able to send
      */
     private boolean sendStellariumTime(StellariumTime stellariumTime) {

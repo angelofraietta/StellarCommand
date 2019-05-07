@@ -1,11 +1,10 @@
-package Stellarium;
+package stellarium;
 
 
-import StellarStructures.AltAz;
-import StellarStructures.ObservationalPoint;
-import StellarStructures.RaDec;
-import StellarStructures.StellarConversions;
-import de.sciss.net.OSCMessage;
+import stellarstructures.AltAz;
+import stellarstructures.ObservationalPoint;
+import stellarstructures.RaDec;
+import stellarstructures.StellarConversions;
 import org.json.JSONObject;
 
 
@@ -16,7 +15,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -65,8 +63,8 @@ public class StellariumSlave  {
     double newJulianDate = 0;
 
     /**
-     * Get the Stellarium Properties. Note that this could be null
-     * @return the last polled Stellarium Properties
+     * Get the stellarium Properties. Note that this could be null
+     * @return the last polled stellarium Properties
      */
     public StellariumProperty getStellariumProperties() {
         return lastStellariumProperty;
@@ -140,7 +138,7 @@ public class StellariumSlave  {
 
 
     /**
-     * Set how often we will rest between polling Stellarium
+     * Set how often we will rest between polling stellarium
      * @param pollTime time in milliseconds
      */
     public void setPollTime(long pollTime) {
@@ -149,7 +147,7 @@ public class StellariumSlave  {
     }
 
     /**
-     * Cause Stellarium to poll server
+     * Cause stellarium to poll server
      */
     public void pollStellarium(){
 
@@ -159,8 +157,8 @@ public class StellariumSlave  {
     }
 
     /**
-     * Set Stellarium to this Julian day
-     * @param julian_day the julian day to set Stellarium to
+     * Set stellarium to this Julian day
+     * @param julian_day the julian day to set stellarium to
      */
     public void setTime(double julian_day){
         synchronized (setTimeSynchroniser) {
@@ -168,7 +166,7 @@ public class StellariumSlave  {
             setTimeSynchroniser.notify();
         }
     }
-    // define the time to rest between polling Stellarium for status
+    // define the time to rest between polling stellarium for status
     private long pollTime =  Long.MAX_VALUE;
 
     /**
@@ -453,7 +451,7 @@ public class StellariumSlave  {
 
 
     /**
-     * Force Module to do a poll of Stellarium and send status changes
+     * Force Module to do a poll of stellarium and send status changes
      * We will do this via the Synchronised thread
      */
     private void pollView(){
@@ -502,7 +500,7 @@ public class StellariumSlave  {
     }
 
     /**
-     * Read current view position of Stellarium in three dimensional spherical points
+     * Read current view position of stellarium in three dimensional spherical points
      * Using J2000 as a double array of x, y, z
      * @return three dimensional spherical points as an array of doubles. Returns NULL on error
      */
@@ -542,7 +540,7 @@ public class StellariumSlave  {
 
 
     /**
-     * Get the Stellarium time from last poll
+     * Get the stellarium time from last poll
      * @return the stellarium time
      */
     public StellariumTime readStellariumTime(){
@@ -566,7 +564,7 @@ public class StellariumSlave  {
         return ret;
     }
     /**
-     * Read the viewer location of  Stellarium
+     * Read the viewer location of  stellarium
      * @return the view location
      */
     public StellariumLocation readObservationPoint(){
@@ -591,7 +589,7 @@ public class StellariumSlave  {
 
 
     /**
-     * Read the Status From the Stellarium RemoteApi
+     * Read the Status From the stellarium RemoteApi
      * @return true if able to read
      * @see  <a href="http://stellarium.org/doc/head/remoteControlApi.html"http://stellarium.org/doc/head/remoteControlApi.html</a>
      */
@@ -612,7 +610,7 @@ public class StellariumSlave  {
     }
 
     /**
-     * Read the Properties From the Stellarium RemoteApi
+     * Read the Properties From the stellarium RemoteApi
      * @return true if able to read
      * @see  <a href="http://stellarium.org/doc/head/remoteControlApi.html"http://stellarium.org/doc/head/remoteControlApi.html</a>
      */
@@ -633,8 +631,8 @@ public class StellariumSlave  {
     }
 
     /**
-     * Read the field of view from Stellarium and notify any listeners of its value
-     * @return the field of view in Stellarium. A return of zero indicates some sort of error
+     * Read the field of view from stellarium and notify any listeners of its value
+     * @return the field of view in stellarium. A return of zero indicates some sort of error
      */
     public float readFieldOfView() {
         float ret = 0;
@@ -679,7 +677,7 @@ public class StellariumSlave  {
     }
 
     /**
-     * Cause Stellarium to view the target
+     * Cause stellarium to view the target
      * @param target_name the name of the object we are targeting. EG. Saturn
      */
     public void setTargetName(String target_name){
@@ -691,7 +689,7 @@ public class StellariumSlave  {
     }
 
     /**
-     * Set the field of view we want Stellarium to display
+     * Set the field of view we want stellarium to display
      * @param field_of_view the new field of view we want to display
      */
     public void setFieldOfView(double field_of_view){
@@ -810,8 +808,8 @@ public class StellariumSlave  {
         }
     }
     /**
-     * Set Stellarium to new client
-     * @param name the name of our Stellarium client
+     * Set stellarium to new client
+     * @param name the name of our stellarium client
      */
     public void setStellariumDevice(String name){
         stellariumDevice = name;
@@ -838,7 +836,7 @@ public class StellariumSlave  {
         }
     }
     /**
-     * Send a post message to Stellarium
+     * Send a post message to stellarium
      * Code fragments from https://stackoverflow.com/questions/4205980/java-sending-http-parameters-via-post-method-easily
      * @param api the API we are sending to
      * @param params the post parameters
@@ -887,7 +885,7 @@ public class StellariumSlave  {
 
 
     /**
-     * Send the get message to Stellarium
+     * Send the get message to stellarium
      * @param api te api we are sending
      * @return a JSON object with the data
      */
@@ -968,7 +966,7 @@ public class StellariumSlave  {
     }
 
     /**
-     * Run the Stellarium script
+     * Run the stellarium script
      * @param script_name the name of the script to run
      * @return true if message was send
      */

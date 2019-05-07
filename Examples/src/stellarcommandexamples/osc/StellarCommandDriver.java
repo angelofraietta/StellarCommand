@@ -123,13 +123,13 @@ public class StellarCommandDriver implements HBAction, OSCListener {
      * Get the Socket Address we need to communicate with StellarCommand
      * If StellarCommand is already open with these ports, we will just return the SocketAddress to communicate
      * If StelarCommand is not open, it will try and spawn it
-     * @return the SocketAddress to communicate with Stellarium. If unable to, will return null
+     * @return the SocketAddress to communicate with stellarium. If unable to, will return null
      */
     public InetSocketAddress loadStellarCommand(){
 
         final Object stellariumLoadWait = new Object();
 
-        // First see if Stellarium is open on any ports by sending a poll to each of them
+        // First see if stellarium is open on any ports by sending a poll to each of them
         OSCMessage pollMessage = OSCMessageBuilder.createOscMessage(buildOscName(StellarOSCVocabulary.CommandMessages.POLL));
 
         // type osclistener to create this code 

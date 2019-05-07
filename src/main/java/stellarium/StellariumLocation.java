@@ -1,6 +1,5 @@
-package Stellarium;
+package stellarium;
 
-import StellarStructures.RaDec;
 import org.json.JSONObject;
 
 /**
@@ -70,8 +69,8 @@ public class StellariumLocation  extends StellariumJSONClass{
     }
 
     /**
-     * Get the Stellarium planhet we are observing from
-     * @return Stellarium planet
+     * Get the stellarium planhet we are observing from
+     * @return stellarium planet
      */
     public String getPlanet(){
         return getStringVal("planet");
@@ -79,16 +78,16 @@ public class StellariumLocation  extends StellariumJSONClass{
 
 
     /**
-     * Get the Stellarium role of observation Point
-     * @return Stellarium role name
+     * Get the stellarium role of observation Point
+     * @return stellarium role name
      */
     public String getRole(){
         return getStringVal("role");
     }
 
     /**
-     * Get the Stellarium name of observation Point
-     * @return Stellarium observation point name
+     * Get the stellarium name of observation Point
+     * @return stellarium observation point name
      */
     public String getName(){
 
@@ -96,7 +95,7 @@ public class StellariumLocation  extends StellariumJSONClass{
     }
 
     /**
-     * Get the altitude from Stellarium Observation point
+     * Get the altitude from stellarium Observation point
      * @return altitude
      */
     public float getAltitude(){

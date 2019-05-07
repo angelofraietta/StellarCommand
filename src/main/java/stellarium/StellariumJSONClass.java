@@ -1,4 +1,4 @@
-package Stellarium;
+package stellarium;
 
 import org.json.JSONObject;
 
