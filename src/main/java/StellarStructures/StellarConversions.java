@@ -21,6 +21,7 @@ public class StellarConversions {
 
     }
 
+
     /**
      * Just do a test to check ACrux at Brazil Time
      * Ra :186.64924916933296 dec:-63.09891984127304

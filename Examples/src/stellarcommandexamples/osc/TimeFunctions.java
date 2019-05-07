@@ -4,11 +4,9 @@ import com.stellarcommand.OSCUDPSender;
 import com.stellarcommand.StellarOSCVocabulary;
 import de.sciss.net.OSCMessage;
 import net.happybrackets.core.HBAction;
+import net.happybrackets.core.OSCMessageBuilder;
 import net.happybrackets.core.OSCUDPListener;
-import net.happybrackets.core.control.FloatControl;
-import net.happybrackets.core.control.FloatControlSender;
-import net.happybrackets.core.control.TextControl;
-import net.happybrackets.core.control.TextControlSender;
+import net.happybrackets.core.control.*;
 import net.happybrackets.device.HB;
 
 import java.lang.invoke.MethodHandles;
@@ -38,13 +36,27 @@ public class TimeFunctions implements HBAction {
         }
 
 
-        TextControl gmtTimeControl = new TextControlSender(this, "GMT Time", "");
+        TextControl gmtTimeControl = new TextControlSender(this, "GMT Time", "").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
 
-        TextControl localTimeControl = new TextControlSender(this, "Local Time", "");
+        TextControl localTimeControl = new TextControlSender(this, "Local Time", "").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);;
 
 
         FloatControl gmtShiftControl = new FloatControlSender(this, "GMT Time Shift", 0);
+
+        FloatControl timerateControl = new FloatControlSender(this, "Time rate", 0);
+
+
+        TextControl stringTimeSender = new TextControl(this, "Send Time", "") {
+            @Override
+            public void valueChanged(String control_val) {// Write your DynamicControl code below this line 
+
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.STELLAR_TIME), control_val);
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                // Write your DynamicControl code above this line 
+            }
+        };// End DynamicControl stringTimeSender code 
 
 
         // type osclistener to create this code
@@ -57,10 +69,12 @@ public class TimeFunctions implements HBAction {
                     String utc = (String) oscMessage.getArg(0);
                     String local = (String) oscMessage.getArg(1);
                     float gmtShift = (float) oscMessage.getArg(2);
+                    float timerate = (float)oscMessage.getArg(3);
 
                     gmtTimeControl.setValue(utc);
                     localTimeControl.setValue(local);
                     gmtShiftControl.setValue(gmtShift);
+                    timerateControl.setValue(timerate);
                 }
                 // type your code above this line
             }
@@ -70,6 +84,43 @@ public class TimeFunctions implements HBAction {
             System.out.println("Error opening port " + commandLoader.RECEIVE_PORT + " " + error_message);
         } // end oscListener code
         // write your code above this line
+
+
+        FloatControl timeRate = new FloatBuddyControl(this, "Time Rate", 0, -1, 1) {
+            @Override
+            public void valueChanged(double control_val) {// Write your DynamicControl code below this line
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.SET_TIME_RATE), control_val);
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+
+                // Write your DynamicControl code above this line
+            }
+        };// End DynamicControl timeRate code
+
+
+        TriggerControl sendCurrenttime = new TriggerControl(this, "Set Midday 6 April 2019 Syd") {
+            @Override
+            public void triggerEvent() {// Write your DynamicControl code below this line
+
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.STELLAR_TIME),
+                        2019, 04, 06, 12, 0, 0);
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                // Write your DynamicControl code above this line
+            }
+        };// End DynamicControl sendCurrenttime code
+
+        TriggerControl sendPoll = new TriggerControl(this, "Request Time") {
+            @Override
+            public void triggerEvent() {// Write your DynamicControl code below this line 
+
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.POLL));
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                // Write your DynamicControl code above this line
+            }
+        };// End DynamicControl sendPoll code 
+
     }
 
 

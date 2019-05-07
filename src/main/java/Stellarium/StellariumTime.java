@@ -1,8 +1,10 @@
 package Stellarium;
 
+import StellarStructures.ObservationalPoint;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class StellariumTime extends StellariumJSONClass{
@@ -16,7 +18,7 @@ timeZone, //the timezone name
 utc, //the time in UTC time zone as ISO8601 time string
 local, //the time in local time zone as ISO8601 time string
 isTimeNow, //if true, the Stellarium time equals the current real-world time
-timerate //the current time rate (in secs)
+timerate //the current time rate (in julian days per second secs)
      */
 
     /**
@@ -32,8 +34,8 @@ timerate //the current time rate (in secs)
      * Get the Julian Day
      * @return julian day
      */
-    public float getJulianDay(){
-        return getFloatVal("jday");
+    public double getJulianDay(){
+        return getDoubleVal("jday");
     }
 
     /**
@@ -44,6 +46,11 @@ timerate //the current time rate (in secs)
         return getFloatVal("deltaT");
     }
 
+    /**
+     * Gets the current time rate in Julian days per second
+     * @return Jukian days per second
+     */
+    public float getTimeRate(){return getFloatVal("timerate");}
     /**
      * Get the the timezone shift to GMT
      * @return the timezone shift to GMT
@@ -81,12 +88,12 @@ timerate //the current time rate (in secs)
      * Get UTC time as a Date/time
      * @return UTC time
      */
-    public LocalDateTime utcTime(){
-        LocalDateTime ret = null;
+    public ZonedDateTime utcTime(){
+        ZonedDateTime ret = null;
 
         String utc_time = utcString();
         if (!utc_time.isEmpty()){
-            ret = LocalDateTime.parse(utc_time, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            ret = ZonedDateTime.parse(utc_time, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
 
         return ret;
@@ -108,6 +115,7 @@ timerate //the current time rate (in secs)
         return ret;
     }
 
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof StellariumTime))
@@ -118,6 +126,12 @@ timerate //the current time rate (in secs)
 
         StellariumTime rhs = (StellariumTime) obj;
 
-        return utcString().equalsIgnoreCase(rhs.utcString());
+        double current_jday = getJulianDay();
+        double prev_j_day = rhs.getJulianDay();
+        boolean ret = current_jday == prev_j_day;
+
+        double j_day_def = ObservationalPoint.calulateJulianDay(utcTime());
+        System.out.println(j_day_def);
+        return ret;
     }
 }

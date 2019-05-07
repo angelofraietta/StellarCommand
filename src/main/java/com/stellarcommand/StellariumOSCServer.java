@@ -1,9 +1,6 @@
 package com.stellarcommand;
 
-import StellarStructures.AltAz;
-import StellarStructures.RaDec;
-import StellarStructures.StellarDataRow;
-import StellarStructures.StellarDataTable;
+import StellarStructures.*;
 import Stellarium.*;
 import de.sciss.net.OSCBundle;
 import de.sciss.net.OSCListener;
@@ -13,6 +10,10 @@ import vizier.VizierQuery;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.SocketAddress;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -63,8 +64,9 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     }
 
 
+
     /**
-     * Convert our OSC message to a float. This is in casd someone sends an int instead of as float
+     * Convert our OSC message to a float. This is in case someone sends an int or string instead of as float
      * @param arg the OSC argument
      * @return a float version
      */
@@ -79,8 +81,36 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         {
             ret = (int)arg;
         }
+        else if (arg instanceof String){
+            String s_val = (String) arg;
+            ret =  Float.parseFloat(s_val);
+        }
         return ret;
     }
+
+    /**
+     * Convert our OSC message to a int. This is in case someone sends a float or string instead of as float
+     * @param arg the OSC argument
+     * @return an int version
+     */
+    static int convertOSCArgToInt(Object arg){
+        int ret = 0;
+
+        if (arg instanceof Integer)
+        {
+            ret = (int)arg;
+        }
+        else if (arg instanceof Float)
+        {
+            ret = ((Float) arg).intValue();
+        }
+        else if (arg instanceof String){
+            String s_val = (String) arg;
+            ret =  Integer.parseInt(s_val);
+        }
+        return ret;
+    }
+
     /**
      * Clear our stored values and have new values se-sent
      */
@@ -278,6 +308,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.POLL)) {
                     // we only send to the port we are actually configured to. Not necessarily to who is calling us
                     oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OSC_PORT, oscReceiver.getPort()), oscClient, targetPort);
+                    forceRePollStellarium();
                 }
 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.EXIT)) {
@@ -333,6 +364,9 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SET_TIME_RATE)){
                     float amount = (Float) msg.getArg(0);
                     stellariumSlave.setTimeRate(amount);
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.STELLAR_TIME)){
+                   setTime(msg);
                 }
 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_STAR_LABELS)){
@@ -409,52 +443,134 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     }
 
     /**
+     * Set the Stellarium time based on OSC message
+     * @param msg the OSC message with the parameters
+     */
+    public boolean setTime(OSCMessage msg) {
+        boolean ret = false;
+
+        try {
+            Object arg_1 = msg.getArg(0);
+            if (arg_1 instanceof String){
+                String iso_time =  (String)arg_1;
+                ZonedDateTime dateTime = ZonedDateTime.parse(iso_time, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+                double julian_date = ObservationalPoint.calulateJulianDay(dateTime);
+                stellariumSlave.setTime(julian_date);
+
+            }
+            else
+            {
+                float gmt_shift = 0; // this will only get set IF they do not put a time zone in and we have received the time before
+                String offset = "Z";
+                int year =  convertOSCArgToInt(msg.getArg(0));
+                int month = convertOSCArgToInt(msg.getArg(1));
+                int day = convertOSCArgToInt(msg.getArg(2));
+                int hour = convertOSCArgToInt(msg.getArg(3));
+                int min = convertOSCArgToInt(msg.getArg(4));
+                float sec = convertOSCArgToFloat(msg.getArg(5));
+
+                if (msg.getArgCount() > 6){
+                    offset = (String) msg.getArg(6);
+                }
+                else
+                {
+                    if (lastStellariumTime != null){
+                        gmt_shift =  lastStellariumTime.getGMTShift();
+                    }
+                }
+
+                LocalDateTime local_time =  LocalDateTime.of(year, month, day, hour, min, (int)Math.floor(sec));
+                String iso_time = DateTimeFormatter.ISO_DATE_TIME.format(local_time);
+                iso_time += offset;
+
+                ZonedDateTime dateTime = ZonedDateTime.parse(iso_time, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+
+                double julian_date = ObservationalPoint.calulateJulianDay(dateTime);
+
+                stellariumSlave.setTime(julian_date - gmt_shift);
+
+            }
+        }
+        catch (Exception ex){
+
+        }
+        return ret;
+    }
+
+    /**
      * Set the ALT az as OSC Message
      * @param msg OSC Message
      */
-    private void processAltAz(OSCMessage msg) {
-        float altitude = convertOSCArgToFloat(msg.getArg(0));
-        float azimuth = convertOSCArgToFloat(msg.getArg(1));
-        stellariumSlave.setAltAz(new AltAz(altitude, azimuth));
+    private boolean processAltAz(OSCMessage msg) {
+        try {
+            float altitude = convertOSCArgToFloat(msg.getArg(0));
+            float azimuth = convertOSCArgToFloat(msg.getArg(1));
+            stellariumSlave.setAltAz(new AltAz(altitude, azimuth));
+            return true;
+        }
+        catch (Exception ex){
+        }
+        return false;
     }
 
     /**
      * Process the Altitude as OSC Message
      * @param msg OSC Message
      */
-    private void processAltitude(OSCMessage msg) {
-        float altitude = (float)msg.getArg(0);
-        stellariumSlave.setAltitude(altitude);
+    private boolean processAltitude(OSCMessage msg) {
+        try {
+            float altitude = convertOSCArgToFloat(msg.getArg(0));
+            stellariumSlave.setAltitude(altitude);
+            return true;
+        }
+        catch (Exception ex){
+            return false;
+        }
     }
 
     /**
      * Pocess the Azimuth as OSC Message
      * @param msg OSC Message
      */
-    private void processAzimuth(OSCMessage msg) {
-        float altitude = convertOSCArgToFloat(msg.getArg(0));
-        stellariumSlave.setAzimuth(altitude);
+    private boolean processAzimuth(OSCMessage msg) {
+        try {
+            float altitude = convertOSCArgToFloat(msg.getArg(0));
+            stellariumSlave.setAzimuth(altitude);
+            return true;
+        }
+        catch (Exception ex){
+            return false;
+        }
     }
 
     /**
      * Process Right Ascension / Declination as OSC Message
      * @param msg OSC Message
      */
-    private void processRaDec(OSCMessage msg) {
-        float ra = (float)msg.getArg(0);
-        float dec = (float)msg.getArg(1);
-        stellariumSlave.setRaDec(new RaDec(ra, dec));
+    private boolean processRaDec(OSCMessage msg) {
+        try {
+            float ra = convertOSCArgToFloat(msg.getArg(0));
+            float dec = convertOSCArgToFloat(msg.getArg(1));
+            stellariumSlave.setRaDec(new RaDec(ra, dec));
+            return true;
+        }
+        catch (Exception ex){
+            return false;
+        }
     }
 
-    private void setFieldOfView(OSCMessage msg) {
+    private boolean setFieldOfView(OSCMessage msg) {
         try
         {
             Object msg_val = msg.getArg(0);
 
             float field_of_view = convertOSCArgToFloat(msg_val);
             stellariumSlave.setFieldOfView(field_of_view);
+            return true;
         }
-        catch(Exception ex){}
+        catch(Exception ex){return false;}
     }
 
     private void exitServer() {
@@ -487,7 +603,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
     private boolean sendStellariumTime(StellariumTime stellariumTime) {
 
         return oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.STELLAR_TIME,
-                stellariumTime.utcString(), stellariumTime.localTimeString(), stellariumTime.getGMTShift()), oscClient, targetPort);
+                stellariumTime.utcString(), stellariumTime.localTimeString(), stellariumTime.getGMTShift(), stellariumTime.getTimeRate()), oscClient, targetPort);
 
     }
 
@@ -511,8 +627,8 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         else{ // we have args so we are actually setting the value
 
             try{
-                float latitude = (float)msg.getArg(0);
-                float longitude = (float)msg.getArg(1);
+                float latitude = convertOSCArgToFloat(msg.getArg(0));
+                float longitude = convertOSCArgToFloat(msg.getArg(1));
                 float altitude =  0;
                 String planet = "";
 

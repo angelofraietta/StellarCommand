@@ -1,6 +1,8 @@
 package StellarStructures;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -13,9 +15,29 @@ public class ObservationalPoint {
     double geographicLongitude;
     double geographicLatitude;
     double localSiderealTime;
-    LocalDateTime observationDate;
+    ZonedDateTime observationDate;
 
-    static final LocalDateTime J200_REFERENCE_DATE = LocalDateTime.parse("2000-01-01T12:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    public static final ZonedDateTime J200_REFERENCE_DATE = ZonedDateTime.parse("2000-01-01T12:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    public static final double J200_REFERENCE_JDAY = 2451545;
+
+
+    /**
+     * Calculate our Julian Day based on dat time provided
+     * @param time the Time we are comparing to
+     * @return the Julian Day value
+     */
+    public static double calulateJulianDay(ZonedDateTime time){
+        Duration time_diff = Duration.between(J200_REFERENCE_DATE, time);
+        double seconds = time_diff.getSeconds();
+        double nanoseconds =  time_diff.getNano();
+
+        double calc_days = seconds / 24d / 60d / 60d;
+
+        // we need to now add our nano seconds to the amount.
+        nanoseconds = nanoseconds / 24d / 60d / 60d / 1000000000d;
+
+        return J200_REFERENCE_JDAY + calc_days + nanoseconds;
+    }
 
     /**
      * Just do a test to check ACrux at Brazil Time
@@ -88,7 +110,7 @@ public class ObservationalPoint {
      * @param longitude geographic longitude
      * @param utc_observation_date the observation date we are using in UTC
      */
-    public ObservationalPoint (double latitude, double longitude, LocalDateTime utc_observation_date){
+    public ObservationalPoint (double latitude, double longitude, ZonedDateTime utc_observation_date){
         geographicLatitude = latitude;
         geographicLongitude = longitude;
         observationDate = utc_observation_date;
@@ -106,7 +128,7 @@ public class ObservationalPoint {
     public static ObservationalPoint brazilRepublicPoint(){
         // do a test with     core.setObserverLocation('Rio de Janeiro, Brazil');
         //    core.setDate ('1889-11-15T08:30:00', 'local');
-        final LocalDateTime observation_date = LocalDateTime.parse("1889-11-15T11:36:28Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        final ZonedDateTime observation_date = ZonedDateTime.parse("1889-11-15T11:36:28Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         final double LATITUDE = -22.902780532836914;
         final double LONGITUDE = -43.207500457763672;

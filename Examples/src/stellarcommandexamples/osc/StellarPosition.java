@@ -106,7 +106,7 @@ public class StellarPosition implements HBAction {
                         display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
 
                         // These are the RA and Dec for Canopus
-                        float ra = 95.987958f, dec = -52.695661f;
+                        float ra = 96.49851f, dec = -52.682182f;
 
                         msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.VIEW_RA_DEC),
                                 ra, dec);

@@ -78,6 +78,10 @@ public final class StellarOSCVocabulary {
         /**
          * The time that Stellarium will be displaying
          * The format of the time will be a string
+         * <br>UTC as String
+         * <br> Local Time as String
+         * <br> GMT Times shift as float
+         * <br>Time rate as float - Julian days per second
          */
         public static final String STELLAR_TIME = "time";
 
@@ -92,6 +96,7 @@ public final class StellarOSCVocabulary {
 
         /**
          * See if Stellarium is active. we will send back our OSC port
+         * Will cause current status to be sent
          */
         public static final String POLL = "poll";
 
@@ -231,6 +236,18 @@ public final class StellarOSCVocabulary {
         public static final String SET_TIME_RATE = "timeRate";
 
 
+        /**
+         * Set the time on Stellarium. This can be set with either a single string with full ISO time or as OSC arguments for the date and time
+         * <br> If the first OSC agrgument is a string, the code will attempt to decode as ISO string
+         * <br>ISO time as String OR Year as Integer
+         * <br>Month as Integer
+         * <br>Day of month as Integer
+         * <br>Hour as Integer in 24 Hour time
+         * <br> Minutes as integer
+         * <br> Seconds as a float
+         * <br> Optional Time zone as Z or +/-HHH:mm as a String. EG "Z" or "+10:00". If no argument, the local time of location will be used
+         */
+        public static final String STELLAR_TIME = "time";
 
 
     }

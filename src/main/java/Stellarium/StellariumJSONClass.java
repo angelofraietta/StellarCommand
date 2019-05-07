@@ -30,6 +30,23 @@ public class StellariumJSONClass {
     }
 
     /**
+     * Get a float value for a parameter
+     * @param name name of parameter
+     * @return a float value for it. Returns zero if does not exists
+     */
+    public double getDoubleVal(String name){
+        double ret = 0;
+
+        if (apiObject != null){
+            Object o = apiObject.get(name);
+            if (o != null) {
+                ret = Double.parseDouble(o.toString());
+            }
+        }
+        return ret;
+    }
+
+    /**
      * Get a int value for a parameter
      * @param name name of parameter
      * @return a int value for it. Returns zero if does not exists

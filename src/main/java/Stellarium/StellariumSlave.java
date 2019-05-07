@@ -5,6 +5,7 @@ import StellarStructures.AltAz;
 import StellarStructures.ObservationalPoint;
 import StellarStructures.RaDec;
 import StellarStructures.StellarConversions;
+import de.sciss.net.OSCMessage;
 import org.json.JSONObject;
 
 
@@ -14,6 +15,10 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,6 +50,7 @@ public class StellariumSlave  {
     final private Object upMoveSynchroniser = new Object();
     final private Object altAzSynchroniser = new Object();
     final private Object locationSynchroniser = new Object();
+    final private Object setTimeSynchroniser = new Object();
 
 
     private double fieldOfView  = 1;
@@ -56,6 +62,7 @@ public class StellariumSlave  {
 
     StellariumLocation lastStellariumLocation = null;
     StellariumTime lastStellariumTime = null;
+    double newJulianDate = 0;
 
     /**
      * Get the Stellarium Properties. Note that this could be null
@@ -96,8 +103,10 @@ public class StellariumSlave  {
         notifyObject(upMoveSynchroniser);
         notifyObject(altAzSynchroniser);
         notifyObject(locationSynchroniser);
+        notifyObject(setTimeSynchroniser);
 
     }
+
     /**
      * The port to communicate on HTTP to get to stellarium
      * @return the HTTP port we are using
@@ -149,6 +158,16 @@ public class StellariumSlave  {
         }
     }
 
+    /**
+     * Set Stellarium to this Julian day
+     * @param julian_day the julian day to set Stellarium to
+     */
+    public void setTime(double julian_day){
+        synchronized (setTimeSynchroniser) {
+            newJulianDate = julian_day;
+            setTimeSynchroniser.notify();
+        }
+    }
     // define the time to rest between polling Stellarium for status
     private long pollTime =  Long.MAX_VALUE;
 
@@ -343,6 +362,31 @@ public class StellariumSlave  {
         }).start();
 
 
+         new Thread(() -> {
+            while (!exitThread) {
+                synchronized (setTimeSynchroniser){
+                    try {
+                        setTimeSynchroniser.wait();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (exitThread)
+                    break;
+
+
+                //Add the function you need to execute here
+                String api = "main/time";
+                Map<String,Object> params = new LinkedHashMap<>();
+
+                params.put("time", newJulianDate);
+                sendPostMessage(api, params);
+            }
+        }).start();
+
+
 
 
         new Thread(() -> {
@@ -425,6 +469,8 @@ public class StellariumSlave  {
             if (coordinates != null) {
                 StellariumLocation stellariumLocation = readObservationPoint();
                 StellariumTime time = readStellariumTime();
+                double julianDate =  time.getJulianDay();
+
 
 
                 if (stellariumLocation != null) {
@@ -1062,12 +1108,17 @@ public class StellariumSlave  {
 
         slave.setPollTime(4000);
 
+
+        ZonedDateTime dateTime = ZonedDateTime.parse(Instant.now().toString()  , DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+        double julian_date = ObservationalPoint.calulateJulianDay(dateTime);
+        slave.setTime(julian_date);
+
         while (true){
 
 
         }
 
     }
-
 
 }

@@ -63,6 +63,8 @@ This will cause the Stellar Command module to send OSC messages to ``192.168.0.5
 You can provide instructions to Stellar Command in order to control Stellarium or to change the amount and type of data you want to receive. For example, you may want the Stellarium display to zoom in closer to a particular area of sky. You would do this by decreasing the field of view.\footnote{Section~\ref{subsec:fieldofview} --
 	\emph{\titleref{subsec:fieldofview}} shows how to do this.} Likewise, you may want to reduce the amount of astronomical data you are receiving by adding a filter threshold so VizieR will only receive stars within a certain magnitude range. 
 
+Message names are not case sensitive. For example, the messages \textit{fieldOfView} and \textit{FieldOfView} could both be used to set the field of view for Stellarium.
+
 \subsection{poll}
 Sometimes Stellar Command may already be started and configured to send and listen to the ports. You can easily find this out by sending the \textit{poll} command with no arguments, which will cause Stellarium to reply on the ports it is configured when started up.
 
@@ -88,6 +90,23 @@ In order to send a change in the field of view, send a message using the \textit
 	\medskip
  \end{syntax}
 \bigskip
+
+ \subsection{time}
+You can set the simulation time by sending a full ISO time stamp as a string message, or by sending each Date time parameter as OSC arguments. For example, you can set the time as a string as follows:
+
+\begin{syntax}	
+	\medskip
+	/Stellar/time 2019-04-18T17:51:17Z
+	\medskip
+\end{syntax}
+
+If using specified time, the first three arguments will be  Year, Month and  Day as integers. The next  argument will be the hour as an integer as a 24 hour number. EG, the number 13 will signify 1pm. The next argument will be the minutes as an integer. The next argument will be seconds as a float, which enables sub second accuracy. The final optional argument will be the time zone as an alphabetical times zone, or if blank, the local time at the location will be used.  the same time could be set by sending the following message.
+\begin{syntax}	
+	\medskip
+	/Stellar/time 2019 04 18 17 51 17.0 Z
+	\medskip
+\end{syntax}
+
 
 \subsection{moveLR}
 You can make the Stellarium display move left or right by sending the command \textit{moveLR} followed by a floating point number indicating how far to move. A positive value will make it appear that the viewer is turning their head to the right, while a negative number will simulate moving to the left. To move to the right, send the following command:
