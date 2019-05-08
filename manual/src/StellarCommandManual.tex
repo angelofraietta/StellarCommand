@@ -1,6 +1,5 @@
-\documentclass{memoir}% http://ctan.org/pkg/memoir
-
-\usepackage{comment}
+\documentclass[a4paper,12pt]{memoir}% http://ctan.org/pkg/memoir
+%\usepackage{comment}
 \usepackage{memsty}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{titlepages}  % code of the example titlepages
@@ -8,6 +7,8 @@
 \usepackage{dpfloat}     % floats on facing pages
 \usepackage{fonttable}[2009/04/01]   % font tables
 \usepackage{makeidx}
+
+\setlength{\evensidemargin}{\oddsidemargin}
 
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
 \renewcommand{\listfigurename}{LIST OF FIGURES}
@@ -67,6 +68,7 @@
 \listoftables
 \clearpage
 
+
 \input{preface.tex}
 \input{introduction.tex}
 \input{background.tex}
@@ -81,7 +83,9 @@
 
 \input{java-library.tex}
 
-
+	
+\bibliography{StellarCommandManual} 
+	
 \printindex
 
 \end{document}
