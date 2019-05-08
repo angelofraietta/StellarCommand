@@ -1,174 +1,26 @@
-%#% extstart input preamble.tex
-%
-% This has been built from Memoir class
-%             Author: Peter Wilson
-%             Copyright 2001, 2002, 2003, 2004, 2008, 2009 Peter R. wilson
-%
-\listfiles
-\documentclass[10pt,a4paper,extrafontsizes]{memoir}
+\documentclass{memoir}% http://ctan.org/pkg/memoir
+
 \usepackage{comment}
-
-
-% For (non-printing) notes  \PWnote{date}{text}
-\newcommand{\PWnote}[2]{} 
-\PWnote{2009/04/29}{Added fonttable to the used packages}
-\PWnote{2009/08/19}{Made Part I a separate doc (memdesign.tex).}
-
-% same
-\newcommand{\LMnote}[2]{} 
-
-
 \usepackage{memsty}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{titlepages}  % code of the example titlepages
 \usepackage{memlays}     % extra layout diagrams
 \usepackage{dpfloat}     % floats on facing pages
 \usepackage{fonttable}[2009/04/01]   % font tables
-%%%%\usepackage{xr-hyper} \externaldocument{memdesign} Doesn't work, 
-%%%%                      Idea won't work in general for memman/memdesign
-%%%%                      as at display time, who knows where everything
-%%%%                      will be located on the individual's computer.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{makeidx}
 
-%%%% Change section heading styles
-%%%\memmansecheads
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\listtablename}{LIST OF TABLES}
+\renewcommand*{\cftchapterleader}{\hfill}
 
-%%%% Use the built-in division styling
-\headstyles{memman}
-
-%%% ToC down to subsections
-\settocdepth{subsection}
+\settocdepth{subsubsection}
 %%% Numbering down to subsections as well
-\setsecnumdepth{subsection}
+\setsecnumdepth{subsubsection}
 
-%%%% extra index for first lines
-\makeindex[lines]
-
-
-% this 'if' is used to determine whether we are compiling the memoir
-% master in the subversion repository, or the public memman.tex
-\newif\ifMASTER
-\MASTERfalse
-%\MASTERtrue
-
-\ifMASTER
-
-% add patch to fink, such that \AtEndFile still work
-\makeatletter
-\AtEndFile{fink.sty}{
-  \typeout{patching fink} 
-  \renewcommand{\InputIfFileExists}[2]{%
-    \IfFileExists{##1}%
-    {##2\@addtofilelist{##1}%
-      \m@matbeginf{##1}%
-      \fink@prepare{##1}%
-      %\@@input \@filef@und
-      \expandafter\fink@input%
-      \expandafter\fink@restore\expandafter{\finkpath}%
-     \m@matendf{##1}%
-     \killm@matf{##1}}%
- }
-}
-\makeatother
-% private package, not in circulation
-% enables us to gather svn information on a single file basis
-%\usepackage[filehooks]{svn-multi-private}
-% use the current version
-\usepackage[filehooks]{svn-multi}
-
-
-% \svnidlong
-% {}
-% {$LastChangedDate: 2018-12-12 12:53:37 +0100 (Wed, 12 Dec 2018) $}
-% {$LastChangedRevision: 622 $}
-% {$LastChangedBy: daleif@math.au.dk $}
-
-
-
-\makeatletter
-\newcommand\addRevisionData{%
-  \begin{picture}(0,0)%
-    \put(0,-20){%
-      \tiny%
-      \expandafter\@ifmtarg\expandafter{\svnfiledate}{}{%
-        \textit{\textcolor{darkgray}{Chapter last updated \svnfileyear/\svnfilemonth/\svnfileday
-         \enspace (revision \svnfilerev)}}
-     }%
-    }%
-  \end{picture}%
-}
-\makeatother
-
-% we add this to the first page of each chapter
-
-\makepagestyle{chapter}
-\makeoddfoot{chapter}{\addRevisionData}{\thepage}{}
-\makeevenfoot{chapter}{\addRevisionData}{\thepage}{}
-
-\else
-% disable svn info collecting
-\newcommand\svnidlong[4]{}
-\fi
-
-
-
-%% end preamble
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%#% extend
-
-\usepackage[draft]{fixme}
-\fxsetup{
-  multiuser,
-  marginface=\normalfont\tiny,
-  innerlayout=noinline,
-  layout=marginnote,
-}
-\usepackage{tikz,ragged2e}
-\usepackage{makeidx} 
-\makeatletter
-% extra feature, vadj=length kan flytte på fxnotes hvis de overlapper
-\@fxdefinekey{layout}{vadj}{\def\marginnotevadjust{#1}}
-
-% endnu mere ekstra feature, kræver tikz og calc tikz lib
-
-\renewcommand*\FXLayoutMarginNote[3]{%
-  \tikz[overlay,remember picture]\coordinate (A) at (0,0);%
-  \marginnote[%
-    \RaggedLeft%
-    \rlap{\tikz[overlay,remember picture]\coordinate(C) at (0,0);}%
-    \@fxuseface{margin}%
-    \@fxtextstd{#1}{#2}{#3}%
-    {\tikz[overlay,remember picture,ultra thin,cyan]\draw(A) -| ++(0,-2pt) -|(C);}%
-  ]{%
-    \RaggedRight%
-    \tikz[overlay,remember picture]\coordinate(B) at (0,0);%
-    \@fxuseface{margin}%
-    \@fxtextstd{#1}{#2}{#3}%
-    \tikz[overlay,remember picture,ultra thin,cyan]\draw(A) -| ++(0,-2pt) -|(B);%
-  }%
-}
-\makeatother
-
-
+\makeindex
 
 \begin{document}
-
-
-%#% extstart input intro.tex
-
-
-
-
-
-%\tightlists
-\firmlists
-\midsloppy
-\raggedbottom
-\chapterstyle{demo3}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\input{memnoidxnum}
 
 \frontmatter
 \pagestyle{empty}
@@ -177,153 +29,51 @@
 % title page
 \vspace*{\fill}
 \begin{center}
-\HUGE\textsf{The Stellar Command Module}\par
+	\HUGE\textsf{The Stellar Command Module}\par
 \end{center}
 \begin{center}
-\LARGE\textsf{for}\par
+	\LARGE\textsf{for}\par
 \end{center}
 \begin{center}
-\HUGE\textsf{Integrating Astronomy and Art}\par
+	\HUGE\textsf{Integrating Astronomy and Music}\par
 \end{center}
 
 \begin{center}
-\Huge\textsf{User Guide}\par
+	\Huge\textsf{User Guide}\par
 \end{center}
 \begin{center}
-\LARGE\textsf{Angelo Fraietta}\par
-\bigskip
-\LARGE\textsf{University of New South Wales}\par
-%\normalsize\textsf{Maintained by Angelo Fraietta}\par
-\medskip
-
+	\LARGE\textsf{Angelo Fraietta}\par
+	\bigskip
+	\LARGE\textsf{University of New South Wales}\par
+	%\normalsize\textsf{Maintained by Angelo Fraietta}\par
+	\medskip
+	
 \end{center}
 \vspace*{\fill}
-\def\THP{T\kern-0.2em H\kern-0.4em P}%   OK for CMR
-\def\THP{T\kern-0.15em H\kern-0.3em P}%   OK for Palatino
-\newcommand*{\THPress}{The Herries Press}%
-\begin{center}
-
-%\includegraphics[width=\droptitle]{anvil2.mps}
-\setlength{\droptitle}{0pt}%
-\end{center}
-\clearpage
-
-\PWnote{2009/06/26}{Updated the copyright page for 9th impression}
-% copyright page
-\begingroup
-\footnotesize
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{\baselineskip}
-
-
-\begin{tabular}{@{} l l}
-  \textcopyright{} 2018\:---\:2019 &Angelo Fraietta \\
-\end{tabular}
-
-
-All rights reserved
-
 
 
 \begin{center}
-\begin{tabular}{ll}
-First edition:                        & 6 June 2019 \\
-
-\end{tabular}
+	
+	%\includegraphics[width=\droptitle]{anvil2.mps}
+	\setlength{\droptitle}{0pt}%
 \end{center}
-\ifMASTER
-Manual last changed \svnyear/\svnmonth/\svnday
-\fi
-
-\endgroup
-
 \clearpage
-
-\pagestyle{headings}
-%%%%\pagestyle{Ruled}
-
-\setupshorttoc
-\tableofcontents
-\clearpage
-\setupparasubsecs
-\setupmaintoc
-
-\begingroup
-
-% important point here: We need \endlineshar=-1 here for the inline
-% list of subsections. Why? Beacause we have subsection subsubsection
-% subsection, and under hyperref running the l@subsubsection for
-% subsubsection, which typesets nothing, ruins our \ignorespaces in
-% our redefinition of \l@subsection (it cannot see and ignore the space after the
-% \contentsline line for subsubsection). Easiest solution: use
-% change \endlinechar
-%
-% Special thanks to David Carlisle in the tex.stackexchange.com chat
-% for suggesting it
-
-
-\endlinechar=-1
 
 
 \tableofcontents
-
-\endgroup
-
-
-\setlength{\unitlength}{1pt}
 \clearpage
 \listoffigures
 \clearpage
 \listoftables
 \clearpage
-%\listofegresults
 
-%#% extend
-
-
-%#% extstart include preface.tex
-%\chapter{Foreword}
-
-\svnidlong
-{$Ignore: $}
-{$LastChangedDate: 2014-11-05 16:28:11 +0100 (Wed, 05 Nov 2014) $}
-{$LastChangedRevision: 501 $}
-{$LastChangedBy: daleif $}
-
-\chapter{Preface}
-    
-    \textit{Stellar Command} is a software system that integrates \textit{stellarium} planetarium software with online astronomical data acquisition through \textit{VizieR} database of astronomical catalogues \cite{ochsenbein2000vizier}. Stellar Command can be used as an interface mechanism for correlating music and sound generation, allowing stellarium to be used as both a direct input interface for performance or composition, and as a remotely controlled derivative multimedia display output.
-
-	I hope you will have as much fun creating musical works with it as much as I have.
-{\raggedleft{\scshape Angelo Fraietta} \\ Newcastle, AU \\ June 2019\par}
-
-
-%#% extend
-
-%#% extstart include intro-8.tex
-
-\svnidlong
-{$Ignore: $}
-{$LastChangedDate: 2015-04-22 17:17:51 +0200 (Wed, 22 Apr 2015) $}
-{$LastChangedRevision: 527 $}
-{$LastChangedBy: daleif $}
-
+\input{preface.tex}
 \input{introduction.tex}
 \input{background.tex}
 \input{terminology.tex}
 
-%#% extend
-
-\cleardoublepage
 \pagenumbering{arabic}
-
-% body
 \mainmatter
-
-
-
-%#% extstart include start-off.tex
-
 
 \input{osc-commands.tex}
 \input{osc-receive.tex}
@@ -331,173 +81,7 @@ Manual last changed \svnyear/\svnmonth/\svnday
 
 \input{java-library.tex}
 
-\chapter{Comments}
-\label{cha:comments}
-
-\section{Algorithms}
-\label{sec:algorithms}
-
-Over time we may use this section to explain, or list some of the
-algorithms for some of the macros in the class. The information may be
-useful to some.
-
-\subsection{Autoadjusting
-  \texorpdfstring{\cs{marginparwidth}}{\textbackslash marginparwidth}}
-\label{sec:auto-csmarg}
-
-This algorithm is used within \cmd{\fixthelayout} unless the user have
-used \cmd{\setmarginnotes}.
-
-\noindent
-\begin{framed}
-  \vskip-2\baselineskip
-  \begin{small}
-\begin{verbatim}
-if twocolumn then
-  marginparwidth = min{inner margin,outer margin}
-else
-  if twoside then
-    if marginpar always left or always right then
-      marginparwidth = min{inner margin,outer margin}
-    else if marginpar in outer margin then
-      marginparwidth = outer margin
-    else if marginpar in inner margin then
-      marginparmargin = inner margin
-    end if
-  else
-    if marginpar in left margin then
-      marginparwidth = inner margin
-    else
-      marginparwidth = outer margin
-    end if
-  end if
-end if
-marginparwidth = marginparwidth - 2marginparsep
-if marginparwidth < 1pt then
-  marginparwidth = 1pt
-end if
-\end{verbatim}
-  \end{small}
-\end{framed}
-
-
-%#% extend
-
-%#% extstart input backend.tex
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%\endinput
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%% end mbooka
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% back end
-\backmatter
-
-\PWnote{2009/07/08}{Changed \cs{toclevel@section} so that Notes 
-                    divisions appear in the bookmarks}
-\makeatletter\renewcommand*{\toclevel@chapter}{-1}\makeatother 
-\makeatletter\renewcommand*{\toclevel@section}{0}\makeatother
-\clearpage
-\printpagenotes
-\clearpage
-\pagestyle{plainmarkruled}
-%%\chapterstyle{section}
-
-\renewcommand*{\begintheglossaryhook}{\small}
-%%%\glossaryintoc
-\printglossary
-
-\renewcommand{\prebibhook}{%
-\ctan\ is the \cTeXan. Information on how to
-access CTAN is available at \url{http://www.tug.org}.
-\par\vspace{\onelineskip}}
-
-%%%\begin{comment}
-\nocite{*}
-\bibliographystyle{abbrv}
-
-\bibliography{NIME_2019-planetarium} 
-
-
-\clearpage
-\twocolindex
-\pagestyle{index}
-%\renewcommand{\chaptermark}[1]{}
-\renewcommand{\preindexhook}{%
-The first page number is usually, but not always, the primary reference to
-the indexed topic.\vskip\onelineskip}
-\indexintoc
-
-%%%\raggedright  does nasty things to index entries
-\printindex
-
-\onecolindex
-\renewcommand*{\preindexhook}{}
-\renewcommand*{\indexname}{Index of first lines}
-%%% \indexintoc
-
-
-\makeatletter
-\renewcommand{\doidxbookmark}[1]{{\def\@tempa{Symbols}\def\@tempb{#1}%
-  \centering\bfseries \ifx\@tempa\@tempb %
-  Analphabetics 
-%  \phantomsection%
-%  \pdfbookmark[0]{Analphabetics}{Analphabetics-idx}%
-%  \label{AnalphabeticsAnalphabeticsAnalphabetics-idx}%
-  \else 
-  #1%
-%  \phantomsection%
-%  \pdfbookmark[0]{#1}{#1-idx}%
-%  \label{#1#1#1-idx}%
-  \fi%
-  \vskip\onelineskip\par}}
-\makeatother
-
 
 \printindex
-
-\cleardoublepage
-\pagestyle{empty}
-\null\vfil
-
-\begin{adjustwidth}{1in}{1in}
-\begin{center}
-{\Large\textsf{Colophon}}
-\end{center}
-\begin{center}
-This manual was typeset using the \ltx\ typesetting system
-created by Leslie Lamport and the \Mname\ class. 
-The body text is set 10/12pt on a
-33pc measure with Palatino designed by Hermann Zapf, which includes 
-italics and small caps. Other fonts include
-Sans, Slanted and Typewriter from Donald Knuth's 
-Computer Modern family.
-
-\end{center}
-
-
-\end{adjustwidth}
-
-
-
-
-
-\vfil
-
-%#% extend
-
 
 \end{document}
-
-\endinput
-
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: t
-%%% TeX-source-specials-mode: t
-%%% TeX-PDF-mode: t
-%%% End: 
