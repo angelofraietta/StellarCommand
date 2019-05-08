@@ -80,14 +80,14 @@ The names of the astronomical data columns is returned in the message names, wit
 \end{itemize}
 
 \subsection{values}
-Each bundle will return zero or more OSC messages that contain the data values that correlate to the column names in the \textit{names} message. Table~\ref{tab:vizierData} shows how the column names correlate to the astronomical data. Note that \textit{/Stellar} was removed from table example for brevity.
+Each bundle will return zero or more OSC messages that contain the data values that correlate to the column names in the \textit{names} message. Table~\ref{tab:vizierData} shows how the column names correlate to the astronomical data. \footnote{\textsuperscript{$\dagger$} \textit{/Stellar} was removed from table example for brevity.} \footnote{\textsuperscript{$\dagger$$\dagger$}The actual columns names are \textit{RArad (deg),  DErad (deg), pmRA (mas/yr), pmDE (mas/yr)} and \textit{Hpmag (mag)} , however, they have been abbreviated to fit the table.}
 
 \begin{table}
 	\centering
 	\caption{Sample correlated column names and data}
 	\begin{tabular}{|l|l|l|l|l|l|l|}  \hline
-		\textbf{OSC Name}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg} \\ \hline
-		/names&RArad (deg)&DErad (deg)&pmRA (mas/yr)&pmDE (mas/yr)&Hpmag (mag) &B-V\\ \hline
+		\textbf{OSC Name\textsuperscript{$\dagger$}}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg}&\textbf{OSC arg} \\ \hline
+		/names&RArad \textsuperscript{$\dagger$$\dagger$}&DErad &pmRA &pmDE &Hpmag (mag) &B-V\\ \hline
 		/values&000.111046 &-79.061831 &163.54  & -62.97  &8.7854  &0.778\\ \hline
 		/values&001.002533 &-80.39506  & 55.39  & -18.26  &7.9968  &0.314\\ \hline
 		/values&001.155615 &-81.345318  &1.05     &0.76  &9.1961 & 0.239\\ \hline

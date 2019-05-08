@@ -8,7 +8,13 @@
 \usepackage{fonttable}[2009/04/01]   % font tables
 \usepackage{makeidx}
 
+\usepackage[margin=2cm]{geometry}
 \setlength{\evensidemargin}{\oddsidemargin}
+
+\usepackage{fancyhdr} 
+\fancyhf{}
+\cfoot{\thepage}
+\pagestyle{fancy}  
 
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
 \renewcommand{\listfigurename}{LIST OF FIGURES}
@@ -60,7 +66,6 @@
 \end{center}
 \clearpage
 
-
 \tableofcontents
 \clearpage
 \listoffigures
@@ -68,7 +73,7 @@
 \listoftables
 \clearpage
 
-
+\pagestyle{fancy}  
 \input{preface.tex}
 \input{introduction.tex}
 \input{background.tex}
