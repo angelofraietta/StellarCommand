@@ -98,4 +98,18 @@ task deployJarAndJavaDoc << {
 }
 
 
+// Pack our Build Jar file and the version text into a zip file so we can add it to plugin resources
+task packDistribution (type:Zip) {
+    //destinationDir "." //set our output directory
+    archiveName 'StellarCommand.zip'  //set the name of our archive
+
+    //config
+    from("Distribution") {
+        include '*/**'
+    }
+
+}
+
+packDistribution.dependsOn deployJarAndJavaDoc
+
 deployJarAndJavaDoc.dependsOn shadowJar
