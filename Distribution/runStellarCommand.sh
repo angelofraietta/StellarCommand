@@ -4,12 +4,12 @@
 PORT=1234
 OSC=/Stellar
 TRYPORTS="3333,4444,5555"
-INS=0
-OUTS=2
+CLIENT=
+STELLARIUM=
 
 
 
 
 echo “Running Stellar Command”
 
-java -jar StellarCommand.jar port=$PORT osc=$OSC tryport=$TRYPORTS
+java -jar StellarCommand.jar port=$PORT osc=$OSC tryport=$TRYPORTS client=$CLIENT stellarium=$STELLARIUM

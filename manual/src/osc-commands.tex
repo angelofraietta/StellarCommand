@@ -7,7 +7,10 @@ There are primarily two ways to use Stellar Command. The first is as a separate 
 %makeidx{standalone}
 \index{OSC Configuration!Commandline arguments}
 \index{OSC Configuration! Client port}
-The Stellar Command module is instantiated by executing Java  with the name of the JAR file and the required program arguments that define communication, such as the network port to send OSC messages to, and the OSC address space.  For example, to start the StellarCommand module so it sends OSC messages on UDP port 1234  using an OSC address space of \texttt{/Stellar},\footnote{In this instance, the OSC client and stellarium are on the same computer.} one would execute the following command:\\
+Scripts are provided to save you having to type these parameters each time and is described in section ~\ref{sec:configscript} --
+\emph{\titleref{sec:configscript}}. This section, however, will explain in detail what each parameter does.
+The Stellar Command module is instantiated by executing Java  with the name of the JAR file and the required program arguments that define communication, such as the network port to send OSC messages to, and the OSC address space.  
+For example, to start the StellarCommand module so it sends OSC messages on UDP port 1234  using an OSC address space of \texttt{/Stellar},\footnote{In this instance, the OSC client and stellarium are on the same computer.} one would execute the following command:\\
 
 \begin{syntax} \index{Commandline arguments!port} \index{Commandline arguments!osc}
 \medskip
@@ -59,6 +62,32 @@ This will cause the Stellar Command module to send OSC messages to ``192.168.0.5
 	\medskip
 \end{syntax}
 \bigskip
+
+\subsection{Using Configuration Scripts}\label{sec:configscript}
+\index{OSC Configuration!Using a script}
+Three scripts are provided to facilitate simple configuration and launching of  Stellar Command. The script \textit{runStellarCommand.sh} is used to configure and launch Stellar Command from the commandline in MacOS and Linux. \index{OSC Configuration!MacOS Commandline}  \index{OSC Configuration!Linux Commandline}. The file \textit{runStellarCommand.bat} is used to configure and launch on Windows  \index{OSC Configuration!Windows batch file}. The is an additional file, \textit{runStellarCommand.command}, which allows a person to write the configuration inside the \textit{.sh} file and then launch Stellar Command by double clicking \textit{runStellarCommand.command} with the mouse.
+
+Configuring Stellar Command is done simply by replacing the value in the script with those required.
+ \begin{syntax} \index{Commandline arguments!client}\index{Commandline arguments!stellarium}
+	\medskip
+PORT=1234\\
+OSC=/Stellar\\
+TRYPORTS="3333,4444,5555"\\
+CLIENT=\\
+STELLARIUM=\\ 
+	\medskip
+\end{syntax}
+\bigskip
+
+If, for example, you wanted Stellar Command to send it's messages to your client on port 5678, simply change text after  \textit{PORT=}.
+ \begin{syntax} \index{Commandline arguments!client}\index{Commandline arguments!stellarium}
+	\medskip
+	PORT=5678\\
+	\medskip
+\end{syntax}
+\bigskip
+
+The same applies for the other parameters.
 
 \section{Sending Commands to the Stellar Command Module}
 You can provide instructions to Stellar Command in order to control stellarium or to change the amount and type of data you want to receive. For example, you may want the stellarium display to zoom in closer to a particular area of sky. You would do this by decreasing the field of view.\footnote{Section~\ref{subsec:fieldofview} --
