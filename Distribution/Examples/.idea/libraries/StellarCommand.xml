@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="StellarCommand">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Device/HappyBrackets/data/jars/StellarCommand.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/libs/docs/StellarCommand/javadoc" />
+      <root url="jar://$PROJECT_DIR$/Device/HappyBrackets/data/jars/StellarCommand.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
