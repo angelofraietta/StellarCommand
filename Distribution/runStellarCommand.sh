@@ -6,10 +6,12 @@ OSC=/Stellar
 TRYPORTS="3333,4444,5555"
 CLIENT=
 STELLARIUM=
+STELLARIUMPOLL=
+STELLARIUMPORT=
 
 
 
 
 echo “Running Stellar Command”
 
-java -jar StellarCommand.jar port=$PORT osc=$OSC tryport=$TRYPORTS client=$CLIENT stellarium=$STELLARIUM
+java -jar StellarCommand.jar port=$PORT osc=$OSC tryport=$TRYPORTS client=$CLIENT stellarium=$STELLARIUM stellariumpoll=$STELLARIUMPOLL stellariumport=$STELLARIUMPORT

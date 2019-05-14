@@ -42,8 +42,13 @@ public class Main {
                 }
                 else if (arg.startsWith(CMD_OSC_CLIENT)) {
                     String param = arg.replace(CMD_OSC_CLIENT, "");
-                    oscClient = InetAddress.getByName(param);
-
+                    if (!param.isEmpty()) {
+                        oscClient = InetAddress.getByName(param);
+                    }
+                    else
+                    {
+                        System.out.println("Skip empty arg " + arg);
+                    }
                 }
                 else if (arg.startsWith(CMD_OSC_ADDRESS)) {
                     String param = arg.replace(CMD_OSC_ADDRESS, "");
@@ -51,15 +56,33 @@ public class Main {
                 }
                 else if (arg.startsWith(CMD_STELLARIUM_ADDRESS)) {
                     String param = arg.replace(CMD_STELLARIUM_ADDRESS, "");
-                    stellariumHost = param;
+                    if (!param.isEmpty()) {
+                        stellariumHost = param;
+                    }
+                    else
+                    {
+                        System.out.println("Skip empty arg " + arg);
+                    }
                 }
                 else if (arg.startsWith(CMD_STELLARIUM_PORT)) {
                     String param = arg.replace(CMD_STELLARIUM_PORT, "");
+                    if (!param.isEmpty()) {
                     stellariumPort = Integer.parseInt(param);
+                    }
+                    else
+                    {
+                        System.out.println("Skip empty arg " + arg);
+                    }
                 }
                 else if (arg.startsWith(CMD_STELLARIUM_POLL_TIME)) {
                     String param = arg.replace(CMD_STELLARIUM_POLL_TIME, "");
+                    if (!param.isEmpty()) {
                     pollTime = Integer.parseInt(param);
+                    }
+                    else
+                    {
+                        System.out.println("Skip empty arg " + arg);
+                    }
                 }
                 else if (arg.startsWith(CMD_OSC_TRY_PORT)) {
                     String param = arg.replace(CMD_OSC_TRY_PORT, "");

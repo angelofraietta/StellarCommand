@@ -98,7 +98,7 @@ public class TimeFunctions implements HBAction {
         };// End DynamicControl timeRate code
 
 
-        TriggerControl sendCurrenttime = new TriggerControl(this, "Set Midday 6 April 2019") {
+        new TriggerControl(this, "Set Local Midday 6 April 2019") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line
 
@@ -110,7 +110,19 @@ public class TimeFunctions implements HBAction {
             }
         };// End DynamicControl sendCurrenttime code
 
-        TriggerControl sendPoll = new TriggerControl(this, "Request Time") {
+        new TriggerControl(this, "Set GMT + 1 Midday 6 April 2019") {
+            @Override
+            public void triggerEvent() {// Write your DynamicControl code below this line
+
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.STELLAR_TIME),
+                        2019, 04, 06, 12, 0, 0, "+01:00");
+                oscudpSender.send(msg, stellarCommandInetSocketAddress);
+                display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                // Write your DynamicControl code above this line
+            }
+        };// End DynamicControl sendCurrenttime code
+
+         new TriggerControl(this, "Request Time") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line 
 

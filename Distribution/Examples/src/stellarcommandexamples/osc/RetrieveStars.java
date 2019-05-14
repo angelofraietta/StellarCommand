@@ -147,6 +147,12 @@ public class RetrieveStars implements HBAction {
             public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                 // type your code below this line
 
+                // Display our Text to StdOut
+                String oscAsText = StellarOSCVocabulary.getOscAsText(oscMessage);
+
+                System.out.println(oscAsText);
+
+
                 if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.BUNDLE_COUNT))){
                     bundleNumber = (int) oscMessage.getArg(0);
                     totalBundles = (int)oscMessage.getArg(1);

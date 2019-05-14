@@ -1,6 +1,10 @@
 \chapter{Using Stellar Command with OSC} \label{chap:launchosc}
 There are primarily two ways to use Stellar Command. The first is as a separate process that runs on the compute. The second method is to use Stellar Command as a library that you link to directly in your program. If you intend to use Stellar Command as a library, you can skip forward to chapter~\ref{chap:libraryosc} --
-\emph{\titleref{chap:libraryosc}}.
+\emph{\titleref{chap:libraryosc}}. 
+
+This chapter defines sending OSC to Stellar Command.  Examples for using OSC can be found at 
+chapter~\ref{chap:oscexamples} --
+\emph{\titleref{chap:oscexamples}}
 
 
 \section{Launching Stellar Command} \label{sec:launchcommand}
@@ -48,13 +52,13 @@ The OSC client and the stellarium server do not have to be on the same physical 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=1\columnwidth]{RemoteStellarium}
-	\caption{Remote stellarium and OSC Clients.}
+	\caption{Remote Stellarium and OSC Clients.}
 	\label{fig:RemoteStellarium}
 \end{figure}
 \bigskip
 
-Creating a connection between \textit{OSC Client 1} and \texttt{Remote stellarium Server} is effected by adding adding the arguments \\\texttt{client=192.168.0.5} and \texttt{stellarium=http://myserver.com} to the command line.
-This will cause the Stellar Command module to send OSC messages to ``192.168.0.5" and stellarium commands to \textit{http://myserver.com} on HTP port 8090\footnote{The default stellarium Remote Control port is 8090, however, this can be changed inside stellarium. It is assumed that port forwarding when not using a local area network has been configured to send packages to the correct computer hosting stellarium}, effectively acting as a proxy between the two.
+Creating a connection between \textit{OSC Client 1} and \texttt{Remote Stellarium Server} is effected by adding adding the arguments \\\texttt{client=192.168.0.5} and \texttt{stellarium=http://myserver.com} to the command line.
+This will cause the Stellar Command module to send OSC messages to ``192.168.0.5" and stellarium commands to \textit{http://myserver.com} on HTP port 8090\footnote{The default stellarium Remote Control port is 8090, however, this can be changed inside stellarium. It is assumed that port forwarding when not using a local area network has been configured to send packages to the correct computer hosting Stellarium}, effectively acting as a proxy between the two.
 
  \begin{syntax} \index{Commandline arguments!client}\index{Commandline arguments!stellarium}
 	\medskip
@@ -62,6 +66,30 @@ This will cause the Stellar Command module to send OSC messages to ``192.168.0.5
 	\medskip
 \end{syntax}
 \bigskip
+
+\index{Commandline arguments!client}\index{Commandline arguments!Stellarium poll frequency} \index{Commandline arguments!stellariumpoll}
+Stellar Command works by polling Stellarium to detect changes. This is a requirement because Stellarium uses a REST API rather than a persistent socket. By default, the Stellarium will be polled once per second, however, you can change this by adding a parameter \textit{stellariumpoll}, which dictates how often Stellarium is polled in milliseconds. For example, the following would cause Stellarium to be polled approximately  every two seconds. Although the parameter is in milliseconds, causing Stellarium to poll more often than once per second can slow your system down significantly. 
+
+ \begin{syntax} 
+	\medskip
+	java -jar StellarCommand.jar port=1234 osc=/Stellar  {\char'134}\\stellariumpoll=2000 
+	\medskip
+\end{syntax}
+\bigskip
+If you set a polling time of zero, then Stellarium will not be polled, however, you can request a poll from your own application be sending the \textit{poll caommand} - described in section ~\ref{sec:poll} --
+\emph{\titleref{sec:poll}}.
+
+
+\index{Commandline arguments!client}\index{Commandline arguments!Stellarium remote port}\index{Commandline arguments!stellariumport}
+The default Stellarium Remote Control port is 8090, however, this can be changed inside Stellarium. It is assumed that port forwarding when not using a local area network has been configured to send packages to the correct computer hosting Stellarium. You can configure this in Stellar Command by adding the parameter \textit{stellariumport}, which dictates the port Stellar Command will use to attempt to communicate with Stellarium. For example, the following would cause Stellar Command to communicate with Stellarium on port 2000. It is extremely unlikely you would need to change this parameter, however, the facility is there in case you do need to.   
+
+\begin{syntax} 
+	\medskip
+	java -jar StellarCommand.jar port=1234 osc=/Stellar  {\char'134}\\stellariumport=2000 
+	\medskip
+\end{syntax}
+\bigskip
+
 
 \subsection{Using Configuration Scripts}\label{sec:configscript}
 \index{OSC Configuration!Using a script}
@@ -75,6 +103,8 @@ OSC=/Stellar\\
 TRYPORTS="3333,4444,5555"\\
 CLIENT=\\
 STELLARIUM=\\ 
+STELLARIUMPOLL=\\
+STELLARIUMPORT=\\
 	\medskip
 \end{syntax}
 \bigskip
@@ -95,7 +125,7 @@ You can provide instructions to Stellar Command in order to control stellarium o
 
 Message names are not case sensitive. For example, the messages \textit{fieldOfView} and \textit{FieldOfView} could both be used to set the field of view for stellarium.
 
-\subsection{poll} \index{OSC messages to Stellar Command!poll}
+\subsection{poll}  \label{sec:poll} \index{OSC messages to Stellar Command!poll}
 Sometimes Stellar Command may already be started and configured to send and listen to the ports. You can easily find this out by sending the \textit{poll} command with no arguments, which will cause stellarium to reply on the ports it is configured when started up.
 
  \begin{syntax}
@@ -130,14 +160,25 @@ You can set the simulation time by sending a full ISO time stamp as a string mes
 	\medskip
 \end{syntax}
 
-If using specified time, the first three arguments will be  Year, Month and  Day as integers. The next  argument will be the hour as an integer as a 24 hour number. EG, the number 13 will signify 1pm. The next two arguments will be the minutes and seconds as integers.  The final optional argument will be the time zone as an alphabetical times zone, or if blank, the local time at the location will be used.  the same time could be set by sending the following message.
+If using specified time, the first three arguments will be  Year, Month and  Day as integers. The next  argument will be the hour as an integer as a 24 hour number. EG, the number 13 will signify 1pm. The next two arguments will be the minutes and seconds as integers.  The final optional argument will be the time zone, using Z for zero time, or -/-HH:MM for a different GMT time shift.
+
+The following will set to 5:51:17pm on 18 April 2019 at GMT.
+
 \begin{syntax}	
 	\medskip
 	/Stellar/time 2019 4 18 17 51 17 Z
 	\medskip
 \end{syntax}
 
-Sending the following would set to midday on 18 April 2019 at the Observer location in stellarium.
+The following will set to 5:51:17pm on 18 April 2019 at GMT + 5 Hours.
+\begin{syntax}	
+	\medskip
+	/Stellar/time 2019 4 18 17 51 17 05:00
+	\medskip
+\end{syntax}
+
+If the time zone is blank, the local time at the location will be used. 
+Sending the following would set to midday on 18 April 2019 at the Observer location in Stellarium.
 
 \begin{syntax}	
 	\medskip
@@ -145,6 +186,7 @@ Sending the following would set to midday on 18 April 2019 at the Observer locat
 	\medskip
 \end{syntax}
 
+You can also set 
 
 \subsection{moveLR} \index{OSC messages to Stellar Command!moveLR}
 You can make the stellarium display move left or right by sending the command \textit{moveLR} followed by a floating point number indicating how far to move. A positive value will make it appear that the viewer is turning their head to the right, while a negative number will simulate moving to the left. To move to the right, send the following command:
