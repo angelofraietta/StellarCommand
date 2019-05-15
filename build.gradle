@@ -112,4 +112,5 @@ task packDistribution (type:Zip) {
 
 packDistribution.dependsOn deployJarAndJavaDoc
 
+deployJarAndJavaDoc.dependsOn(javadocJar)
 deployJarAndJavaDoc.dependsOn shadowJar

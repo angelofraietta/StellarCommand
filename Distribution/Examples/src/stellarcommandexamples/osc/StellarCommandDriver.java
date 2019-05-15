@@ -137,6 +137,11 @@ public class StellarCommandDriver implements HBAction, OSCListener {
             @Override
             public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                 // type your code below this line 
+                // Display our Text to StdOut
+                String oscAsText = StellarOSCVocabulary.getOscAsText(oscMessage);
+
+                System.out.println(oscAsText);
+
 
                 if (oscMessage.getName().equalsIgnoreCase(buildOscName(StellarOSCVocabulary.ClientMessages.OSC_PORT))){
                     try{

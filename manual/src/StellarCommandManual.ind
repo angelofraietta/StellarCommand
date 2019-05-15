@@ -1,0 +1,67 @@
+\begin{theindex}
+
+  \item Commandline arguments
+    \subitem client, \hyperpage{7, 8}
+    \subitem osc, \hyperpage{5}
+    \subitem port, \hyperpage{5}
+    \subitem stellarium, \hyperpage{7, 8}
+    \subitem Stellarium poll frequency, \hyperpage{7}
+    \subitem Stellarium remote port, \hyperpage{7}
+    \subitem stellariumpoll, \hyperpage{7}
+    \subitem stellariumport, \hyperpage{7}
+    \subitem tryport, \hyperpage{5}
+
+  \indexspace
+
+  \item Examples
+    \subitem HappyBrackets, \hyperpage{1}
+
+  \indexspace
+
+  \item Filters
+    \subitem B-V, \hyperpage{13}
+    \subitem Hpmag, \hyperpage{12}
+    \subitem reset, \hyperpage{13}
+
+  \indexspace
+
+  \item OSC Configuration
+    \subitem  Client port, \hyperpage{5}
+    \subitem Commandline arguments, \hyperpage{5}
+    \subitem Linux Commandline, \hyperpage{7}
+    \subitem MacOS Commandline, \hyperpage{7}
+    \subitem Stellar Command receive port, \hyperpage{5}
+    \subitem Using a script, \hyperpage{7}
+    \subitem Windows batch file, \hyperpage{7}
+  \item OSC Examples, \hyperpage{19}
+    \subitem Example files location, \hyperpage{19}
+    \subitem Java Docs, \hyperpage{20}
+    \subitem OSC Constants, \hyperpage{20}
+  \item OSC messages to Stellar Command
+    \subitem altitude, \hyperpage{10}
+    \subitem azimuth, \hyperpage{10}, \hyperpage{20}
+    \subitem fieldOfView, \hyperpage{8}
+    \subitem filter, \hyperpage{12}
+    \subitem filter/B-V/greater, \hyperpage{13}
+    \subitem filter/B-V/less, \hyperpage{13}
+    \subitem filter/Hpmag/greater, \hyperpage{13}
+    \subitem filter/Hpmag/less, \hyperpage{13}
+    \subitem filter/Hpmag/reset, \hyperpage{13}
+    \subitem loadTable, \hyperpage{12}
+    \subitem moveLR, \hyperpage{9}
+    \subitem moveUD, \hyperpage{10}
+    \subitem poll, \hyperpage{8}
+    \subitem saveTable, \hyperpage{12}
+    \subitem sendStars, \hyperpage{12}
+    \subitem showAtmosphere, \hyperpage{11}
+    \subitem showConstellationArt, \hyperpage{11}
+    \subitem showGround, \hyperpage{11}
+    \subitem showStarLabels, \hyperpage{11}
+    \subitem time, \hyperpage{9}
+    \subitem timeRate, \hyperpage{12}
+    \subitem viewAltAz, \hyperpage{10}
+    \subitem viewerObservationPoint, \hyperpage{11}
+    \subitem viewObject, \hyperpage{11}
+    \subitem viewRADec, \hyperpage{10}
+
+\end{theindex}

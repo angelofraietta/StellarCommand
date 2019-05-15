@@ -90,6 +90,10 @@ public class ShowHide implements HBAction {
                 @Override
                 public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                     // type your code below this line
+                    // Display our Text to StdOut
+                    String oscAsText = StellarOSCVocabulary.getOscAsText(oscMessage);
+
+                    System.out.println(oscAsText);
 
                     if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.SHOW_STAR_LABELS))) {
                         int i_val = (int)oscMessage.getArg(0);

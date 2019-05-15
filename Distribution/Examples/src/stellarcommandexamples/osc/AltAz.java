@@ -40,7 +40,8 @@ public class AltAz implements HBAction {
             @Override
             public void valueChanged(double control_val) {// Write your DynamicControl code below this line 
 
-                OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.AZIMUTH),
+                OSCMessage msg = OSCMessageBuilder.createOscMessage(
+                        commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.AZIMUTH),
                         control_val);
 
                 oscudpSender.send(msg, stellarCommandInetSocketAddress);
@@ -68,10 +69,11 @@ public class AltAz implements HBAction {
             @Override
             public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                 // type your code below this line
+                // Display our Text to StdOut
+                String oscAsText = StellarOSCVocabulary.getOscAsText(oscMessage);
 
-                if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.DISPLAY_VIEW))){
+                System.out.println(oscAsText);
 
-                }
                 // type your code above this line
             }
         };

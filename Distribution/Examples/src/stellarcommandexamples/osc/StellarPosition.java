@@ -143,7 +143,13 @@ public class StellarPosition implements HBAction {
                     public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                         // type your code below this line
 
-                        if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.DISPLAY_VIEW))) {
+                        // Display our Text to StdOut
+                        String oscAsText = StellarOSCVocabulary.getOscAsText(oscMessage);
+
+                        System.out.println(oscAsText);
+
+                        if (oscMessage.getName().equalsIgnoreCase(
+                                commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.DISPLAY_VIEW))) {
                             float fov = (float) oscMessage.getArg(0);
                             float Ra = (float) oscMessage.getArg(1);
                             float Dec = (float) oscMessage.getArg(2);

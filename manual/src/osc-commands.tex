@@ -1,4 +1,4 @@
-\chapter{Using Stellar Command with OSC} \label{chap:launchosc}
+\chapter{Sending OSC to Stellar Command} \label{chap:launchosc}
 There are primarily two ways to use Stellar Command. The first is as a separate process that runs on the compute. The second method is to use Stellar Command as a library that you link to directly in your program. If you intend to use Stellar Command as a library, you can skip forward to chapter~\ref{chap:libraryosc} --
 \emph{\titleref{chap:libraryosc}}. 
 
@@ -93,7 +93,7 @@ The default Stellarium Remote Control port is 8090, however, this can be changed
 
 \subsection{Using Configuration Scripts}\label{sec:configscript}
 \index{OSC Configuration!Using a script}
-Three scripts are provided to facilitate simple configuration and launching of  Stellar Command. The script \textit{runStellarCommand.sh} is used to configure and launch Stellar Command from the commandline in MacOS and Linux. \index{OSC Configuration!MacOS Commandline}  \index{OSC Configuration!Linux Commandline}. The file \textit{runStellarCommand.bat} is used to configure and launch on Windows  \index{OSC Configuration!Windows batch file}. The is an additional file, \textit{runStellarCommand.command}, which allows a person to write the configuration inside the \textit{.sh} file and then launch Stellar Command by double clicking \textit{runStellarCommand.command} with the mouse.
+Three scripts are provided to facilitate simple configuration and launching of  Stellar Command. The script \textit{runStellarCommand.sh} is used to configure and launch Stellar Command from the commandline in MacOS and Linux. \index{OSC Configuration!MacOS Commandline}  \index{OSC Configuration!Linux Commandline} The file \textit{runStellarCommand.bat} is used to configure and launch on Windows  \index{OSC Configuration!Windows batch file}. There is an additional file, \textit{runStellarCommand.command}, which allows a person to write the configuration inside the \textit{.sh} file and then launch Stellar Command by double clicking \textit{runStellarCommand.command} with the mouse.
 
 Configuring Stellar Command is done simply by replacing the value in the script with those required.
  \begin{syntax} \index{Commandline arguments!client}\index{Commandline arguments!stellarium}
@@ -170,10 +170,10 @@ The following will set to 5:51:17pm on 18 April 2019 at GMT.
 	\medskip
 \end{syntax}
 
-The following will set to 5:51:17pm on 18 April 2019 at GMT + 5 Hours.
+The following will set to 5:51:17pm on 18 April 2019 at GMT + 5 Hours. Note that you must add the "+" or "-" sign and it must be a string value. 
 \begin{syntax}	
 	\medskip
-	/Stellar/time 2019 4 18 17 51 17 05:00
+	/Stellar/time 2019 4 18 17 51 17 +05:00
 	\medskip
 \end{syntax}
 
@@ -186,7 +186,13 @@ Sending the following would set to midday on 18 April 2019 at the Observer locat
 	\medskip
 \end{syntax}
 
-You can also set 
+You can also set the time by typing the exact string value.
+\begin{syntax}	
+	\medskip
+	/Stellar/time 2019-04-06T12:00:00Z 
+	\medskip
+\end{syntax}
+
 
 \subsection{moveLR} \index{OSC messages to Stellar Command!moveLR}
 You can make the stellarium display move left or right by sending the command \textit{moveLR} followed by a floating point number indicating how far to move. A positive value will make it appear that the viewer is turning their head to the right, while a negative number will simulate moving to the left. To move to the right, send the following command:
@@ -206,7 +212,7 @@ You can make the stellarium display move up or rdown by sending the command \tex
 \end{syntax}
 \bigskip
 
-\subsection{azimuth} \index{OSC messages to Stellar Command!azimuth}
+\subsection{azimuth} \index{OSC messages to Stellar Command!azimuth} \label{subsec:azimuth}
 If you want to change the azimuth that you are looking at, use \textit{azimuth} in the namespace and add the azimuth as a float argument. For example, if you wanted to turn to the east, you would send a message as follows:
  \begin{syntax}	
 	\medskip
