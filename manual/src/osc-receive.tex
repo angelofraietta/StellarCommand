@@ -14,10 +14,10 @@ As stated in Section ~\ref{sec:launchcommand} --
 
 You would receive all OSC messages from Stellar Command on port \textit{1234} with all messages prefixed with the namespace \textit{Stellar}. We will ignore the leading namespace in these instructions and assume that you will be filtering it.
 
-\section{osc}
+\section{osc}\index{OSC messages from Stellar Command!osc}
 This should be the first message you receive from Stellar Command. The \textit{osc} name indicates the UDP port you need to send OSC messages to Stelar Command on.
 
-\section{view}
+\section{view}\index{OSC messages from Stellar Command!view}
 The \textit{view} message will contain the following OSC arguments:
 \begin{enumerate}
 	\item float - Field of view. This is the field of view in decimal degrees. 
@@ -31,7 +31,7 @@ Consider the following received message:
 \bigskip
 This would indicate a 20 $^{\circ}$ field of view, RA of 96.49851$^{\circ}$ and Dec. of -52.682182$^{\circ}$.
 
-\section{Star Values}
+\section{Star Values}\index{OSC messages from Stellar Command!Star Values}
 In many cases, sending astronomical data for all the stars within a certain radius a point would require create a message that would be too big for a single OSC packet. If we wanted to send astronomical data for say 1000 stars, we would need to send more than one packet. To accommodate this, Stellar Command will send multiple packets of data in bundles, with each packet containing OSC messages with  three distinct types of OSC messages - 1 x \textit{bundleCount} message, 1 x \textit{names} message and 0 or more \textit{values} messages. 
 
 For example, one complete set of astronomical data might appear as follows:
@@ -64,7 +64,7 @@ For example, one complete set of astronomical data might appear as follows:
 	
 \end{syntax}
 
-\subsection{bundleCount}
+\subsection{bundleCount}\index{OSC messages from Stellar Command!bundleCount}
 The \textit{bundleCount} message will contain the bundle number and the total number of bundles as arguments. The bundle number will be a zero based index, meaning that the first bundle will be bundle zero.For example, the bundleCount message for the first bundle of 15 bundles would appear as follows:
 
 \begin{syntax}
@@ -72,7 +72,7 @@ The \textit{bundleCount} message will contain the bundle number and the total nu
 \end{syntax}
 \bigskip
 
-\subsection{names}
+\subsection{names}\index{OSC messages from Stellar Command!names}
 The names of the astronomical data columns is returned in the message names, with each OSC argument being the name of the  data. Stellar Command has configured VizieR to use the Hipparcos catalogue. The column of data returned are as follows: 
 
 \begin{itemize}
@@ -84,7 +84,7 @@ The names of the astronomical data columns is returned in the message names, wit
 	\item B-V (mag) -  Colour index
 \end{itemize}
 
-\subsection{values}
+\subsection{values}\index{OSC messages from Stellar Command!values}
 Each bundle will return zero or more OSC messages that contain the data values that correlate to the column names in the \textit{names} message. Table~\ref{tab:vizierData} shows how the column names correlate to the astronomical data. \footnote{\textsuperscript{$\dagger$} \textit{/Stellar} was removed from table example for brevity.} \footnote{\textsuperscript{$\dagger$$\dagger$}The actual columns names are \textit{RArad (deg),  DErad (deg), pmRA (mas/yr), pmDE (mas/yr)} and \textit{Hpmag (mag)}, however, they have been abbreviated to fit the table.}
 
 \begin{table}
@@ -107,7 +107,7 @@ Each bundle will return zero or more OSC messages that contain the data values t
 Figure~\ref{fig:exampleStellar},  shown in  section \ref{sec:oscreceiveexample} --
 \emph{\titleref{sec:oscreceiveexample}}, shows how the data is received from Stellar Command as OSC.
 
-\section{viewerObservationPoint}
+\section{viewerObservationPoint}\index{OSC messages from Stellar Command!viewerObservationPoint}
 The \textit{viewerObservationPoint} message will contain information regarding the viewers location within the stellarium simulation. The OSC arguments returned are:
 \begin{enumerate}
 	\item float - latitude in degrees. 
@@ -122,13 +122,14 @@ For example, the following OSC message would indicate we are viewing from a lati
 	/Stellar/viewerObservationPoint -15.824176 70.520546 930.0 Earth
 \end{syntax}
 
-\section{time}
+\section{time} \index{TimeRate!OSC Received} \index{OSC messages from Stellar Command!time}
 The \textit{time} message indicates the simulated time being displayed on stellarium. The arguments in the OSC message if we were viewing at midday of 8 June 2019 in Sydney simulating a normal procession of time, would be are as follows:
 \begin{enumerate}
 	\item string - UTC as ISO formatted String. Eg, .2019-06-08T02:00:00.000Z
 	\item string - Local time as a string eg. 2019-06-08T12:00:00.000
 	\item float - GMT time shift in Julian days. eg 0.41666666
-	\item float - the current time rate in Julian days 1.1574074E-5
+	\item float - the current time rate as a multiplier eg. 1.0
 \end{enumerate}
 
-Note that time rate is actually a double precision number, however, OSC does not natively support double values. 1.1574074E-5 is approximately the number of days in a second.
+See section ~\ref{subsec:timerate} --
+\emph{\titleref{subsec:timerate}} for time rate specifics.

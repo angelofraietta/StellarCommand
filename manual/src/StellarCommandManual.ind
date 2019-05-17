@@ -37,6 +37,15 @@
     \subitem Example files location, \hyperpage{19}
     \subitem Java Docs, \hyperpage{20}
     \subitem OSC Constants, \hyperpage{20}
+  \item OSC messages from Stellar Command
+    \subitem bundleCount, \hyperpage{16}
+    \subitem names, \hyperpage{16}
+    \subitem osc, \hyperpage{15}
+    \subitem Star Values, \hyperpage{16}
+    \subitem time, \hyperpage{18}
+    \subitem values, \hyperpage{17}
+    \subitem view, \hyperpage{15}
+    \subitem viewerObservationPoint, \hyperpage{17}
   \item OSC messages to Stellar Command
     \subitem altitude, \hyperpage{10}
     \subitem azimuth, \hyperpage{10}, \hyperpage{20}
@@ -63,5 +72,12 @@
     \subitem viewerObservationPoint, \hyperpage{11}
     \subitem viewObject, \hyperpage{11}
     \subitem viewRADec, \hyperpage{10}
+
+  \indexspace
+
+  \item TimeRate
+    \subitem OSC Received, \hyperpage{18}
+    \subitem Sending OSC, \hyperpage{12}
+    \subitem Stellarium vs Stellar Command, \hyperpage{xvii}
 
 \end{theindex}

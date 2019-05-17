@@ -22,6 +22,11 @@ timerate //the current time rate (in julian days per second secs)
      */
 
     /**
+     * The numnber of seconds in a day to do julian day to second conversions
+     */
+    public static final double SECONDS_PER_DAY = 24 * 60 * 60;
+
+    /**
      * Class containing Time objext from RemoteApi
      * @param jsonObject the JSON object from stellarium API call
      */
@@ -48,10 +53,17 @@ timerate //the current time rate (in julian days per second secs)
 
     /**
      * Gets the current time rate in Julian days per second
-     * @return Jukian days per second
+     * @return Julian days per second
      */
-    public double getTimeRate(){return getDoubleVal("timerate");}
+    public double getJulianTimeRate(){return getDoubleVal("timerate");}
 
+    /**
+     * Get the actual simulated time rate as a multiplier. Normal time progression will return 1
+     * @return the time rate as seconds per seconds
+     */
+    public double getTimeRate(){
+        return getJulianTimeRate() * SECONDS_PER_DAY;
+    }
     /**
      * Get the the timezone shift to GMT in Julian days
      * @return the timezone shift to GMT

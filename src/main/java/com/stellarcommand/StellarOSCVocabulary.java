@@ -81,7 +81,7 @@ public final class StellarOSCVocabulary {
          * <br>UTC as String
          * <br> Local Time as String
          * <br> GMT Times shift as float in julian days - eg, a value of 0.5 indicates half a day ahead of GMT
-         * <br>Time rate as float - Julian days per second
+         * <br>Time rate as float - Time rate multiplier. Eg if we are going 2x speed will have a value of 2
          */
         public static final String STELLAR_TIME = "time";
 
@@ -230,8 +230,8 @@ public final class StellarOSCVocabulary {
         public static final String MOVE_LEFT_RIGHT = "moveLR";
 
         /**
-         * Cause stellarium to progress in time:
-         * <br><b>julian day per second</b> float -  The number of julian days per second. EG, if the value was set to one, the display would progress one day every second
+         * Cause Stellarium to progress in time as a mulitiple. Eg, a value of 2 will be 2x sumulation:
+         * <br><b>time rate multiplier</b> float -  Normal time multiplier
          */
         public static final String SET_TIME_RATE = "timeRate";
 

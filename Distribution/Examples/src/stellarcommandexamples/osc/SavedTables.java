@@ -51,6 +51,9 @@ public class SavedTables implements HBAction {
 
 
         commandLoader = new StellarCommandDriver();
+
+        // disable display of OSC Diag messages from command loader. Just read ones in this class
+        commandLoader.setDisableOscDiag(true);
         stellarCommandInetSocketAddress = commandLoader.loadStellarCommand();
 
         if (stellarCommandInetSocketAddress == null) {
@@ -58,20 +61,24 @@ public class SavedTables implements HBAction {
         }
 
 
-        TextControl storedTable = new TextControlSender(this, "Stored Table", "data/tables/Canopus.txt");
+        TextControl storedTable = new TextControlSender(this, "Stored Table", "data/tables/Canopus.txt").setDisplayType(DynamicControl.DISPLAY_TYPE.DISPLAY_DEFAULT);
 
 
-        TriggerControl loadTable = new TriggerControl(this, "Load Canopus") {
+        TriggerControl loadTable = new TriggerControl(this, "Load Table") {
             @Override
             public void triggerEvent() {// Write your DynamicControl code below this line
                 // Let us find the exactt location of our file
                 File stored_file =  new File(storedTable.getValue());
                 if (stored_file.exists()){
                     String file_path = stored_file.getAbsolutePath();
-                    OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.LOAD_TABLE), file_path);
+                    OSCMessage msg = OSCMessageBuilder.createOscMessage(
+                            commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.LOAD_TABLE),
+                            file_path);
 
                     oscudpSender.send(msg, stellarCommandInetSocketAddress);
-                    display_text.setValue(StellarOSCVocabulary.getOscAsText(msg));
+                    String oscAsText = StellarOSCVocabulary.getOscAsText(msg);
+                    System.out.println(oscAsText);
+                    display_text.setValue(oscAsText);
                 }
 
                 // Write your DynamicControl code above this line 
@@ -92,10 +99,13 @@ public class SavedTables implements HBAction {
                     bundleNumber = (int) oscMessage.getArg(0);
                     totalBundles = (int)oscMessage.getArg(1);
                     if (bundleNumber == 0){
-                        bundle_info.setValue("Expect " + totalBundles + " bundles of stars");
+                        String diag_text = "Expect " + totalBundles + " bundles of stars";
+                        System.out.println(diag_text);
+                        bundle_info.setValue(diag_text);
                         resetStars();
                         star_info.setValue("");
                         star_properties.setValue("");
+
                     }
                 }
                 else if (oscMessage.getName().equalsIgnoreCase(commandLoader.buildOscName(StellarOSCVocabulary.ClientMessages.STAR_NAMES))){

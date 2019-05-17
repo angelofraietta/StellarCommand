@@ -91,7 +91,8 @@ public class TimeFunctions implements HBAction {
         // write your code above this line
 
 
-        FloatControl timeRate = new FloatBuddyControl(this, "Time Rate", 0, -1, 1) {
+
+        FloatControl timeRate = new FloatTextControl(this, "Time Rate", 0) {
             @Override
             public void valueChanged(double control_val) {// Write your DynamicControl code below this line
                 OSCMessage msg = OSCMessageBuilder.createOscMessage(commandLoader.buildOscName(StellarOSCVocabulary.CommandMessages.SET_TIME_RATE), control_val);

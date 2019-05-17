@@ -42,6 +42,15 @@ Another parameter is the altitude from where the observation is being made.
 \subsubsection{Date time - ISO 8601}
 The ISO 8601 date and time format is a standardised way of defining the exact date and time. The time zone is the time difference between local time and Coordinated Universal Time (UTC) and does not change with daylight saving. The exact time is specified by the year, month, day followed by time in hours (24 hour code), minutes, seconds and the time zone.  The time zone for UTC is "Z", meaning zero. The time zone is modified by changing the "Z" to hours and minutes, separated by a semicolon. For example,  midday on January 1, 2000 at UTC would be defined as "2000-01-01T12:00:00Z". Likewise, "2019-06-01T14:13:00+10:00" would be 1 June 2019 at 2:15pm in Sydney, which is 10 hours ahead of or earlier than UTC time. 
 
+\subsubsection{Time Rate}\label{subsec:timerate}\index{TimeRate!Stellarium vs Stellar Command}
+The Stellarium API uses Julian days per second in it's native API, which would mean the normal time rate would return 1.1574074E-5. If you set the time rate to 2 in the Stellarium native  API, Stellarium would progress at 2 days per second. 
+I believe that it is more intuitive to present the time rate as a value compared to the normal progression of time. For example, setting the time rate to 2 would simulate running 2x normal speed. Also, this aligns better with Stellarium scripts, which present the time as a rate compared to normal time. Eg, in the Stellarium scripting language, the following would indicate running at 2x normal speed.
+
+\begin{syntax}
+	core.setTimeRate(2);
+\end{syntax}
+
+
 \subsubsection{Azimuth}
 \textit{Azimuth} is the direction with respect to celestial north and is measured in degrees. If, for example, you were looking due south, the azimuth would be 180. East is 90 and west is -90 or +270. 
 

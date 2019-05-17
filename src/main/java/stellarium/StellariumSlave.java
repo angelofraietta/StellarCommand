@@ -667,13 +667,22 @@ public class StellariumSlave  {
      * A value of one is means we are travelling at one julian day per second.
      * A value of zero is fixed time. A negative value is reverse.
      * We can speed up or slow down by setting this value
-     * @param timeRate the time rate at which our sky is moving
+     * @param julianDaysPerSecond the time rate at which our sky is moving
      */
-    public void setTimeRate(double timeRate){
-        this.timeRate = timeRate;
+    public void setJulianTimeRate(double julianDaysPerSecond){
+        this.timeRate = julianDaysPerSecond;
         synchronized (timerateSynchroniser){
             timerateSynchroniser.notify();
         }
+    }
+
+    /**
+     * Set the multiplier time rate we are simulating Stellarium with.
+     * Setting a value of 2 means we are simulating 2 x rate
+     * @param timeRate the time rate multiplier of normal time progression
+     */
+    public void setTimeRate(double timeRate){
+        setJulianTimeRate(timeRate / StellariumTime.SECONDS_PER_DAY);
     }
 
     /**

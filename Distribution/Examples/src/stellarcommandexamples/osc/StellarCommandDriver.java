@@ -37,6 +37,15 @@ public class StellarCommandDriver implements HBAction, OSCListener {
 
     InetSocketAddress stellarCommandInetSocketAddress = null;
 
+    boolean disableOscDiag = false; // Disable the diag if we just want to monitor elsewhere
+
+    /**
+     * Set whether we will disable printing OSC from this module
+     * @param disable set tru to suppress diag from this class
+     */
+    void setDisableOscDiag(boolean disable){
+        disableOscDiag = disable;
+    }
     /**
      * Get the String that we will use to Spawn Stellar Command
      * @return the commandline to launch StellarCommand
@@ -138,10 +147,11 @@ public class StellarCommandDriver implements HBAction, OSCListener {
             public void OSCReceived(OSCMessage oscMessage, SocketAddress socketAddress, long time) {
                 // type your code below this line 
                 // Display our Text to StdOut
-                String oscAsText = StellarOSCVocabulary.getOscAsText(oscMessage);
+                if (!disableOscDiag) {
+                    String oscAsText = StellarOSCVocabulary.getOscAsText(oscMessage);
 
-                System.out.println(oscAsText);
-
+                    System.out.println(oscAsText);
+                }
 
                 if (oscMessage.getName().equalsIgnoreCase(buildOscName(StellarOSCVocabulary.ClientMessages.OSC_PORT))){
                     try{

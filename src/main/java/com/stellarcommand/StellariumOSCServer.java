@@ -604,7 +604,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
      */
     private boolean sendStellariumTime(StellariumTime stellariumTime) {
 
-        return oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.STELLAR_TIME,
+        return oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.  STELLAR_TIME,
                 stellariumTime.utcString(), stellariumTime.localTimeString(), stellariumTime.getGMTShift(), stellariumTime.getTimeRate()), oscClient, targetPort);
 
     }
