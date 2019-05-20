@@ -76,8 +76,7 @@ Stellar Command works by polling Stellarium to detect changes. This is a require
 	\medskip
 \end{syntax}
 \bigskip
-If you set a polling time of zero, then Stellarium will not be polled, however, you can request a poll from your own application be sending the \textit{poll caommand} - described in section ~\ref{sec:poll} --
-\emph{\titleref{sec:poll}}.
+If you set a polling time of zero, then Stellarium will not be polled, however, you can request a poll from your own application be sending the \textit{poll} command - described in section \refsection{sec:poll}.
 
 
 \index{Commandline arguments!client}\index{Commandline arguments!Stellarium remote port}\index{Commandline arguments!stellariumport}
@@ -89,6 +88,16 @@ The default Stellarium Remote Control port is 8090, however, this can be changed
 	\medskip
 \end{syntax}
 \bigskip
+
+\subsection{Launch Without Stellarium}\label{sec:launchnostellarium}\index{OSC messages to Stellar Command!Running without Stellarium}. In some cases, you may want to launch Stellar Command to access the functionality of VizieR without using Stellarium. This may be the case if you are only interested in the astronomical data and are not using Stellarium as an interface device. This  is be accomplished by adding the value \textit{disabled} to the \textit{stellarium} parameter. For example, the following command line argument will disable calls to Stellarium.
+
+ \begin{syntax} \index{Commandline arguments!client}\index{Commandline arguments!stellarium} \index{Commandline arguments! disable Stellarium}
+	\medskip
+	java -jar StellarCommand.jar port=1234 osc=/Stellar  {\char'134} stellarium=disabled\\
+	\medskip
+\end{syntax}
+\bigskip
+
 
 
 \subsection{Using Configuration Scripts}\label{sec:configscript}
@@ -125,8 +134,8 @@ You can provide instructions to Stellar Command in order to control stellarium o
 
 Message names are not case sensitive. For example, the messages \textit{fieldOfView} and \textit{FieldOfView} could both be used to set the field of view for stellarium.
 
-\subsection{poll}  \label{sec:poll} \index{OSC messages to Stellar Command!poll}
-Sometimes Stellar Command may already be started and configured to send and listen to the ports. You can easily find this out by sending the \textit{poll} command with no arguments, which will cause stellarium to reply on the ports it is configured when started up.
+\subsection{poll}  \label{sec:poll} \index{OSC messages to Stellar Command!poll}  \index{OSC messages to Stellar Command!Request Version}
+Sometimes Stellar Command may already be started and configured to send and listen to the ports. You can easily find this out by sending the \textit{poll} command with no arguments, which will cause Stellarium to reply on the ports it is configured when started up. Additionally, the poll message will cause Stellar Command to return the running version of Stellar Command.
 
  \begin{syntax}
 	\medskip
@@ -134,14 +143,32 @@ Sometimes Stellar Command may already be started and configured to send and list
 	\medskip
 \end{syntax}
 
-If you were sending OSC on the required port and your cleint was at the correct address, you would receive the following OSC message:
+If you were sending OSC on the required port and your client was at the correct address, you would receive the following OSC message:
 \begin{syntax}
 	/Stellar/osc 3333  \\
 \end{syntax}
 \bigskip
 
+See sections \refsection{sec:version} and \refsection{sec:osc}for more detail.
 
-\subsection{fieldOfView}\label{subsec:fieldofview} \index{OSC messages to Stellar Command!fieldOfView}
+\subsection{queryVizieR}\label{subsec:queryVizieR}  \index{OSC messages to Stellar Command!queryVizieR}\index{OSC messages to Stellar Command!Direct VizieR Query}\index{OSC messages to Stellar Command!Running without Stellarium}
+It is possible to run Stellar Command and make calls to  VizieR without running Stellarium, as detailed in section \refsection{sec:launchnostellarium}. This might be the case if you were only interested in the astronomical data without any correlation to  a Stellarium Display, for example, if you were using a graphic programs such as Processing. The call is made by defining a centre radius as a float. If querying using RA and Dec, the second and third arguments are floats. For example, the following call would query a 1\degree  radius at an RaDec of  186.6492, -63.0989
+
+\begin{syntax} \index{VizieR query!Ra and Dec}
+	/Stellar/osc 1.0 186.6492 -63.0989  \\
+\end{syntax}
+\bigskip
+ 
+ Additionally, it is possible to query using a star or celestial object instead of RA and Dec. For example, to query a 1\degree circle around Acrux would be performed as follows:
+  
+ \begin{syntax} \index{VizieR query!Ra and Dec}
+ 	/Stellar/osc 1.0 Acrux  \\
+ \end{syntax}
+ \bigskip
+
+Stellar Command will respond by sending Star Values as OSC messages. See section \refsection{sec:version} for details on Star Values.
+
+\subsection{fieldOfView}\label{subsec:fieldofview}\index{OSC messages to Stellar Command!fieldOfView}
 
 In order to send a change in the field of view, send a message using the \textit{fieldOfView} in the namespace, followed by the field of view as a float argument. For example, to set the field of view to 60$^{\circ}$, you would send a message as follows:
  \begin{syntax}	

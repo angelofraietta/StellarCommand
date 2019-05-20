@@ -14,8 +14,19 @@ As stated in Section ~\ref{sec:launchcommand} --
 
 You would receive all OSC messages from Stellar Command on port \textit{1234} with all messages prefixed with the namespace \textit{Stellar}. We will ignore the leading namespace in these instructions and assume that you will be filtering it.
 
-\section{osc}\index{OSC messages from Stellar Command!osc}
-This should be the first message you receive from Stellar Command. The \textit{osc} name indicates the UDP port you need to send OSC messages to Stelar Command on.
+\section{osc}\label{sec:osc}\index{OSC messages from Stellar Command!osc}
+This should be the first message you receive from Stellar Command. The \textit{osc} name indicates the UDP port you need to send OSC messages to Stellar Command on. The message is normally received when Stellar Command starts of as a response to a \textit{poll} message. See section \refsection{sec:poll} for more detail.
+
+\section{version}\label{sec:version}\index{OSC messages from Stellar Commandversion}
+This message will indicate the running version of Stellar Command. The three int OSC arguments returned are major, minor, and build. The following received message would indicate the running version of Stellar Command is 1.0.0.
+
+\begin{syntax}
+	\medskip
+	/Stellar/version 1 0 0 \\
+	\medskip
+\end{syntax}
+
+The message is normally received when Stellar Command starts of as a response to a \textit{poll} message. See section \refsection{sec:poll} for more detail.
 
 \section{view}\index{OSC messages from Stellar Command!view}
 The \textit{view} message will contain the following OSC arguments:
@@ -31,7 +42,7 @@ Consider the following received message:
 \bigskip
 This would indicate a 20 $^{\circ}$ field of view, RA of 96.49851$^{\circ}$ and Dec. of -52.682182$^{\circ}$.
 
-\section{Star Values}\index{OSC messages from Stellar Command!Star Values}
+\section{Star Values} \label{sec:starvalues} \index{OSC messages from Stellar Command!Star Values}
 In many cases, sending astronomical data for all the stars within a certain radius a point would require create a message that would be too big for a single OSC packet. If we wanted to send astronomical data for say 1000 stars, we would need to send more than one packet. To accommodate this, Stellar Command will send multiple packets of data in bundles, with each packet containing OSC messages with  three distinct types of OSC messages - 1 x \textit{bundleCount} message, 1 x \textit{names} message and 0 or more \textit{values} messages. 
 
 For example, one complete set of astronomical data might appear as follows:

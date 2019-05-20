@@ -25,6 +25,9 @@ import java.util.Map;
 public class StellariumSlave  {
 
     static public String DEFAULT_STELLARIUM_HOST = "localhost";
+
+    static public String DISABLED = "disabled";
+
     static public int DEFAULT_STELLARIUM_PORT = 8090;
 
     double currentAz = 0;
@@ -854,7 +857,10 @@ public class StellariumSlave  {
     synchronized boolean sendPostMessage(String api, Map<String,Object> params) {
         boolean ret = false;
 
+        if (stellariumDevice.equalsIgnoreCase(DISABLED)) return false;
+
         try {
+
             URL url = new URL("http://" + stellariumDevice + ":"+ stellariumPort +"/api/" + api);
             StringBuilder postData = new StringBuilder();
             for (Map.Entry<String, Object> param : params.entrySet()) {
@@ -901,6 +907,7 @@ public class StellariumSlave  {
     synchronized JSONObject sendGetMessage(String api){
         JSONObject ret = null;
 
+        if (stellariumDevice.equalsIgnoreCase(DISABLED)) return null;
         try {
             URL url = new URL("http://" + stellariumDevice + ":"+ stellariumPort +"/api/" + api);
 

@@ -163,6 +163,10 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         }
 
         oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OSC_PORT, source_port), oscClient, targetPort);
+
+        oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.VERSION, Version.MAJOR, Version.MINOR, Version.BUILD), oscClient, targetPort);
+
+
         //stellariumSlave.addViewListener(this::viewRead);
         stellariumSlave.addViewListener(this);
         //vizierQuery.addFilter("Hpmag", "<", 5);
@@ -309,6 +313,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.POLL)) {
                     // we only send to the port we are actually configured to. Not necessarily to who is calling us
                     oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OSC_PORT, oscReceiver.getPort()), oscClient, targetPort);
+                    oscSender.send(OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.VERSION, Version.MAJOR, Version.MINOR, Version.BUILD), oscClient, targetPort);
                     forceRePollStellarium();
                 }
 
@@ -432,6 +437,11 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.AZIMUTH)){
                     processAzimuth(msg);
                 }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.VIZIER_QUERY)){
+                    processVizierQuerry(msg);
+                }
+
+
 
 
 
@@ -439,6 +449,51 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         }
         catch (Exception ex){
             ex.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Perform a VizieR query using paramters in OSC Message
+     * @param msg OSC message with arguments RA, Dec. and Field of view
+     */
+    private void processVizierQuerry(OSCMessage msg) {
+
+        //
+        float fov = convertOSCArgToFloat(msg.getArg(0));
+        String centre = "";
+
+        Object arg_1 = msg.getArg(1);
+        if (arg_1 instanceof Float || arg_1 instanceof Integer) {
+            float ra = convertOSCArgToFloat(msg.getArg(0));
+            float dec = convertOSCArgToFloat(msg.getArg(1));
+            centre =  ra+ " " + dec;
+        }
+        else if (arg_1 instanceof String){
+            centre = (String)arg_1;
+        }
+
+        if (queryVizier){
+
+
+            String vizierData = vizierQuery.readVizierCentre(centre, fov);
+            StellarDataTable table = new StellarDataTable();
+
+            Reader inputString = new StringReader(vizierData);
+            BufferedReader reader = new BufferedReader(inputString);
+
+            try {
+                table.loadTable(reader);
+
+                if (!sendDataTable(table))
+                {
+                    System.out.println("Unable to send table");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //System.out.println(vizierData);
+
         }
 
     }

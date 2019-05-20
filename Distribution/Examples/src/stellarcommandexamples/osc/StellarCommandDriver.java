@@ -165,6 +165,12 @@ public class StellarCommandDriver implements HBAction, OSCListener {
                         }
                     }
                     catch (Exception ex){}
+                }else if (oscMessage.getName().equalsIgnoreCase(buildOscName(StellarOSCVocabulary.ClientMessages.VERSION))){
+                    int major =  (int)oscMessage.getArg(0);
+                    int minor =  (int)oscMessage.getArg(1);
+                    int build =  (int)oscMessage.getArg(2);
+
+                    System.out.println("Verdion " + major + "." + minor + "." + build);
                 }
 
                 // type your code above this line

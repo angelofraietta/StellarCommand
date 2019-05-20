@@ -33,6 +33,13 @@ public final class StellarOSCVocabulary {
         public static final String OSC_PORT = "osc";
 
         /**
+         * Returns the version information as Major, minor and build
+         * <br>Major - int
+         * <br> Minor - int
+         * <br> Buils - int
+         */
+        public static final String VERSION = "version";
+        /**
          * Notifies Client of the display being viewed in stellarium as three floats <br>
          * The OSC arguments are three floats measured in decimal degrees:
          * <br>The field of view being viewed
@@ -95,7 +102,7 @@ public final class StellarOSCVocabulary {
     public final class CommandMessages {
 
         /**
-         * See if stellarium is active. we will send back our OSC port
+         * See if stellarium is active. we will send back our OSC port and version informaition
          * Will cause current status to be sent
          */
         public static final String POLL = "poll";
@@ -249,6 +256,18 @@ public final class StellarOSCVocabulary {
          */
         public static final String STELLAR_TIME = "time";
 
+
+        /**
+         * Perform a VizieR query without querying Stellarium
+         * <br>Field of fiew - float as decimal degrees
+         *
+         * If the second argument is a float, the second and tgird arguments are the RA and Dec
+         * <br>If float RA - float as Right ascension in decimal degrees
+         * <br>Dec - float as declination decimal degrees
+         *
+         * <br> if second arg is a string, the celstial object name - eg, Acrux
+         */
+        public static final String VIZIER_QUERY = "queryVizieR";
 
     }
 

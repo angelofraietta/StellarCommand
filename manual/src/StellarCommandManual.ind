@@ -1,6 +1,7 @@
 \begin{theindex}
 
   \item Commandline arguments
+    \subitem  disable Stellarium, \hyperpage{7}
     \subitem client, \hyperpage{7, 8}
     \subitem osc, \hyperpage{5}
     \subitem port, \hyperpage{5}
@@ -20,58 +21,63 @@
 
   \item Filters
     \subitem B-V, \hyperpage{13}
-    \subitem Hpmag, \hyperpage{12}
-    \subitem reset, \hyperpage{13}
+    \subitem Hpmag, \hyperpage{13}
+    \subitem reset, \hyperpage{14}
 
   \indexspace
 
   \item OSC Configuration
     \subitem  Client port, \hyperpage{5}
     \subitem Commandline arguments, \hyperpage{5}
-    \subitem Linux Commandline, \hyperpage{7}
-    \subitem MacOS Commandline, \hyperpage{7}
+    \subitem Linux Commandline, \hyperpage{8}
+    \subitem MacOS Commandline, \hyperpage{8}
     \subitem Stellar Command receive port, \hyperpage{5}
-    \subitem Using a script, \hyperpage{7}
-    \subitem Windows batch file, \hyperpage{7}
+    \subitem Using a script, \hyperpage{8}
+    \subitem Windows batch file, \hyperpage{8}
   \item OSC Examples, \hyperpage{19}
     \subitem Example files location, \hyperpage{19}
     \subitem Java Docs, \hyperpage{20}
     \subitem OSC Constants, \hyperpage{20}
   \item OSC messages from Stellar Command
-    \subitem bundleCount, \hyperpage{16}
-    \subitem names, \hyperpage{16}
+    \subitem bundleCount, \hyperpage{17}
+    \subitem names, \hyperpage{17}
     \subitem osc, \hyperpage{15}
     \subitem Star Values, \hyperpage{16}
     \subitem time, \hyperpage{18}
     \subitem values, \hyperpage{17}
-    \subitem view, \hyperpage{15}
-    \subitem viewerObservationPoint, \hyperpage{17}
+    \subitem view, \hyperpage{16}
+    \subitem viewerObservationPoint, \hyperpage{18}
+  \item OSC messages from Stellar Commandversion, \hyperpage{15}
   \item OSC messages to Stellar Command
-    \subitem altitude, \hyperpage{10}
+    \subitem altitude, \hyperpage{11}
     \subitem azimuth, \hyperpage{10}, \hyperpage{20}
-    \subitem fieldOfView, \hyperpage{8}
-    \subitem filter, \hyperpage{12}
-    \subitem filter/B-V/greater, \hyperpage{13}
-    \subitem filter/B-V/less, \hyperpage{13}
+    \subitem Direct VizieR Query, \hyperpage{9}
+    \subitem fieldOfView, \hyperpage{9}
+    \subitem filter, \hyperpage{13}
+    \subitem filter/B-V/greater, \hyperpage{14}
+    \subitem filter/B-V/less, \hyperpage{14}
     \subitem filter/Hpmag/greater, \hyperpage{13}
     \subitem filter/Hpmag/less, \hyperpage{13}
-    \subitem filter/Hpmag/reset, \hyperpage{13}
-    \subitem loadTable, \hyperpage{12}
-    \subitem moveLR, \hyperpage{9}
+    \subitem filter/Hpmag/reset, \hyperpage{14}
+    \subitem loadTable, \hyperpage{13}
+    \subitem moveLR, \hyperpage{10}
     \subitem moveUD, \hyperpage{10}
     \subitem poll, \hyperpage{8}
-    \subitem saveTable, \hyperpage{12}
-    \subitem sendStars, \hyperpage{12}
-    \subitem showAtmosphere, \hyperpage{11}
-    \subitem showConstellationArt, \hyperpage{11}
-    \subitem showGround, \hyperpage{11}
-    \subitem showStarLabels, \hyperpage{11}
+    \subitem queryVizieR, \hyperpage{9}
+    \subitem Request Version, \hyperpage{8}
+    \subitem Running without Stellarium, \hyperpage{7}, \hyperpage{9}
+    \subitem saveTable, \hyperpage{13}
+    \subitem sendStars, \hyperpage{13}
+    \subitem showAtmosphere, \hyperpage{12}
+    \subitem showConstellationArt, \hyperpage{12}
+    \subitem showGround, \hyperpage{12}
+    \subitem showStarLabels, \hyperpage{12}
     \subitem time, \hyperpage{9}
     \subitem timeRate, \hyperpage{12}
-    \subitem viewAltAz, \hyperpage{10}
+    \subitem viewAltAz, \hyperpage{11}
     \subitem viewerObservationPoint, \hyperpage{11}
     \subitem viewObject, \hyperpage{11}
-    \subitem viewRADec, \hyperpage{10}
+    \subitem viewRADec, \hyperpage{11}
 
   \indexspace
 
@@ -79,5 +85,10 @@
     \subitem OSC Received, \hyperpage{18}
     \subitem Sending OSC, \hyperpage{12}
     \subitem Stellarium vs Stellar Command, \hyperpage{xvii}
+
+  \indexspace
+
+  \item VizieR query
+    \subitem Ra and Dec, \hyperpage{9}
 
 \end{theindex}
