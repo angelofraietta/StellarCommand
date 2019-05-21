@@ -397,11 +397,41 @@ You can reset the specific filter by sending a \textit{reset} command with the f
 	/Stellar/filter/Hpmag/reset
 	\medskip
 \end{syntax}  
-
+	\medskip
 
 You can reset all filters by sending the \textit{resetFilters} command: \index{Filters!reset}
+	\medskip
 \begin{syntax}	
 	\medskip
 	/Stellar/resetFilters
 	\medskip
 \end{syntax}  
+	\medskip
+\subsection{script}\label{sec:scriptcommand} \index{OSC messages to Stellar Command!script} \index{Stellarium Script!Start}
+An extremely powerful feature of Stellarium is the ability to run predefined astronomy shows. These scripts are written in JavaScript and are run within the Stellarium core. You can run, stop or find out the status of the scripting engine in Stellarium with the \textit{script command}.
+
+You can run a specific script by setting the first OSC argument as the name of the script. Sending the following OSC message would cause the \textit{The Jack Bennett Catalog} packaged with Stellarium to run.
+\begin{syntax}	
+	\medskip
+	/Stellar/script bennett.ssc
+	\medskip
+\end{syntax}  
+	\medskip
+	
+If you choose to keep your scripts separate to those packaged with Stellarium, you will need o pass the full path as the OSC argument. For example, 
+	\medskip
+\begin{syntax}	
+	\medskip
+	/Stellar/script /Stellar/script /Users/me/myprivatescripts/stellariumscript/bennett.ssc
+	\medskip
+\end{syntax}  
+	\medskip
+Stopping a script is done by using the word "stop" as the OSC argument. 
+	\medskip
+\begin{syntax}	
+	\medskip
+	/Stellar/script stop
+	\medskip
+\end{syntax}  
+	\medskip
+Calling the script command without an argument will cause Stellar Command to send back the scripting engine status. Section \refsection{sec:scriptstatus} details the status of a returned script status message.

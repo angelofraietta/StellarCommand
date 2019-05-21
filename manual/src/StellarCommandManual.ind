@@ -42,6 +42,7 @@
     \subitem bundleCount, \hyperpage{17}
     \subitem names, \hyperpage{17}
     \subitem osc, \hyperpage{15}
+    \subitem script, \hyperpage{18}
     \subitem Star Values, \hyperpage{16}
     \subitem time, \hyperpage{18}
     \subitem values, \hyperpage{17}
@@ -67,6 +68,7 @@
     \subitem Request Version, \hyperpage{8}
     \subitem Running without Stellarium, \hyperpage{7}, \hyperpage{9}
     \subitem saveTable, \hyperpage{13}
+    \subitem script, \hyperpage{14}
     \subitem sendStars, \hyperpage{13}
     \subitem showAtmosphere, \hyperpage{12}
     \subitem showConstellationArt, \hyperpage{12}
@@ -78,6 +80,12 @@
     \subitem viewerObservationPoint, \hyperpage{11}
     \subitem viewObject, \hyperpage{11}
     \subitem viewRADec, \hyperpage{11}
+
+  \indexspace
+
+  \item Stellarium Script
+    \subitem Start, \hyperpage{14}
+    \subitem Status, \hyperpage{18}
 
   \indexspace
 

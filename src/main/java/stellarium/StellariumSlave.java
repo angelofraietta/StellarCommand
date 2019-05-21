@@ -986,7 +986,7 @@ public class StellariumSlave  {
      * @param script_name the name of the script to run
      * @return true if message was send
      */
-    boolean runScript(String script_name){
+    public boolean runScript(String script_name){
         String api = "scripts/run";
         Map<String,Object> params = new LinkedHashMap<>();
 
@@ -1000,7 +1000,7 @@ public class StellariumSlave  {
      * Stops the current script
      * @return true if message was sent
      */
-    boolean stopScript(){
+    public boolean stopScript(){
         String api = "scripts/stop";
         Map<String,Object> params = new LinkedHashMap<>();
 
@@ -1011,7 +1011,7 @@ public class StellariumSlave  {
      * Query if we have a script running
      * @return true if a script is running
      */
-    boolean scriptStatus(){
+    public boolean scriptStatus(){
         boolean ret = false;
         //curl -G http://localhost:8090/api/scripts/status
         String api = "scripts/status";
@@ -1034,7 +1034,7 @@ public class StellariumSlave  {
      * @param val the value of the parameter
      * @return true if successful
      */
-    boolean sendStelProperty(String name, Object val){
+    public boolean sendStelProperty(String name, Object val){
         String api = "stelproperty/set";
         Map<String,Object> params = new LinkedHashMap<>();
         params.put("id", name);

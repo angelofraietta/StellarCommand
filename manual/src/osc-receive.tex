@@ -19,13 +19,13 @@ This should be the first message you receive from Stellar Command. The \textit{o
 
 \section{version}\label{sec:version}\index{OSC messages from Stellar Commandversion}
 This message will indicate the running version of Stellar Command. The three int OSC arguments returned are major, minor, and build. The following received message would indicate the running version of Stellar Command is 1.0.0.
-
+	\medskip
 \begin{syntax}
 	\medskip
 	/Stellar/version 1 0 0 \\
 	\medskip
 \end{syntax}
-
+	\medskip
 The message is normally received when Stellar Command starts of as a response to a \textit{poll} message. See section \refsection{sec:poll} for more detail.
 
 \section{view}\index{OSC messages from Stellar Command!view}
@@ -144,3 +144,12 @@ The \textit{time} message indicates the simulated time being displayed on stella
 
 See section ~\ref{subsec:timerate} --
 \emph{\titleref{subsec:timerate}} for time rate specifics.
+
+\section{script}\label{sec:scriptstatus} \index{OSC messages from Stellar Command!script} \index{Stellarium Script!Status}
+The \textit{script} message will return the status of the Stellarium scripting engine. A zero value for the OSC argument indicates that no script is running, while a non zero indicates a script is running. For example, the following message would indicate no script is currently running.
+
+\begin{syntax}
+	/Stellar/script 0
+\end{syntax}
+
+Requesting the script status is done by sending the script request messages, as detailed in section \refsection{sec:scriptcommand}.

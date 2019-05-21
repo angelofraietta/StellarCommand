@@ -92,6 +92,11 @@ public final class StellarOSCVocabulary {
          */
         public static final String STELLAR_TIME = "time";
 
+        /**
+         * Sends the status of Stellarium S cript
+         * <br> int - zero if not running script or non zero if a script is running
+         */
+        public static final String SCRIPT = "script";
 
     }
 
@@ -269,8 +274,24 @@ public final class StellarOSCVocabulary {
          */
         public static final String VIZIER_QUERY = "queryVizieR";
 
+
+        /**
+         * Run a Stellarium Script. The options are the script name or a command
+         * <br>Script name will have .ssc extension. If no OSC Arg then the script status will be sent back
+         * <br> commands are stop or status
+         * <br>String Script name - RUN SCRIPT. OR
+         * <br>String Stop - stop current script OR
+         */
+        public static final String SCRIPT = "script";
     }
 
+    public final  class ScriptDirectives{
+        /**
+         * Stop current running Stellarium script
+         */
+        public static final String STOP = "stop";
+
+    }
     /**
      * The parameters we will use to define our filters <br>
      * The actual parameter filtered will be before with its value as the OSC argument  <br>

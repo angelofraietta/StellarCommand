@@ -440,6 +440,9 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.VIZIER_QUERY)){
                     processVizierQuerry(msg);
                 }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SCRIPT)){
+                    processScript(msg);
+                }
 
 
 
@@ -451,6 +454,30 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
             ex.printStackTrace();
         }
 
+    }
+
+    /**
+     * Process a script message using OSC Archguments
+     * @param msg the OSC message with Arguments.
+     */
+    private void processScript(OSCMessage msg) {
+        if (msg.getArgCount() > 0) {
+            String script_name = (String) msg.getArg(0);
+
+            if (script_name.equalsIgnoreCase(StellarOSCVocabulary.ScriptDirectives.STOP)) {
+                stellariumSlave.stopScript();
+            } else {
+                stellariumSlave.runScript(script_name);
+            }
+
+        }
+        boolean script_running = stellariumSlave.scriptStatus();
+
+        OSCMessage ret_msg = OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.SCRIPT,
+                script_running);
+        System.out.println(getOscMessageDisplay(msg));
+
+        oscSender.send(ret_msg, oscClient, targetPort);
     }
 
     /**
