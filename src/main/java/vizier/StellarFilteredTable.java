@@ -302,7 +302,7 @@ public class StellarFilteredTable {
             }
         }
         // iterate through list and filter out
-        System.out.println(row.trim());
+        //System.out.println(row.trim());
 
 
         Collections.sort(sortedList);

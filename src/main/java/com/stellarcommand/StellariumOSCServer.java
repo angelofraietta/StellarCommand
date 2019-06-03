@@ -475,7 +475,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
 
         OSCMessage ret_msg = OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.SCRIPT,
                 script_running);
-        System.out.println(getOscMessageDisplay(msg));
+        //System.out.println(getOscMessageDisplay(msg));
 
         oscSender.send(ret_msg, oscClient, targetPort);
     }
@@ -768,7 +768,7 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
         OSCMessage msg = OSCMessageBuilder.createOscMessage(oscNamespace + "/" + StellarOSCVocabulary.ClientMessages.OBSERVATION_POINT,
                 location.getLatitude(), location.getLongitude(),
                 location.getAltitude(), location.getPlanet());
-        System.out.println(getOscMessageDisplay(msg));
+        //System.out.println(getOscMessageDisplay(msg));
 
         return oscSender.send(msg, oscClient, targetPort);
     }

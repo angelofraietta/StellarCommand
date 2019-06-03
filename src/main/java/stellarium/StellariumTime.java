@@ -144,7 +144,7 @@ timerate //the current time rate (in julian days per second secs)
         boolean ret = current_jday == prev_j_day;
 
         double j_day_def = ObservationalPoint.calulateJulianDay(utcTime());
-        System.out.println(j_day_def);
+
         return ret;
     }
 }

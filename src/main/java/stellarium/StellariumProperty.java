@@ -7,6 +7,16 @@ import org.json.JSONObject;
  * defined. Add more as project progresses
  */
 public class StellariumProperty extends StellariumJSONClass {
+
+    public class Show {
+        public static final String ATMOSTPHERE = "actionShow_Atmosphere";
+        public static final String GROUND = "actionShow_Ground";
+        public static final String STAR_LABELS = "actionShow_Stars_Labels";
+        public static final String CONSTELATION_ART = "actionShow_Constellation_Art";
+        public static final String CARDINAL_POINTS = "actionShow_Cardinal_Points";
+
+    }
+
     public StellariumProperty(JSONObject jsonObject) {
         super(jsonObject);
     }
@@ -36,7 +46,7 @@ public class StellariumProperty extends StellariumJSONClass {
      * @return true if showing, otherwise, false
      */
     public boolean getShowAtmosphere(){
-        return getPropertyBooleanValue("actionShow_Atmosphere");
+        return getPropertyBooleanValue(Show.ATMOSTPHERE);
     }
 
     /**
@@ -44,7 +54,7 @@ public class StellariumProperty extends StellariumJSONClass {
      * @return true if showing, otherwise, false
      */
     public boolean getShowGround(){
-        return getPropertyBooleanValue("actionShow_Ground");
+        return getPropertyBooleanValue(Show.GROUND);
     }
 
     /**
@@ -52,7 +62,7 @@ public class StellariumProperty extends StellariumJSONClass {
      * @return true if showing, otherwise, false
      */
     public boolean getShowStarLabels(){
-        return getPropertyBooleanValue("actionShow_Stars_Labels");
+        return getPropertyBooleanValue(Show.STAR_LABELS);
     }
 
     /**
@@ -60,7 +70,7 @@ public class StellariumProperty extends StellariumJSONClass {
      * @return true if showing, otherwise, false
      */
     public boolean getShowConstellationArt(){
-        return getPropertyBooleanValue("actionShow_Constellation_Art");
+        return getPropertyBooleanValue(Show.CONSTELATION_ART);
     }
 
 }

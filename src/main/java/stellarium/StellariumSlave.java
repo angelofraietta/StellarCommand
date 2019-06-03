@@ -729,7 +729,7 @@ public class StellariumSlave  {
      * @param display set true to display
      */
     public void showStarLabels(boolean display){
-        sendStelProperty("actionShow_Stars_Labels", display);
+        sendStelProperty(StellariumProperty.Show.STAR_LABELS, display);
     }
 
     /**
@@ -737,7 +737,7 @@ public class StellariumSlave  {
      * @param show set true to show, false to hide
      */
     public void showGround(boolean show){
-        sendStelProperty("actionShow_Ground", show);
+        sendStelProperty(StellariumProperty.Show.GROUND, show);
     }
 
     /**
@@ -745,7 +745,7 @@ public class StellariumSlave  {
      * @param show set true to show, false to hide
      */
     public void showConstellationArt(boolean show){
-        sendStelProperty("actionShow_Constellation_Art", show);
+        sendStelProperty(StellariumProperty.Show.CONSTELATION_ART, show);
     }
 
     /**
@@ -753,7 +753,7 @@ public class StellariumSlave  {
      * @param show set true to show atmosphere, false to hide
      */
     public void showAtmosphere(boolean show){
-        sendStelProperty("actionShow_Atmosphere", show);
+        sendStelProperty(StellariumProperty.Show.ATMOSTPHERE, show);
     }
 
     /**

@@ -76,7 +76,7 @@ public class StellarConversions {
         cos(A)   =   ---------------------------------
                         cos(ALT)*cos(LAT)
 
-        A = acos(A)
+        A = acos(A)println
 
          */
         double a_az = (Math.sin(raDec.declination * DEG_CONVERT) - Math.sin(alt * DEG_CONVERT) * Math.sin(observationalPoint.geographicLatitude * DEG_CONVERT))/
