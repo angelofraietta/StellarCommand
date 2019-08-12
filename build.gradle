@@ -105,12 +105,37 @@ task packDistribution (type:Zip) {
 
     //config
     from("Distribution") {
-        include '*/**'
+        include 'runStellarCommand.*'
+        include 'StellarCommand.jar'
+        include 'Examples/.idea/libraries/StellarCommand.xml'
+        include 'Examples/Device/HappyBrackets/data/jars/StellarCommand.jar'
+        include 'Examples/libs/docs/StellarCommand/*'
+        include 'Examples/src/stellarcommandexamples/'
+
     }
 
 }
 
+// Pack our Build Jar file and the version text into a zip file so we can add it to plugin resources
+task packDistributionHappyBrackets (type:Zip) {
+    //destinationDir "." //set our output directory
+
+    archiveName 'StellarCommandHappyBrackets.zip'  //set the name of our archive
+
+    //config
+    from("Distribution") {
+        include 'Examples/.idea/libraries/StellarCommand.xml'
+        include 'Examples/Device/HappyBrackets/data/jars/StellarCommand.jar'
+        include 'Examples/libs/docs/StellarCommand/*'
+        include 'Examples/src/stellarcommandexamples/'
+
+    }
+
+}
+
+
 packDistribution.dependsOn deployJarAndJavaDoc
+packDistributionHappyBrackets.dependsOn deployJarAndJavaDoc
 
 deployJarAndJavaDoc.dependsOn(javadocJar)
 deployJarAndJavaDoc.dependsOn shadowJar
