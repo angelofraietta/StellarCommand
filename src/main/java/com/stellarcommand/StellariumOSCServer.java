@@ -400,6 +400,32 @@ public class StellariumOSCServer implements StellariumViewListener, OSCListener 
                         stellariumSlave.showConstellationArt(show);
                     }
                 }
+
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_CARDINAL_POINTS)){
+                    if (msg.getArgCount() < 1){
+                        if (stellariumSlave.getStellariumProperties() != null) {
+                            boolean value = stellariumSlave.getStellariumProperties().getShowCardinalPoints();
+                            oscSender.send(OSCMessageBuilder.createOscMessage(oscName, value), oscClient, targetPort);
+                        }
+                    }
+                    else {
+                        boolean show = ((int) msg.getArg(0) == 0) ? false : true;
+                        stellariumSlave.showCardinalPoints(show);
+                    }
+                }
+                else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_EQUATORIAL_GRID)){
+                    if (msg.getArgCount() < 1){
+                        if (stellariumSlave.getStellariumProperties() != null) {
+                            boolean value = stellariumSlave.getStellariumProperties().getShowEquatorialGrid();
+                            oscSender.send(OSCMessageBuilder.createOscMessage(oscName, value), oscClient, targetPort);
+                        }
+                    }
+                    else {
+                        boolean show = ((int) msg.getArg(0) == 0) ? false : true;
+                        stellariumSlave.showEquatorialGrid(show);
+                    }
+                }
+
                 else if (command.equalsIgnoreCase(StellarOSCVocabulary.CommandMessages.SHOW_ATMOSPHERE)){
                     if (msg.getArgCount() < 1){
                         if (stellariumSlave.getStellariumProperties() != null) {

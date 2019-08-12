@@ -49,6 +49,8 @@ public class StellariumSlave  {
     final private Object pollSynchroniser = new Object();
     final private Object lrMoveSynchroniser = new Object();
     final private Object upMoveSynchroniser = new Object();
+    final private Object altitudeSynchroniser = new Object();
+    final private Object azimuthSynchroniser = new Object();
     final private Object altAzSynchroniser = new Object();
     final private Object locationSynchroniser = new Object();
     final private Object setTimeSynchroniser = new Object();
@@ -103,6 +105,8 @@ public class StellariumSlave  {
         notifyObject(lrMoveSynchroniser);
         notifyObject(upMoveSynchroniser);
         notifyObject(altAzSynchroniser);
+        notifyObject(altitudeSynchroniser);
+        notifyObject(azimuthSynchroniser);
         notifyObject(locationSynchroniser);
         notifyObject(setTimeSynchroniser);
 
@@ -341,6 +345,47 @@ public class StellariumSlave  {
                 sendAltAz(currentAz, currentAlt);
             }
         }).start();
+
+
+
+        new Thread(() -> {
+            while (!exitThread) {
+                synchronized (altitudeSynchroniser){
+                    try {
+                        altitudeSynchroniser.wait();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (exitThread)
+                    break;
+
+                // we should just have
+                sendAltitude(currentAlt);
+            }
+        }).start();
+
+        new Thread(() -> {
+            while (!exitThread) {
+                synchronized (azimuthSynchroniser){
+                    try {
+                        azimuthSynchroniser.wait();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (exitThread)
+                    break;
+
+                // we should just have
+                sendAzimuth(currentAz);
+            }
+        }).start();
+
 
 
         new Thread(() -> {
@@ -749,6 +794,22 @@ public class StellariumSlave  {
     }
 
     /**
+     * Show or hide the cardinal points
+     * @param show set true to show, false to hide
+     */
+    public void showCardinalPoints(boolean show){
+        sendStelProperty(StellariumProperty.Show.CARDINAL_POINTS, show);
+    }
+
+    /**
+     * Show or hide the equatorial grid
+     * @param show set true to show, false to hide
+     */
+    public void showEquatorialGrid(boolean show){
+        sendStelProperty(StellariumProperty.Show.EQUATORIAL_GRID, show);
+    }
+
+    /**
      * Show or hide the atmosphere
      * @param show set true to show atmosphere, false to hide
      */
@@ -761,9 +822,31 @@ public class StellariumSlave  {
      * @param degrees the altitude in degrees
      */
     public void setAltitude(double degrees){
-        synchronized (altAzSynchroniser){
-            currentAlt = degrees  * Math.PI / 180;
-            altAzSynchroniser.notify();
+        synchronized (altitudeSynchroniser){
+            setAltitudeRadians(Math.toRadians(degrees));
+            altitudeSynchroniser.notify();
+        }
+
+    }
+
+    /**
+     * Set the altitude in radians
+     * @param radians the altitude in radians
+     */
+    public void setAltitudeRadians(double radians){
+        // this is the amount away from the top and bottom of sine wave
+        final double BOUNDARY_PAD = 0.0000000000001;
+
+        synchronized (altitudeSynchroniser){
+            if (radians == Math.PI / 2){
+                radians = Math.PI / 2 - BOUNDARY_PAD;
+            }
+            else if (radians == Math.PI / -2)
+            {
+                radians = Math.PI / -2 + BOUNDARY_PAD;
+            }
+            currentAlt = radians;
+            altitudeSynchroniser.notify();
         }
 
     }
@@ -773,9 +856,20 @@ public class StellariumSlave  {
      * @param degrees the degrees of azimuth. North is zero, east is 90
      */
     public void setAzimuth(double degrees){
-        synchronized (altAzSynchroniser){
+        synchronized (azimuthSynchroniser){
             currentAz = (degrees + 180)  * Math.PI / 180 * -1;
-            altAzSynchroniser.notify();
+            azimuthSynchroniser.notify();
+        }
+    }
+
+    /**
+     * Set the Azimuth in Radians
+     * @param radians the radians of azimuth. North is zero
+     */
+    public void setAzimuthRadians(double radians){
+        synchronized (azimuthSynchroniser){
+            currentAz = (radians * -2) - Math.PI;
+            azimuthSynchroniser.notify();
         }
     }
 
@@ -977,6 +1071,33 @@ public class StellariumSlave  {
         Map<String,Object> params = new LinkedHashMap<>();
         params.put("az", az);
         params.put("alt", alt);
+
+        return sendPostMessage(api, params);
+    }
+
+
+    /**
+     * Send new azimuth position to stellarium
+     * @param azimuth new azimuth in radians
+     * @return status message
+     */
+    boolean sendAzimuth(double azimuth){
+        String api = "main/view";
+        Map<String,Object> params = new LinkedHashMap<>();
+        params.put("az", azimuth);
+
+        return sendPostMessage(api, params);
+    }
+
+    /**
+     * Send new Altitude position to stellarium
+     * @param altitude new altitude in radians
+     * @return status message
+     */
+    boolean sendAltitude(double altitude){
+        String api = "main/view";
+        Map<String,Object> params = new LinkedHashMap<>();
+        params.put("alt", altitude);
 
         return sendPostMessage(api, params);
     }

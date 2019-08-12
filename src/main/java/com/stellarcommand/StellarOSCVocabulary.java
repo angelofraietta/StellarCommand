@@ -222,6 +222,22 @@ public final class StellarOSCVocabulary {
 
 
         /**
+         * Cause stellarium to show or hide the cardinal points. OSC arguments are:
+         * <br><b>Show</b> int -  not zero is true, zero is false
+         * <br> If no OSC arguments present, the current value will be returned
+         */
+        public static final String SHOW_CARDINAL_POINTS = "showCardinalPoints";
+
+
+        /**
+         * Cause stellarium to show or hide the equatorial grid. OSC arguments are:
+         * <br><b>Show</b> int -  not zero is true, zero is false
+         * <br> If no OSC arguments present, the current value will be returned
+         */
+        public static final String SHOW_EQUATORIAL_GRID = "showEquatorialGrid";
+
+
+        /**
          * Cause stellarium to show or hide the star labels. OSC arguments are:
          * <br><b>Show</b> int -  not zero is true, zero is false
          * <br> If no OSC arguments present, the current value will be returned

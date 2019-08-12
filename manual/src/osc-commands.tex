@@ -327,6 +327,25 @@ It is possible to show or hide the constellation art by sending the \textit{show
 	\medskip
 \end{syntax}
 
+ \subsection{showCardinalPoints}\index{OSC messages to Stellar Command!showCardinalPoints}
+It is possible to show or hide the cardinal points by sending the \textit{showCardinalPoints} command, and an integer value of zero to hide the art or non-zero to show it. To show the cardinal points, you would send the following OSC message:
+
+\begin{syntax}	
+	\medskip
+	/Stellar/showCardinalPoints 1
+	\medskip
+\end{syntax}
+
+
+\subsection{showEquatorialGrid}\index{OSC messages to Stellar Command!showEquatorialGrid}
+It is possible to show or hide the equatorial by sending the \textit{showEquatorialGrid} command, and an integer value of zero to hide the art or non-zero to show it. To show the equatorial grid, you would send the following OSC message:
+
+\begin{syntax}	
+	\medskip
+	/Stellar/showEquatorialGrid 1
+	\medskip
+\end{syntax}
+
 \subsection{timeRate}\index{OSC messages to Stellar Command!timeRate}\index{TimeRate!Sending OSC} 
 It is possible to change the simulated time rate on Stellarium by sending the \textit{timeRate} command followed by the new time rateas a float. If, for example, you set the time rate to zero, time would be still and the stars would not move through the sky. If, however, you set the time rate to 2.0, the display would simulate time running at twice normal speed. You can also make time go in reverse by setting the time rate to a negative number. To set the display to simulate time running at twice normal speed, you would send the following:
 
